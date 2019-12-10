@@ -6,11 +6,11 @@
 //$this->registerCssFile('css/create-order.css', ['depends'=>'app\assets\NewAppAsset']);
 
 ?>
-<div class="welcome_wrap" id="new-order" new-date="10.12.2019">
+<div class="welcome_wrap" id="new-order" new-date="10.12.2019 2">
     <div class="container">
         <div class="welcome">
             <div class="welcome__form">
-                <h1 class="welcome__title title_36">закажите поездку<span>онлайн</span> test</h1>
+                <h1 class="welcome__title title_36" vlad="test">закажите поездку<span>онлайн</span> test</h1>
                 <div class="welcome__label">
 
                     <label class="welcome__col city_select"><span class="welcome__sub text_16">Откуда</span>
