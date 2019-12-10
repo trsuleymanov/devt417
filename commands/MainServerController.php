@@ -882,10 +882,12 @@ class MainServerController extends Controller
         if ($response->statusCode == 200) {
 
             $aCities = $response->data;
+            $aIds = [];
             if(count($aCities) > 0) {
                 foreach($aCities as $aCity) {
 
                     $city = City::find()->where(['id' => $aCity['id']])->one();
+                    $aIds[] = $city->id;
 
                     $city->name = $aCity['name'];
                     $city->extended_external_use = $aCity['extended_external_use'];
@@ -906,7 +908,7 @@ class MainServerController extends Controller
                 $request_2 = new Client();
                 $response = $request_2->createRequest()
                     ->setMethod('post')
-                    ->setUrl(Yii::$app->params['mainServerUrl'] . 'city/set-sync-to-cities?ids=' . implode(',', ArrayHelper::map($aCities, 'id', 'id')))
+                    ->setUrl(Yii::$app->params['mainServerUrl'] . 'city/set-sync-to-cities?ids=' . implode(',', $aIds))
                     ->setHeaders(['Authorization' => 'SecretKey ' . MainServerController::$secretKey])
                     ->send();
 
