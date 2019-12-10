@@ -866,4 +866,61 @@ class MainServerController extends Controller
             exit;
         }
     }
+
+
+    // выкачка изменений по городам с основного сервера
+    public function actionUpdateCities() {
+
+        $request_1 = new Client(); // это клиент запроса, а не Клиент-человек
+
+        $response = $request_1->createRequest()
+            ->setMethod('post')
+            ->setUrl(Yii::$app->params['mainServerUrl'].'city/get-not-sync-cities')
+            ->setHeaders(['Authorization' => 'SecretKey '.MainServerController::$secretKey])
+            ->send();
+
+        if ($response->statusCode == 200) {
+
+            $aCities = $response->data;
+            if(count($aCities) > 0) {
+                foreach($aCities as $aCity) {
+
+                    $city = ClientExt::find()->where(['id' => $aCity['id']])->one();
+
+                    $city->name = $aCity['name'];
+                    $city->extended_external_use = $aCity['extended_external_use'];
+                    $city->center_lat = $aCity['center_lat'];
+                    $city->center_long = $aCity['center_long'];
+                    $city->map_scale = $aCity['map_scale'];
+                    $city->search_scale = $aCity['search_scale'];
+                    $city->point_focusing_scale = $aCity['point_focusing_scale'];
+                    $city->all_points_show_scale = $aCity['all_points_show_scale'];
+
+                    if(!$city->save(false)) {
+                        throw new ErrorException('Не удалось сохранить город');
+                    }
+                }
+
+
+                // пошлем обратно ответ на основной сервер со списком id записанных клиентов, чтобы там была установлена дата синхронизации
+                $request_2 = new Client();
+                $response = $request_2->createRequest()
+                    ->setMethod('post')
+                    ->setUrl(Yii::$app->params['mainServerUrl'] . 'city/set-sync-to-cities?ids=' . implode(',', ArrayHelper::map($aCities, 'id', 'id')))
+                    ->setHeaders(['Authorization' => 'SecretKey ' . MainServerController::$secretKey])
+                    ->send();
+
+                if ($response->statusCode == 200) {
+                    echo "успешно завершено\n";
+                } else {
+                    echo "Пришел ответ на запрос установки дат синхронизации со статусом " . $response->statusCode . "\n";
+                    exit;
+                }
+            }
+
+        }else {
+            echo "Пришел ответ на запрос получения городов со статусом ".$response->statusCode."\n";
+            exit;
+        }
+    }
 }

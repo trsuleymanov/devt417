@@ -85,25 +85,22 @@ $this->registerJsFile('js/admin/pages.js', ['depends' => 'app\assets\AdminAsset'
 //                        ]
 //                    ])
 //                ],
-                [
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{update} {delete}',
-                    'options' => ['style' => 'width: 50px;'],
-                    'buttons' => [
-                        'delete' => function ($url, $model) {
-                            return Html::a(
-                                '<span class="glyphicon glyphicon-trash"></span>',
-                                Url::to(['/admin/city/ajax-delete', 'id' => $model->id]),
-                                [
-                                    'aria-label' => 'Удалить',
-                                    'class' => "delete-city",
-//                                    'data-pjax' => "0",
-//                                    'data-confirm' => "Вы уверены, что хотите удалить этот элемент?",
-//                                    'data-method' => "post"
-                                ]);
-                        },
-                    ],
-                ],
+//                [
+//                    'class' => 'yii\grid\ActionColumn',
+//                    'template' => '{update} {delete}',
+//                    'options' => ['style' => 'width: 50px;'],
+//                    'buttons' => [
+//                        'delete' => function ($url, $model) {
+//                            return Html::a(
+//                                '<span class="glyphicon glyphicon-trash"></span>',
+//                                Url::to(['/admin/city/ajax-delete', 'id' => $model->id]),
+//                                [
+//                                    'aria-label' => 'Удалить',
+//                                    'class' => "delete-city",
+//                                ]);
+//                        },
+//                    ],
+//                ],
             ],
         ]); ?>
     </div>
