@@ -885,7 +885,7 @@ class MainServerController extends Controller
             if(count($aCities) > 0) {
                 foreach($aCities as $aCity) {
 
-                    $city = ClientExt::find()->where(['id' => $aCity['id']])->one();
+                    $city = City::find()->where(['id' => $aCity['id']])->one();
 
                     $city->name = $aCity['name'];
                     $city->extended_external_use = $aCity['extended_external_use'];
