@@ -6,7 +6,7 @@
 //$this->registerCssFile('css/create-order.css', ['depends'=>'app\assets\NewAppAsset']);
 
 ?>
-<div class="welcome_wrap" id="new-order">
+<div class="welcome_wrap" id="new-order" new-date="10.12.2019">
     <div class="container">
         <div class="welcome">
             <div class="welcome__form">
