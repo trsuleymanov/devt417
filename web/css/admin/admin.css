@@ -1,0 +1,36 @@
+.box-header .pagination-sm, .box-header .pagination-xs {
+    margin: 0 10px;
+}
+
+#default-modal #ya-map-from, #default-modal #ya-map-to {
+    height: 700px;
+}
+
+#default-modal #ya-map-from .placemark-balloon-content, #default-modal #ya-map-to .placemark-balloon-content {
+    height: 140px;
+}
+
+#active-users-list .user {
+    width: 200px;
+    border: solid 1px #C8C8C8;
+    border-width: 0 0 1px 0;
+    padding: 5px 0 5px 0;
+}
+
+.driver-update #create-driver-user, .driver-create #create-driver-user {
+    margin-top: 22px;
+    width: 260px;
+    height: 60px;
+    write-space: normal;
+    cursor: pointer;
+}
+.driver-update #create-driver-user.disabled, .driver-create #create-driver-user.disabled {
+    opacity: 0.3;
+}
+
+.online-driver-position {
+    content: "\25cf";
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #00ff11;
+}
