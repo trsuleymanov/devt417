@@ -226,7 +226,7 @@ class ClientExtController extends Controller
                 //->andWhere(['status' => 'sended'])  // пока любой заказ устроит на время разработки
                 ->andWhere(['direction_id' => $model->direction_id])
                 ->orderBy(['id' => 'SORT_DESC'])
-                //->limit(3)
+                ->limit(3)
                 ->all();
             if(count($last_client_exts) > 0) {
                 $last_yandex_points = YandexPoint::find()
