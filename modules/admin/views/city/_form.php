@@ -20,6 +20,7 @@ $this->registerJsFile('https://api-maps.yandex.ru/2.1/?lang=ru_RU', ['depends' =
     ]
 ]); ?>
 
+<?php /*
 <div class="box box-solid">
 
     <div class="box-header with-border">
@@ -77,7 +78,8 @@ $this->registerJsFile('https://api-maps.yandex.ru/2.1/?lang=ru_RU', ['depends' =
         </div>
     </div>
 </div>
-<?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); */
+?>
 
 
 <?php

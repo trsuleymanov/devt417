@@ -85,10 +85,11 @@ $this->registerJsFile('js/admin/pages.js', ['depends' => 'app\assets\AdminAsset'
 //                        ]
 //                    ])
 //                ],
-//                [
-//                    'class' => 'yii\grid\ActionColumn',
-//                    'template' => '{update} {delete}',
-//                    'options' => ['style' => 'width: 50px;'],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    //'template' => '{update} {delete}',
+                    'template' => '{update} ',
+                    'options' => ['style' => 'width: 50px;'],
 //                    'buttons' => [
 //                        'delete' => function ($url, $model) {
 //                            return Html::a(
@@ -100,7 +101,7 @@ $this->registerJsFile('js/admin/pages.js', ['depends' => 'app\assets\AdminAsset'
 //                                ]);
 //                        },
 //                    ],
-//                ],
+                ],
             ],
         ]); ?>
     </div>

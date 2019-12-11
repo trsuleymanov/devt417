@@ -74,45 +74,45 @@ class CityController extends Controller
 //    }
 
 
-//    public function actionUpdate($id)
-//    {
-//        $model = $this->findModel($id);
-//
-//
-//        if (Yii::$app->request->isAjax)
-//        {
-//            $queryParams = Yii::$app->request->queryParams;
-//
-//            $queryParams['YandexPointSearch']['city_id'] = $id;
-//
-//            $yandexPointSearchModel = new YandexPointSearch();
-//            $yandexPointDataProvider = $yandexPointSearchModel->search($queryParams);
-//
-//            return $this->render('update', [
-//                'model' => $model,
-//                'yandexPointSearchModel' => $yandexPointSearchModel,
-//                'yandexPointDataProvider' => $yandexPointDataProvider,
-//            ]);
-//
-//        }else {
-//
-//            $queryParams = Yii::$app->request->queryParams;
-//            $queryParams['YandexPointSearch']['city_id'] = $id;
-//
-//            $yandexPointSearchModel = new YandexPointSearch();
-//            $yandexPointDataProvider = $yandexPointSearchModel->search($queryParams);
-//
-//            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//                return $this->redirect(['index']);
-//            } else {
-//                return $this->render('update', [
-//                    'model' => $model,
-//                    'yandexPointSearchModel' => $yandexPointSearchModel,
-//                    'yandexPointDataProvider' => $yandexPointDataProvider,
-//                ]);
-//            }
-//        }
-//    }
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+
+        if (Yii::$app->request->isAjax)
+        {
+            $queryParams = Yii::$app->request->queryParams;
+
+            $queryParams['YandexPointSearch']['city_id'] = $id;
+
+            $yandexPointSearchModel = new YandexPointSearch();
+            $yandexPointDataProvider = $yandexPointSearchModel->search($queryParams);
+
+            return $this->render('update', [
+                'model' => $model,
+                'yandexPointSearchModel' => $yandexPointSearchModel,
+                'yandexPointDataProvider' => $yandexPointDataProvider,
+            ]);
+
+        }else {
+
+            $queryParams = Yii::$app->request->queryParams;
+            $queryParams['YandexPointSearch']['city_id'] = $id;
+
+            $yandexPointSearchModel = new YandexPointSearch();
+            $yandexPointDataProvider = $yandexPointSearchModel->search($queryParams);
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['index']);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                    'yandexPointSearchModel' => $yandexPointSearchModel,
+                    'yandexPointDataProvider' => $yandexPointDataProvider,
+                ]);
+            }
+        }
+    }
 
 
 //    public function actionAjaxDelete($id)
