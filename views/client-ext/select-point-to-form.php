@@ -1,25 +1,12 @@
 <?php
 
-use app\models\Tariff;
-use app\models\YandexPoint;
-use yii\web\ForbiddenHttpException;
+// популярные яндекс-точки высадки
+// echo "popular_yandex_points:<pre>"; print_r($popular_yandex_points); echo "</pre>";
 
-// перечисляемые точки, это точки "откуда" у которых super_tariff_used=true
-// цена у супер-точек - это цена по супер-тарифу общая за 1 место (в тарифе это поле superprepayment_common_price)
-// выбранный тариф зависит от рейса, а рейс как таковой не был выбран, но была выбрана дата и направление, значит можно найти тариф.
-/*
-$tariff = Tariff::find()
-    ->where(['<=', 'start_date', $model->data])
-    ->andWhere(['commercial' => 0])
-    ->orderBy(['start_date' => SORT_DESC])
-    ->one();
-if($tariff == null) {
-    throw new ForbiddenHttpException('Тариф не найден');
-}
+// яндекс-точки высадки из последних 3 заказов
+// echo "last_yandex_points:<pre>"; print_r($last_yandex_points); echo "</pre>";
 
-$city_id = ($model->direction_id == 1 ? 2 : 1);
-$yandex_points = YandexPoint::find()->where(['city_id' => $city_id])->andWhere(['super_tariff_used' => true])->all();
-*/
+
 ?>
 
 <div class="reservation-drop__select">
@@ -45,9 +32,9 @@ $yandex_points = YandexPoint::find()->where(['city_id' => $city_id])->andWhere([
         <li class="reservation-drop__select-item">Ж/Д Центр.</li>
         <li class="reservation-drop__select-item">Аэропорт</li>
         */ ?>
-        <?php foreach ($some_points as $point) { ?>
+        <?php /*foreach ($some_points as $point) { ?>
             <li class="reservation-drop__select-item select-point-to" data-id = "<?= $point->id ?>" data-name = "<?= $point->name ?>" lat="<?= $point->lat ?>" lon="<?= $point->long ?>"><?= $point->name ?></li>
-        <?php } ?>
+        <?php }*/ ?>
     </ul>
 </div>
 <div class="reservation-drop__dest">

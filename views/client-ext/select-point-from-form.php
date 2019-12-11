@@ -1,27 +1,18 @@
 <?php
 
-use app\models\Tariff;
-use app\models\YandexPoint;
-use yii\web\ForbiddenHttpException;
+// популярные яндекс-точки посадки
+// echo "popular_yandex_points:<pre>"; print_r($popular_yandex_points); echo "</pre>";
 
-// перечисляемые точки, это точки "откуда" у которых super_tariff_used=true
-// цена у супер-точек - это цена по супер-тарифу общая за 1 место (в тарифе это поле superprepayment_common_price)
-// выбранный тариф зависит от рейса, а рейс как таковой не был выбран, но была выбрана дата и направление, значит можно найти тариф.
+// яндекс-точки посадки с супер тарифом
+// echo "super_yandex_points:<pre>"; print_r($super_yandex_points); echo "</pre>";
 
-$tariff = Tariff::find()
-    ->where(['<=', 'start_date', $model->data])
-    ->andWhere(['commercial' => 0])
-    ->orderBy(['start_date' => SORT_DESC])
-    ->one();
-if($tariff == null) {
-    throw new ForbiddenHttpException('Тариф не найден');
-}
+// яндекс-точки посадки из последних 3 заказов
+//echo "last_yandex_points:<pre>"; print_r($last_yandex_points); echo "</pre>";
 
-$city_id = ($model->direction_id == 1 ? 2 : 1);
-$yandex_points = YandexPoint::find()->where(['city_id' => $city_id])->andWhere(['super_tariff_used' => true])->all();
+
 ?>
 
-<?php if(count($yandex_points) > 0) { ?>
+<?php if(count($super_yandex_points) > 0) { ?>
     <div class="reservation-drop-offer">
         <div class="reservation-drop-offer__cover">
             <div class="reservation-drop-offer__cover-wrap">
@@ -31,7 +22,7 @@ $yandex_points = YandexPoint::find()->where(['city_id' => $city_id])->andWhere([
             <img src="/images_new/arrow-tab.png" alt="" class="reservation-drop-offer__cover-arrow">
         </div>
         <ul class="reservation-drop-offer__list">
-            <?php foreach ($yandex_points as $yandex_point) { ?>
+            <?php foreach ($super_yandex_points as $yandex_point) { ?>
                 <li class="reservation-drop-offer__item" yandex-point-id="<?= $yandex_point->id ?>">
                     <div class="reservation-drop-offer__item-title">«<?= $yandex_point->name ?>» - <b><?= $tariff->superprepayment_common_price ?></b> руб.</div>
                     <!--<div class="reservation-drop-offer__item-subtitle">ул. Ленина, 92</div>-->

@@ -6,6 +6,7 @@ use app\models\ClientExt;
 use app\models\ClientExtPassenger;
 use app\models\Direction;
 use app\models\Passenger;
+use app\models\Tariff;
 use app\models\User;
 use app\models\YandexPoint;
 use Codeception\Module\Cli;
@@ -13,6 +14,7 @@ use Yii;
 use app\models\Trip;
 use app\models\TripSearch;
 use yii\base\ErrorException;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -189,8 +191,67 @@ class ClientExtController extends Controller
             throw new ForbiddenHttpException('Заказ не найден');
         }
 
+        $city_from_id = ($model->direction_id == 1 ? 2 : 1); // город отправки
+
+
+        // популярные яндекс-точки посадки
+        $popular_yandex_points = YandexPoint::find()
+            ->where(['city_id' => $city_from_id])
+            ->andWhere(['popular_departure_point' => true])
+            ->all();
+
+
+        // яндекс-точки посадки с супер-тарифом
+        $tariff = Tariff::find()
+            ->where(['<=', 'start_date', $model->data])
+            ->andWhere(['commercial' => 0])
+            ->orderBy(['start_date' => SORT_DESC])
+            ->one();
+        if($tariff == null) {
+            throw new ForbiddenHttpException('Тариф не найден');
+        }
+        $super_yandex_points = YandexPoint::find()
+            ->where(['city_id' => $city_from_id])
+            ->andWhere(['super_tariff_used' => true])
+            ->all();
+
+
+        // яндекс-точки из которых клиент уезжал за последние три заказа для города отправки (т.е. точки посадки)
+        $last_yandex_points = [];
+        $user = Yii::$app->user->identity;
+        if($user != null) {
+
+            $last_client_exts = ClientExt::find()
+                ->where(['user_id' => $user->getId()])
+                //->andWhere(['status' => 'sended'])  // пока любой заказ устроит на время разработки
+                ->andWhere(['direction_id' => $model->direction_id])
+                ->orderBy(['id' => 'SORT_DESC'])
+                //->limit(3)
+                ->all();
+            if(count($last_client_exts) > 0) {
+                $last_yandex_points = YandexPoint::find()
+                    ->where(['id' => ArrayHelper::map($last_client_exts, 'yandex_point_from_id', 'yandex_point_from_id')])
+                    ->all();
+            }
+        }
+
+        // Если множество популярных точек отправки пересекается множеством точек отправки последних заказов,
+        //  то уменьшать нужно множество точек отправки последних заказов $last_yandex_points
+        $arPopularPointsIds = ArrayHelper::map($popular_yandex_points, 'id', 'id');
+        if(count($last_yandex_points) > 0) {
+            foreach ($last_yandex_points as $key => $last_yandex_point) {
+                if(isset($arPopularPointsIds[$last_yandex_point->id])) {
+                    unset($last_yandex_points[$key]);
+                }
+            }
+        }
+
         return $this->renderPartial('select-point-from-form', [
             'model' => $model,
+            'tariff' => $tariff,
+            'popular_yandex_points' => $popular_yandex_points,
+            'super_yandex_points' => $super_yandex_points,
+            'last_yandex_points' => $last_yandex_points,
         ]);
     }
 
@@ -202,11 +263,48 @@ class ClientExtController extends Controller
             throw new ForbiddenHttpException('Заказ не найден');
         }
 
-        $some_points = YandexPoint::find()->where(['active' => true, 'city_id' => $model->city_to_id])->limit(4)->all();
+        $city_to_id = ($model->direction_id == 1 ? 1 : 2); // город прибытия
+
+
+        // популярные яндекс-точки высадки
+        $popular_yandex_points = YandexPoint::find()
+            ->where(['city_id' => $city_to_id])
+            ->andWhere(['popular_arrival_point' => true])
+            ->all();
+
+        // 2. яндекс-точки высадки за последние три заказа для города прибытия
+        $last_yandex_points = [];
+        $user = Yii::$app->user->identity;
+        if($user != null) {
+            $last_client_exts = ClientExt::find()
+                ->where(['user_id' => $user->getId()])
+                //->andWhere(['status' => 'sended']) // пока любой заказ устроит на время разработки
+                ->andWhere(['direction_id' => $model->direction_id])
+                ->orderBy(['id' => 'SORT_DESC'])
+                ->limit(3)
+                ->all();
+            if(count($last_client_exts) > 0) {
+                $last_yandex_points = YandexPoint::find()
+                    ->where(['id' => ArrayHelper::map($last_client_exts, 'yandex_point_to_id', 'yandex_point_to_id')])
+                    ->all();
+            }
+        }
+
+        // Если множество популярных точек высадки пересекается множеством точек высадки последних заказов,
+        //  то уменьшать нужно множество точек высадки последних заказов $last_yandex_points
+        $arPopularPointsIds = ArrayHelper::map($popular_yandex_points, 'id', 'id');
+        if(count($last_yandex_points) > 0) {
+            foreach ($last_yandex_points as $key => $last_yandex_point) {
+                if(isset($arPopularPointsIds[$last_yandex_point->id])) {
+                    unset($last_yandex_points[$key]);
+                }
+            }
+        }
 
         return $this->renderPartial('select-point-to-form', [
             'model' => $model,
-            'some_points' => $some_points
+            'popular_yandex_points' => $popular_yandex_points,
+            'last_yandex_points' => $last_yandex_points
         ]);
     }
 }
