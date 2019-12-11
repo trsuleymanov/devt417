@@ -22,7 +22,7 @@ class UserSearch extends User
                 //'confirmed',
                 'created_at', 'updated_at', 'blocked'], 'integer'],
             [['auth_key', 'password_hash', 'token', 'email', 'fio', 'phone', 'last_ip', 'restore_code', 'code_for_friends',
-                'friend_code', 'push_token', 'email_is_confirmed'], 'safe'],
+                'friend_code', 'push_token', 'email_is_confirmed', 'phone_is_confirmed'], 'safe'],
             [['account'], 'number'],
         ];
     }
@@ -67,6 +67,7 @@ class UserSearch extends User
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'phone_is_confirmed' => $this->phone_is_confirmed,
             'last_login_date' => $this->last_login_date,
             'attempt_count' => $this->attempt_count,
             'attempt_date' => $this->attempt_date,

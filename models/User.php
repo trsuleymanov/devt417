@@ -36,6 +36,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
                 'attempt_count', 'attempt_date', 'blocked', //'confirmed',
                 //'main_server_client_id'
                 'sync_date', 'current_year_sended_places', 'current_year_sended_prize_places', 'current_year_penalty',
+                'phone_is_confirmed'
             ], 'integer'],
             [['push_token'], 'string', 'max' => 255],
             ['password', 'validatePassword2', 'skipOnEmpty' => false, 'on' => 'login'],
@@ -68,6 +69,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'email_is_confirmed' => 'Эл.почта была подтверждена',
             'fio' => 'ФИО',
             'phone' => 'Телефон',
+            'phone_is_confirmed' => 'Телефон подтвержден',
             'cashback' => 'Кэш-бэк счет',
 
             'current_year_sended_places' => 'Число отправленных мест',
