@@ -213,10 +213,11 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
                 <img src="/images_new/cancel.svg" alt="" class="reservation-drop__topline-cancel">
             </div>
             <div class="reservation-drop__content">
+                <?php /*
                 <div class="reservation-drop-offer">
                     <div class="reservation-drop-offer__cover">
                         <div class="reservation-drop-offer__cover-wrap">
-                            <div class="reservation-drop-offer__cover-title">Совершите<br>поездку за <b>417</b> руб.</div>
+                            <div class="reservation-drop-offer__cover-title">Совершите...<br>поездку за <b>417</b> руб.</div>
                             <div class="reservation-drop-offer__cover-subtitle">Выберите адрес из опций быстрого выезда. Цена за одно место действует при условии предоплаты.</div>
                         </div>
                         <img src="/images_new/arrow-tab.png" alt="" class="reservation-drop-offer__cover-arrow">
@@ -278,7 +279,7 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
                         <img src="/images_new/back-address.svg" alt="" class="reservation-drop__time-back-arrow">
                         <div class="reservation-drop__time-back-text"><span>Другой адрес?</span></div>
                     </div>
-                </div>
+                </div>*/ ?>
             </div>
         </div>
     </div>

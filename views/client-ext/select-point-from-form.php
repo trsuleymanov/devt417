@@ -9,7 +9,6 @@
 // яндекс-точки посадки из последних 3 заказов
 //echo "last_yandex_points:<pre>"; print_r($last_yandex_points); echo "</pre>";
 
-
 ?>
 
 <?php if(count($super_yandex_points) > 0) { ?>
