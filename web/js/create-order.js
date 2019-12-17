@@ -327,6 +327,7 @@ $(document).on('click', '.container-drop--1 .btn-select-placemark', function() {
         //console.log('ajax_response:'); console.log(ajax_response);
 
         addressToStep2();
+
     });
 });
 
@@ -371,8 +372,6 @@ function openSelectPointFromModal(response_function) {
         type: 'post',
         data: {},
         success: function (html) {
-
-            html = '<div class="reservation-drop-offer"><div class="reservation-drop-offer__cover"><div class="reservation-drop-offer__cover-wrap"><div class="reservation-drop-offer__cover-title">Совершите<br>поездку за <b>417</b> руб.</div><div class="reservation-drop-offer__cover-subtitle">Выберите адрес из опций быстрого выезда. Цена за одно место действует при условии предоплаты.</div></div><img src="/images_new/arrow-tab.png" alt="" class="reservation-drop-offer__cover-arrow"></div><ul class="reservation-drop-offer__list"><li class="reservation-drop-offer__item"><div class="reservation-drop-offer__item-title">«Орион» - <b>417</b> руб.</div><div class="reservation-drop-offer__item-subtitle">ул. Ленина, 92</div></li><li class="reservation-drop-offer__item"><div class="reservation-drop-offer__item-title">«Лента» - <b>417</b> руб.</div><div class="reservation-drop-offer__item-subtitle">ул. Ленина, 105</div></li><li class="reservation-drop-offer__item"><div class="reservation-drop-offer__item-title">«Сбербанк» - <b>417</b> руб.</div><div class="reservation-drop-offer__item-subtitle">ул. Ленина, 105</div></li></ul></div>' + html;
 
             $("body").append('<div class="main-overlay"></div>');
             $(".main-overlay").click(function(event) {
@@ -457,6 +456,35 @@ $(document).on('click', '#open-select-point-from', function(e) {
 
 });
 
+$(document).on('click', '.select-point-from', function() {
+
+    var yandex_point_from_id = $(this).attr('data-id');
+    var yandex_point_from_name = $(this).attr('data-name');
+    var lat = $(this).attr('lat');
+    var long = $(this).attr('lon');
+
+    // // этот блок временно отключен
+    // var coordinates = [lat, long];
+    // map_from.setCenter(coordinates, 16, {duration: 500});
+
+    $('input[name="ClientExt[yandex_point_from_id]"]').val(yandex_point_from_id).attr('lat', lat).attr('lon', long);
+    $('.reservation-step-line-dest-address').html(yandex_point_from_name);
+    toggleSubmitBut1();
+
+    //$(".reservation-drop--2").removeClass("d-b");
+    $(".reservation-step-line-content-top-left--empty1").addClass("d-n");
+    $(".reservation-step-line-content-top-left--ready1").addClass("d-b");
+    $(".reservation-step-line-selecte--1").addClass("d-n");
+
+    var access_code = $('#order-client-form').attr('client-ext-code');
+    loadTripTimes(access_code, yandex_point_from_id, function(ajax_response) {
+        //console.log('ajax_response:'); console.log(ajax_response);
+
+        addressToStep2();
+
+    });
+
+});
 
 $(document).on('click', '#open-select-point-to', function(e) {
 
@@ -521,10 +549,10 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
                 //     .attr('travel_time_h', trip_obj.travel_time_h)
                 //     .attr('travel_time_m', trip_obj.travel_time_m);
 
-                // trip_id	3491
-                // time	03:10
-                // data	12.10.2019
-                // travel_time_h	3
+                // trip_id  3491
+                // time 03:10
+                // data 12.10.2019
+                // travel_time_h    3
                 // travel_time_m
 
                 trips_html += '<li class="reservation-drop__time-item" trip-id="' + trip_obj.trip_id + '" data-departure-date="'+ trip_obj.departure_date +'" data-departure-time="'+ trip_obj.departure_time +'" data-arrival-date="'+ trip_obj.arrival_date +'" data-arrival-time="'+ trip_obj.arrival_time +'" yandex-point-id="' + response.yandex_point_id + '" yandex-point-name="' + response.yandex_point_name + '" yandex-point-lat="' + response.yandex_point_lat +'" yandex-point-lon="' + response.yandex_point_long +'" yandex-point-description="' + response.yandex_point_description + '">' + (response.client_ext_data != trip_obj.data ? trip_obj.data + ' ' : '') + trip_obj.departure_time + '</li>';
@@ -542,13 +570,15 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
                 '<div class="reservation-drop__time-paragraph">Указанное вами желаемое время посадки - <span class="reservation-drop__time-time">' + time + '</span>. На выбранной точке можно сесть в указанное время.</div>' +
                 '    <div class="reservation-drop__time-title">Выберите время посадки:</div>' +
                 '    <ul class="reservation-drop__time-list">' +
-                        trips_html +
+                trips_html +
                 '    </ul>' +
                 '    <div class="reservation-drop__time-back-wrap">' +
                 '        <img src="/images_new/back-address.svg" alt="" class="reservation-drop__time-back-arrow">' +
-                '        <div class="reservation-drop__time-back-text"><span>Другой адрес?</span></div>' +
+                '        <div class="reservation-drop__time-back-text"><span class="reservation-drop__time-back-trigger">Другой адрес?</span></div>' +
                 '    </div>';
             $('.reservation-drop--1').find('.reservation-drop__time').html(html);
+
+            console.log(html);
 
             // if(has_elems == true) {
             //     $('#select-trip-list').show();
@@ -581,7 +611,7 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
 }
 
 
-function addressToStep1() {
+function addressToStep1(parent) {
     $(".reservation-drop-offer").removeClass("d-n");
     $(".reservation-drop__search").removeClass("d-n");
     $(".reservation-drop__selected").removeClass("d-b");
@@ -589,7 +619,7 @@ function addressToStep1() {
 }
 
 // клик на выпадающем в поиске одном из элементов
-function addressToStep2() {
+function addressToStep2(parent) {
     $(".reservation-drop-offer").addClass("d-n");
     $(".reservation-drop__search").addClass("d-n");
     $(".reservation-drop__selected").addClass("d-b");
@@ -618,14 +648,16 @@ $(document).on('click', '.reservation-popup__item', function(event) {
 });
 
 
-$(document).on('click', '.reservation-drop-offer__cover-arrow', function () {
-    $(this).parents('.reservation-drop-offer').find('.reservation-drop-offer__list').toggleClass("d-b");
-    $(this).toggleClass('arrow--rotated');
+$(document).on('click', '.reservation-drop-offer__cover', function () {
+    $(this).next('.reservation-drop-offer__list').toggleClass("d-b");
+    $(this).find('.reservation-drop-offer__cover-arrow').toggleClass('arrow--rotated');
 });
-$(document).on('click', '.reservation-drop__time-back-wrap', function () {
+$(document).on('click', '.reservation-drop__time-back-trigger', function () {
 
     addressToStep1();
+
 });
+
 $(document).on('click', '.reservation-drop-offer__item', function () {
 
     var access_code = $('#order-client-form').attr('client-ext-code');
@@ -652,7 +684,7 @@ $(document).ready(function() {
 });
 
 // label 'использовать мою геопозицию'
-$(document).on('click', '.reservation-drop__search-geo', function() {
+$(document).on('click', '.reservation-drop__search-geo span', function() {
     // $(".reservation-drop__map").toggleClass("d-b");
 
     // показ (с наведением на текущую позицию) или скрытие карты
@@ -690,7 +722,7 @@ $(document).on('click', '.reservation-drop__search-geo', function() {
     $(".reservation-drop__map").toggleClass("d-b");
 });
 
-$(document).on('click', ".reservation-drop__selected-showmap-wrap", function () {
+$(document).on('click', ".reservation-drop__selected-showmap-trigger", function () {
     $(".reservation-drop__selected-map").toggleClass("d-b");
 });
 
