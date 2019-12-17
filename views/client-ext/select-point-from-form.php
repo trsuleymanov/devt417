@@ -9,7 +9,7 @@
 // яндекс-точки посадки из последних 3 заказов
 // echo "last_yandex_points:<pre>"; print_r($last_yandex_points); echo "</pre>";
 
-$super_yandex_points = $last_yandex_points;
+// $super_yandex_points = $last_yandex_points;
 
 // echo "tariff:<pre>"; print_r($tariff); echo "</pre>";
 
