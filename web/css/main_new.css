@@ -2,7 +2,7 @@
   position: static;
   margin: 0;
   width: 300px;
-  height: 195px;
+  min-height: 195px;
   background-color: #fff;
   /*border-radius: 0 0 10px 10px;*/
   display: flex;
@@ -52,6 +52,31 @@
 .guest .fix_height {
   height: 275px;
 }
+
+#modal_confirm_phone .for_enter p {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+#modal_confirm_phone .for_enter call {
+  white-space: nowrap;
+}
+
+#modal_confirm_phone .for_enter #confirm_phone_link {
+  margin: 0 auto;
+  display: block;
+  width: 70%;
+  height: 37px;
+  line-height: 37px;
+  font-weight: 500;
+  border: 1px solid #ffb100;
+  background-color: #ffb100;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 7px;
+  text-align: center;
+}
+
 .welcome {
   min-height: 520px;
   display: -webkit-box;

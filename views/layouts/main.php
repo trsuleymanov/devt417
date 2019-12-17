@@ -91,9 +91,6 @@ endif;
                                 Для входа в личный кабинет
                                 введите номер телефона
                             </p>
-                            <?php /*
-                            <input class="for_enter__input" type="tel" name="phone" placeholder="+7 (000) 000 - 00 - 00" autocomplete="off">
-                            */ ?>
                             <?php
 
                             if($settings->disable_number_validation == false) {
@@ -124,6 +121,7 @@ endif;
                         ActiveForm::end();
                         ?>
                     </div>
+                    <div id="modal_confirm_phone" class="for_enter_wrap"></div>
 
                     <div id="modal_enter_password" class="for_enter_wrap">
                         <?php /*

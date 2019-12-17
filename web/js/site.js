@@ -457,6 +457,85 @@ $(document).on('submit', '#login-form', function(event) {
 */
 
 
+function openConfirmPhoneForm(user_phone, is_mobile) {
+
+    $.ajax({
+        url: '/site/ajax-get-confirm-phone-form?user_phone='+ user_phone +'&is_mobile='+ is_mobile,
+        type: 'post',
+        data: {},
+        success: function (response) {
+
+            if(response.success == true) {
+
+            //     // $('#default-modal').find('.modal-body').html(response.html);
+            //     // $('#default-modal').find('.modal-dialog').width('650px');
+            //     // $('#default-modal .modal-title').html('Регистрация');
+            //     // $('#default-modal').modal('show');
+
+            //     //$('.for_enter_wrap').hide();
+            //     if(is_mobile == 0) {
+                    clearAndHideRegForms();
+                    $('#modal_confirm_phone').html(response.html).fadeIn(100);
+            //     }else {
+            //         clearAndHideMobileRegForms();
+            //         $('#entersmscode-mobile').html(response.html).fadeIn(100);
+            //     }
+
+                    $(document).on('click', '#confirm_phone_link', function(){
+
+                        $.ajax({
+                            url: '/user/ajax-get-call-auth?number='+ response.number +'&reg_number='+ response.reg_number +'&reg_time_limit='+ response.reg_time_limit,
+                            type: 'post',
+                            data: {},
+                            success: function (response) {
+
+                                console.log(response);
+                    //             // if(response.user_is_exist == true) {
+                    //             //     alert('С таким телефоном пользователь уже зарегистрирован. Авторизуйтесь пожалуйста для дальнейшего оформления заказа.');
+                    //             // }
+                            },
+                            error: function (data, textStatus, jqXHR) {
+
+                                if (textStatus == 'error' && data != undefined) {
+                                    if (void 0 !== data.responseJSON) {
+                                        if (data.responseJSON.message.length > 0) {
+                                            alert(data.responseJSON.message);
+                                        }
+                                    } else {
+                                        if (data.responseText.length > 0) {
+                                            alert(data.responseText);
+                                        }
+                                    }
+                                } else {
+                                    alert('Ошибка');
+                                }
+                            }
+                        });
+
+                    });
+
+            }else {
+                alert('Ошибка');
+            }
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+
+}
 
 function openInputCodeForm(access_code, client_ext_id, is_mobile) {
 
@@ -601,13 +680,18 @@ function sendMobileForm(phone, client_ext_id, is_mobile) {
         },
         success: function (response) {
 
+            console.log(response);
             if(response.success == true) {
 
-                if(response.next_step == "registration") {
+                if(response.next_step == "confirm_phone") {
+                    // alert('registration');
+                    openConfirmPhoneForm(response.user_phone, is_mobile);
+
+                } else if(response.next_step == "registration") {
                     // alert('registration');
                     openInputCodeForm(response.access_code, client_ext_id, is_mobile);
 
-                }else if(response.next_step == "insert_password") {
+                } else if(response.next_step == "insert_password") {
                     // alert('insert_password');
                     openInsertPassword(response.user_phone, is_mobile);
                 }
