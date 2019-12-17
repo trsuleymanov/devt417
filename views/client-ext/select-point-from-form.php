@@ -7,8 +7,11 @@
 // echo "super_yandex_points:<pre>"; print_r($super_yandex_points); echo "</pre>";
 
 // яндекс-точки посадки из последних 3 заказов
-//echo "last_yandex_points:<pre>"; print_r($last_yandex_points); echo "</pre>";
+// echo "last_yandex_points:<pre>"; print_r($last_yandex_points); echo "</pre>";
 
+$super_yandex_points = $last_yandex_points;
+
+// echo "tariff:<pre>"; print_r($tariff); echo "</pre>";
 
 ?>
 
@@ -32,40 +35,51 @@
     </div>
 <?php } ?>
 
-<div class="reservation-drop__search">
-    <div class="reservation-drop__search-text">… или введите адрес вручную для выбора точки посадки рядом с домом</div>
-    <div id="search-from-block" class="reservation-drop__search-input-wrap">
-        <input id="search-place-from" type="text" class="reservation-drop__search-input" autocomplete="none" placeholder="Начните вводить адрес..." />
-        <div class="search-result-block sw-select-block"></div>
-    </div>
-    <div class="reservation-drop__search-geo"><span>использовать мою геопозицию</span></div>
+<? if( $model->cityFrom->extended_external_use ): ?>
 
-</div>
+    <div class="reservation-drop__search">
 
-
-
-
-<div class="reservation-drop__search">
-    <div class="reservation-drop__search-text">… или введите адрес вручную для выбора точки посадки рядом с домом</div>
-    <div id="search-from-block" class="reservation-drop__search-input-wrap">
-        <input id="search-place-from" type="text" class="reservation-drop__search-input" autocomplete="none" placeholder="Начните вводить адрес..." />
-        <div class="search-result-block sw-select-block"></div>
-        <?php /*
-        <input type="text" class="reservation-drop__search-input" placeholder="Начните вводить адрес...">
-        <div class="reservation-popup reservation-popup-search">
-            <ul class="reservation-popup__list">
-                <li class="reservation-popup__item">
-                    <div class="reservation-popup__item-text">Пушкина 1</div>
-                </li>
-                <li class="reservation-popup__item">
-                    <div class="reservation-popup__item-text">Проспект Победы 4а</div>
-                </li>
-            </ul>
+        <div class="reservation-drop__search-text">… или введите адрес вручную для выбора точки посадки рядом с домом</div>
+        <div id="search-from-block" class="reservation-drop__search-input-wrap">
+            <input id="search-place-from" type="text" class="reservation-drop__search-input" autocomplete="none" placeholder="Начните вводить адрес..." />
+            <div class="search-result-block sw-select-block"></div>
         </div>
-        */ ?>
+        <div class="reservation-drop__search-geo"><span>использовать мою геопозицию</span></div>
+
+        <? if( count($last_yandex_points) || count($popular_yandex_points) ): ?>
+            <ul class="reservation-drop__select-list">
+                <? foreach($last_yandex_points as $point): ?>
+                    <li class="reservation-drop__select-item select-point-from" data-id = "<?= $point->id ?>" data-name = "<?= $point->name ?>" lat="<?= $point->lat ?>" lon="<?= $point->long ?>"><?= $point->name ?></li>
+                <? endforeach; ?>
+                <? foreach($popular_yandex_points as $point): ?>
+                    <li class="reservation-drop__select-item select-point-from" data-id = "<?= $point->id ?>" data-name = "<?= $point->name ?>" lat="<?= $point->lat ?>" lon="<?= $point->long ?>"><?= $point->name ?></li>
+                <? endforeach; ?>
+            </ul>
+        <? endif; ?>
+
     </div>
-    <div class="reservation-drop__search-geo"><span>использовать мою геопозицию</span></div>
-</div>
+
+<? else: ?>
+
+    <div class="reservation-drop__select">
+        <div class="reservation-drop__select-title">Выберите из списка точку высадки, наиболее удобную для вас</div>
+        <div id="search-to-block" class="reservation-drop__select-select-wrap">
+            <input id="search-place-to" type="text" class="reservation-drop__select-select" autocomplete="off">
+            <div class="search-result-block sw-select-block"></div>
+            <div class="reservation-popup reservation-popup-select">
+                <ul class="reservation-popup__list"></ul>
+            </div>
+        </div>
+        <div class="reservation-drop__search-geo"><span>использовать мою геопозицию</span></div>
+        <ul class="reservation-drop__select-list">
+            <?php foreach ($last_yandex_points as $point) { ?>
+                <li class="reservation-drop__select-item select-point-from" data-id = "<?= $point->id ?>" data-name = "<?= $point->name ?>" lat="<?= $point->lat ?>" lon="<?= $point->long ?>"><?= $point->name ?></li>
+            <?php } ?>
+        </ul>
+    </div>
+
+<? endif; ?>
+
 <div class="reservation-drop__map">
     <?php /*
     <iframe src="https://yandex.ua/map-widget/v1/?um=constructor%3Ad85c33d8c2998c0058266a0bafaaa69c1c2197088f04a1e4ed222bdbeca7aa6b&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
@@ -80,24 +94,12 @@
     <div class="reservation-drop__selected-big">Выбрана точка посадки:</div>
     <div class="reservation-drop__selected-showmap">
         <div class="reservation-drop__selected-address">адрес/название точки</div>
-        <div class="reservation-drop__selected-showmap-wrap"><span>на карте</span></div>
+        <div class="reservation-drop__selected-showmap-wrap">
+            <span class = "reservation-drop__selected-showmap-trigger">на карте</span>
+        </div>
     </div>
     <div class="reservation-drop__selected-map">
         <iframe src="https://yandex.ua/map-widget/v1/?um=constructor%3Ad85c33d8c2998c0058266a0bafaaa69c1c2197088f04a1e4ed222bdbeca7aa6b&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
     </div>
 </div>
-<div class="reservation-drop__time">
-    <!--
-    <div class="reservation-drop__time-paragraph">Указанное вами желаемое время посадки - <span class="reservation-drop__time-time">21:00</span>. На выбранной точке можно сесть в указанное время.</div>
-    <div class="reservation-drop__time-title">Выберите время посадки:</div>
-    <ul class="reservation-drop__time-list">
-        <li class="reservation-drop__time-item">21:00</li>
-        <li class="reservation-drop__time-item">22:00</li>
-        <li class="reservation-drop__time-item">23:00</li>
-    </ul>
-    <div class="reservation-drop__time-back-wrap">
-        <img src="/images_new/back-address.svg" alt="" class="reservation-drop__time-back-arrow">
-        <div class="reservation-drop__time-back-text"><span>Другой адрес?</span></div>
-    </div>
-    -->
-</div>
+<div class="reservation-drop__time"></div>

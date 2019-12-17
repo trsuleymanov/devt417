@@ -36,10 +36,14 @@ class InputPhoneForm extends Model {
         }
 
         // может быть формат: +7 (966) 112 80 06
-        if (!preg_match('/^\+7 \([0-9]{3}\) [0-9]{3} [0-9]{2} [0-9]{2}$/', $this->$attribute)) {
+        if( strpos($this->$attribute, '+7 (9') === false ) {
+
+            $this->addError($attribute, 'Проверьте правильность ввода номера. Мы работаем только с мобильными операторами из России');
+
+        } elseif (!preg_match('/^\+7 \([0-9]{3}\) [0-9]{3} [0-9]{2} [0-9]{2}$/', $this->$attribute)) {
             //$this->addError($attribute, 'Телефон должен быть в формате +7-***-***-****');
             $this->addError($attribute, 'Телефон должен быть в формате +7 (***) *** ** **');
-        }else {
+        } else {
             return true;
         }
     }

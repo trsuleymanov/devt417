@@ -142,9 +142,15 @@ $form = ActiveForm::begin([
                         </div>
                     </div>
 
-                    <div class="reservation-step-line-selecte reservation-step-line-selecte--1 <?= $model->yandexPointFrom != null ? 'd-n' : '' ?>">
-                        <input id="open-select-point-from" type="text" placeholder="Начните вводить адрес..." readonly>
-                    </div>
+                    <? if( $model->cityFrom->extended_external_use ): ?>
+                        <div class="reservation-step-line-selecte reservation-step-line-selecte--1 <?= $model->yandexPointFrom != null ? 'd-n' : '' ?>">
+                            <input id="open-select-point-from" data-external-use = "<?=$model->cityFrom->extended_external_use;?>" type="text" placeholder="Начните вводить адрес..." readonly>
+                        </div>
+                    <? else: ?>
+                        <div class="reservation-step-line-selecte reservation-step-line-selecte--1 input-arrow <?= ($model->yandexPointTo != null ? 'd-n' : '') ?>">
+                            <input id="open-select-point-from" data-external-use = "<?=$model->cityFrom->extended_external_use;?>" type="text" placeholder="Выберите из списка" readonly>
+                        </div>
+                    <? endif; ?>
 
                     <div class="reservation-step-line-map reservation-step-line-map--address">
                         
