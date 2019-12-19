@@ -28,9 +28,6 @@ $this->registerJsFile('js/account/order.js', ['depends'=>'app\assets\NewAppAsset
             $datetime = $order->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
 
             $trip = $order->trip;
-            if ($trip == null) {
-                throw new ForbiddenHttpException('Для заказа ' . $order->id . ' не найден рейс');
-            }
             $tariff = $trip->tariff;
             ?>
 
@@ -59,22 +56,24 @@ $this->registerJsFile('js/account/order.js', ['depends'=>'app\assets\NewAppAsset
                 </div>
                 <div class="order__price">
                     <?php if ($order_class == 'history__order__action') { ?>
-                        <div class="order__price__row order__price__row_total">
-                            <div class="order__price__title">
-                                Цена за место:
+                        <?php if($tariff != null) { ?>
+                            <div class="order__price__row order__price__row_total">
+                                <div class="order__price__title">
+                                    Цена за место:
+                                </div>
+                                <div class="order__price__value">
+                                    <?= ($tariff->superprepayment_common_price + $tariff->superprepayment_reservation_cost) ?><span>р.</span>
+                                </div>
                             </div>
-                            <div class="order__price__value">
-                                <?= ($tariff->superprepayment_common_price + $tariff->superprepayment_reservation_cost) ?><span>р.</span>
+                            <div class="order__price__row">
+                                <div class="order__price__title">
+                                    Общая скидка:
+                                </div>
+                                <div class="order__price__value">
+                                    0<span>р.</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="order__price__row">
-                            <div class="order__price__title">
-                                Общая скидка:
-                            </div>
-                            <div class="order__price__value">
-                                0<span>р.</span>
-                            </div>
-                        </div>
+                        <?php } ?>
                     <?php } elseif ($order_class == 'history__order__canceled') { ?>
                         <div class="order__price__row order__price__row_total">
                             <div class="order__price__title">
