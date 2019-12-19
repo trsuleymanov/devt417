@@ -46,7 +46,8 @@ class ClientExt extends \yii\db\ActiveRecord
             [['direction_id', 'data', 'time', 'yandex_point_from_id', 'city_from_id', 'city_to_id', 'time', 'places_count'], 'required'],
             [['user_id', 'created_at', 'updated_at', 'sync_date', 'status_setting_time', 'time_confirm',
                 'places_count', 'student_count', 'child_count', 'yandex_point_from_id', 'yandex_point_to_id', 'trip_id', 'is_paid', 'payment_in_process',
-                'suitcase_count', 'bag_count', 'prize_trip_count'], 'integer'],
+                'suitcase_count', 'bag_count', 'prize_trip_count',
+                'cancellation_click_time', 'cancellation_clicker_id'], 'integer'],
             [['direction_id', 'trip_name',
                 // 'street_from', 'point_from', 'street_to', 'point_to',
                 'transport_model', 'transport_color', 'email'], 'string', 'max' => 50],
@@ -156,20 +157,6 @@ class ClientExt extends \yii\db\ActiveRecord
             'user_id'
         ];
 
-//        $scenarios['second_form'] = [
-//            'user_id', // +
-//            'phone',
-//            'email',
-//            'fio',
-//            'time_confirm',// +
-//            'trip_id',
-//            'trip_name', // +
-//            'yandex_point_from_id', 'yandex_point_from_name', 'yandex_point_from_lat', 'yandex_point_from_long', // +
-//            'places_count', 'student_count', 'child_count', 'suitcase_count', 'bag_count',// +
-//            'price', // +
-//            'yandex_point_to_id', 'yandex_point_to_name', 'yandex_point_to_lat', 'yandex_point_to_long',// +
-//        ];
-
         $scenarios['second_form'] = [
             'trip_id',
             'yandex_point_from_id',
@@ -195,7 +182,6 @@ class ClientExt extends \yii\db\ActiveRecord
     }
 
 
-
     /**
      * @inheritdoc
      */
@@ -208,6 +194,8 @@ class ClientExt extends \yii\db\ActiveRecord
             'main_server_order_id' => 'id заказа на основном сервере',
             'status' => 'Статус',
             'status_setting_time' => 'Время установки статуса',
+            'cancellation_click_time' => 'Время отмены',
+            'cancellation_clicker_id' => 'Пользователь совершивший отмену',
             'user_id' => 'Пользователь',
             'fio' => 'ФИО',
             'phone' => 'Телефон',
@@ -468,6 +456,7 @@ class ClientExt extends \yii\db\ActiveRecord
         ];
     }
 
+
     public static function getStatusesRu() {
 
 //        return [
@@ -490,27 +479,6 @@ class ClientExt extends \yii\db\ActiveRecord
         ];
     }
 
-//    public static function getStatusesBackgroundColor() {
-//
-//        return [
-//            'created' => '#FFE576', // создана заявка
-//            'pending_call' => '#A0D880', // заявка обработана (т.е. заказ создан), но ожидается звонок от оператора для подтверждения ВРПТ
-//            'pending_send' => '#2CAC00', // в ожидании отправления
-//            'sended' => '#2CAC00', // отправлен
-//            'canceled' => '#FF0000' // отменен
-//        ];
-//    }
-
-//    public static function getStatusesTextColor() {
-//
-//        return [
-//            'created' => '#676750', // создана заявка
-//            'pending_call' => '#676750', // заявка обработана (т.е. заказ создан), но ожидается звонок от оператора для подтверждения ВРПТ
-//            'pending_send' => '#FFFFFF', // в ожидании отправления
-//            'sended' => '#FFFFFF', // отправлен
-//            'canceled' => '#FFFFFF' // отменен
-//        ];
-//    }
 
     public static function convertMainServerOrderStatus($main_server_order) {
 
@@ -554,17 +522,6 @@ class ClientExt extends \yii\db\ActiveRecord
             return '';
         }
 
-//        if($main_server_order['status_code'] == 'created' && empty($main_server_order['time_confirm'])) {
-//            return 'pending_call';
-//        }elseif($main_server_order['status_code'] == 'created' && !empty($main_server_order['time_confirm'])) {
-//            return 'pending_send';
-//        }elseif($main_server_order['status_code'] == 'sent') {
-//            return 'sended';
-//        }elseif($main_server_order['status_code'] == 'canceled') {
-//            return 'canceled';
-//        }else {
-//            return 'unknown';
-//        }
     }
 
     /**
@@ -579,7 +536,7 @@ class ClientExt extends \yii\db\ActiveRecord
             throw new ForbiddenHttpException('Не найден статус '.$status);
         }
 
-        //if($status == 'canceled') {
+
         if(in_array($status, ['canceled_by_client', 'canceled_by_operator', 'canceled_auto'])) {
 
             $setting = Setting::find()->where(['id' => 1])->one();
@@ -598,6 +555,11 @@ class ClientExt extends \yii\db\ActiveRecord
                 if ($this->paid_summ > 0) {
                     $this->returnPayment();
                 }
+            }
+
+            if($status == 'canceled_by_client') {
+                $this->cancellation_click_time = time();
+                $this->cancellation_clicker_id = Yii::$app->getUser()->getId();
             }
 
         }elseif($status == 'sended') {// если заявка-заказ перешел в статус "отправлена", то при наличии кода друга начисляем другу деньгу

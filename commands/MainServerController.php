@@ -134,10 +134,8 @@ class MainServerController extends Controller
 
     /*
      * Возвращается список не синхронизированных заказов
-     *
      * php yii main-server/get-not-sync-orders
-     */
-    /**
+     *
      * @throws ErrorException
      * @throws ForbiddenHttpException
      * @throws \yii\base\InvalidConfigException
@@ -155,7 +153,6 @@ class MainServerController extends Controller
 
         if ($response->statusCode == 200) {
 
-
             $orders = $response->data;
             if(count($orders) > 0) {
                 foreach($orders as $order) {
@@ -166,7 +163,6 @@ class MainServerController extends Controller
                     }
 
                     if($client_ext == null) {
-                        //throw new ForbiddenHttpException('Заявка не найдена');
                         $client_ext = new ClientExt();
                         $client_ext->source_type = 'main_site';
 
@@ -176,10 +172,6 @@ class MainServerController extends Controller
 
                     $client_ext->main_server_order_id = $order['order_id'];
 
-                    // статус после перезаписи $client_ext отдельно установим чтобы сработал нужный код
-//                    $client_ext->status = ClientExt::convertMainServerOrderStatus($order);
-//                    $client_ext->status_setting_time = $order['status_setting_time'];
-
 
                     $user = null;
                     if(!empty($order['client_email'])) {
@@ -188,29 +180,6 @@ class MainServerController extends Controller
                     if($user == null) {
                         $user = User::find()->where(['phone' => $order['client_mobile_phone']])->one();
                     }
-//                    if($user == null) {
-//                        $user = new User();
-//                        $user->email = $order['client_email'];
-//                        $user->phone = $order['client_mobile_phone'];
-//                        $user->fio = $order['client_name'];
-//                        $user->cashback = $order['client_cashback'];
-//                        if(!$user->save(false)) {
-//                            throw new ErrorException('Не удалось создать пользователя');
-//                        }
-//                    }else {
-//                        if($user->fio != $order['client_name']) {
-//                            $user->setField('fio', $order['client_name']);
-//                        }
-//                        if($user->email != $order['client_email'] && !empty($order['client_email'])) {
-//                            $user->setField('email', $order['client_email']);
-//                        }
-//                        if($user->phone != $order['client_mobile_phone'] && !empty($order['client_mobile_phone'])) {
-//                            $user->setField('phone', $order['client_mobile_phone']);
-//                        }
-//                        if($user->cashback != $order['client_cashback'] && !empty($order['client_cashback'])) {
-//                            $user->setField('cashback', $order['client_cashback']);
-//                        }
-//                    }
 
                     // создание пользователя должно было произойти ранее при синхронизации пользователей
                     if($user == null) {
@@ -228,7 +197,6 @@ class MainServerController extends Controller
                     $trip = null;
                     if(!empty($order['trip_name'])) {
                         $trip = Trip::find()
-                            //->where(['date' => $order['date']])
                             ->where(['date' => $order['trip_date']])
                             ->andWhere(['direction_id' => ($order['direction_name'] == 'АК' ? 1 : 2)])
                             ->andWhere(['name' => $order['trip_name']])
@@ -248,7 +216,6 @@ class MainServerController extends Controller
                     $client_ext->bag_count = $order['bag_count'];
                     $client_ext->suitcase_count = $order['suitcase_count'];
 
-
                     $client_ext->yandex_point_from_id = $order['yandex_point_from_id'];
                     $client_ext->yandex_point_from_name = $order['yandex_point_from_name'];
                     $client_ext->yandex_point_from_lat = $order['yandex_point_from_lat'];
@@ -262,7 +229,6 @@ class MainServerController extends Controller
                     $client_ext->accrual_cash_back = $order['accrual_cash_back'];
                     $client_ext->penalty_cash_back = $order['penalty_cash_back'];
                     $client_ext->used_cash_back = $order['used_cash_back'];
-                    // $client_ext->discount // - такого поля нет в заказах диспетчерской
 
                     $client_ext->transport_car_reg = $order['transport_car_reg'];
                     $client_ext->transport_model = $order['transport_model'];
