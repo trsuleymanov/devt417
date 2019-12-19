@@ -542,18 +542,20 @@ class ClientExt extends \yii\db\ActiveRecord
             $setting = Setting::find()->where(['id' => 1])->one();
 
             $trip = $this->trip;
-            if($trip == null) {
-                throw new ErrorException('У заказа '.$this->id.' не найден рейс');
-            }
+            //if($trip == null) {
+                // throw new ErrorException('У заказа '.$this->id.' не найден рейс');
+            //}
 
             // если текущее время отмены заказа больше чем время (первая точка рейча минут часы $setting->count_hours_before_trip_to_cancel_order),
             // то отмена заказа запрещена
-            if (in_array($status, ['canceled_by_client']) && !empty($this->status) && $with_check == true && time() > $trip->getStartTimeUnixtime() - 3600 * intval($setting->count_hours_before_trip_to_cancel_order)) {
-                throw new ForbiddenHttpException('Запрещено отменять заказ '.$this->id.' менее чем за ' . $setting->count_hours_before_trip_to_cancel_order . ' часов до рейса (id=' . $this->id . ')');
-            } else {
-                // если заказ оплачен/частично оплачен, то проводим возврат
-                if ($this->paid_summ > 0) {
-                    $this->returnPayment();
+            if($trip != null) {
+                if (in_array($status, ['canceled_by_client']) && !empty($this->status) && $with_check == true && time() > $trip->getStartTimeUnixtime() - 3600 * intval($setting->count_hours_before_trip_to_cancel_order)) {
+                    throw new ForbiddenHttpException('Запрещено отменять заказ ' . $this->id . ' менее чем за ' . $setting->count_hours_before_trip_to_cancel_order . ' часов до рейса (id=' . $this->id . ')');
+                } else {
+                    // если заказ оплачен/частично оплачен, то проводим возврат
+                    if ($this->paid_summ > 0) {
+                        $this->returnPayment();
+                    }
                 }
             }
 
