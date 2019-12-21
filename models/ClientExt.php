@@ -47,7 +47,8 @@ class ClientExt extends \yii\db\ActiveRecord
             [['user_id', 'created_at', 'updated_at', 'sync_date', 'status_setting_time', 'time_confirm',
                 'places_count', 'student_count', 'child_count', 'yandex_point_from_id', 'yandex_point_to_id', 'trip_id', 'is_paid', 'payment_in_process',
                 'suitcase_count', 'bag_count', 'prize_trip_count',
-                'cancellation_click_time', 'cancellation_clicker_id'], 'integer'],
+                'cancellation_click_time', 'cancellation_clicker_id', 'paid_time'], 'integer'],
+
             [['direction_id', 'trip_name',
                 // 'street_from', 'point_from', 'street_to', 'point_to',
                 'transport_model', 'transport_color', 'email'], 'string', 'max' => 50],
@@ -234,14 +235,15 @@ class ClientExt extends \yii\db\ActiveRecord
             'prize_trip_count' => 'Количество призовых поездок',
             'price' => 'Итоговая цена',
             'paid_summ' => 'Оплачено',
+            'paid_time' => 'Время оплаты',
+            'payment_in_process' => 'Платеж обрабатывается',
+            'is_paid' => 'Заказ оплачен (да/нет)',
+            'discount' => 'Скидка',
             'accrual_cash_back' => 'Начисление кэш-бэка',
             'penalty_cash_back' => 'Использованный кэш-бэк для оплаты заказа',
             'used_cash_back' => 'Списанный кэш-бэк как штраф',
             'but_checkout' => 'Кнопка завершения создания заказа', // Оплатить сейчас или Бронировать
-            'payment_in_process' => 'Платеж обрабатывается',
-            'is_paid' => 'Заказ оплачен (да/нет)',
 
-            'discount' => 'Скидка',
             'transport_car_reg' => 'Гос. номер т/с',
             'transport_model' => 'Марка т/с',
             'transport_color' => 'Цвет т/с',
@@ -377,8 +379,10 @@ class ClientExt extends \yii\db\ActiveRecord
 
         if($this->price > 0 && ($this->price == $this->paid_summ + $this->used_cash_back)) {
             $this->is_paid = true;
+            $this->paid_time = time();
         }else {
             $this->is_paid = false;
+            $this->paid_time = NULL;
         }
 
         return parent::beforeSave($insert);
