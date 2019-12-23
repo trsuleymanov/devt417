@@ -59,7 +59,6 @@ class OrderController extends Controller
             throw new ForbiddenHttpException('Заказ не найден');
         }
 
-        // $client_ext->setStatus('canceled');
         $client_ext->setStatus('canceled_by_client');
 
         return [

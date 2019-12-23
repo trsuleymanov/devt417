@@ -28,7 +28,6 @@ class CancelAction extends \yii\rest\Action
 //            throw new ForbiddenHttpException('Нельзя отменить заказ по которому была произведена оплата');
 //        }
 
-        // $client_ext->setStatus('canceled');
         $client_ext->setStatus('canceled_by_client');
 
         return; // 200

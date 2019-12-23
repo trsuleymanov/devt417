@@ -71,6 +71,11 @@ class GetNotSyncClientextsAction extends \yii\rest\Action
 
                     'is_mobile' => $client_ext->is_mobile,
                     'status' => $client_ext->status,
+
+                    'status_setting_time' => $client_ext->status_setting_time,
+                    'cancellation_click_time' => $client_ext->cancellation_click_time,
+                    'cancellation_clicker_id' => $client_ext->cancellation_clicker_id,
+
                     'direction_id' => $client_ext->direction_id,
                     'data' => $client_ext->data,
                     'time' => $client_ext->time,
@@ -101,8 +106,6 @@ class GetNotSyncClientextsAction extends \yii\rest\Action
 
                     'passengers' => isset($aClientExtPassengers[$client_ext->id]) ? $aClientExtPassengers[$client_ext->id] : [],
 
-                    // 'city_from_id' => $client_ext->city_from_id,
-                    // 'city_to_id' => $client_ext->city_to_id,
                     'suitcase_count' => $client_ext->suitcase_count,
                     'bag_count' => $client_ext->bag_count,
                     'trip_id' => ($client_ext->trip != null ? $client_ext->trip->main_server_trip_id : ''),
