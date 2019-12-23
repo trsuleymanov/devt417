@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </svg>
             </button>
             <a class="modal_global__login text_20" href="">Регистраций - шаг 3/3</a>
-            <button class="close modal-close" type="button">
+            <button class="close" type="button" name="close" data-izimodal-close="">
                 <svg class="icon icon-close close__svg">
                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
                 </svg>

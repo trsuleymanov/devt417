@@ -3,6 +3,7 @@ function clearAndHideRegForms() {
 
     $('#modal_enter_password').html();
     $('#modal_restorepassword').html();
+    $('#modal_confirm_phone').html();
     $('#modal_entersmscode').html();
     $('#modal_registration').html();
     $('.for_enter_wrap').hide();
@@ -22,7 +23,8 @@ function clearAndHideMobileRegForms() {
         }else {
             //console.log('закрываем id=' + $(this).attr('id'));
             var id = $(this).attr('id');
-            if(id == 'enter_password-mobile' || id == 'restorepassword-mobile' || id == 'entersmscode-mobile' || id == 'registration-mobile') {
+            console.log(id);
+            if(id == 'enter_password-mobile' || id == 'restorepassword-mobile' || id == 'confirm_phone-mobile' || id == 'entersmscode-mobile' || id == 'registration-mobile') {
                 console.log('очищаем id='+$(this).attr('id'));
                 $(this).html('').fadeOut(100);
             }
@@ -377,7 +379,7 @@ function openLoginForm(access_code) {
 
                 // inputphoneform_errors
                 //   mobile_phone
-                //      0	Необходимо заполнить «Телефон».
+                //      0   Необходимо заполнить «Телефон».
 
             }
         },
@@ -467,52 +469,106 @@ function openConfirmPhoneForm(user_phone, is_mobile) {
 
             if(response.success == true) {
 
-            //     // $('#default-modal').find('.modal-body').html(response.html);
-            //     // $('#default-modal').find('.modal-dialog').width('650px');
-            //     // $('#default-modal .modal-title').html('Регистрация');
-            //     // $('#default-modal').modal('show');
+                // $('#default-modal').find('.modal-body').html(response.html);
+                // $('#default-modal').find('.modal-dialog').width('650px');
+                // $('#default-modal .modal-title').html('Регистрация');
+                // $('#default-modal').modal('show');
 
             //     //$('.for_enter_wrap').hide();
-            //     if(is_mobile == 0) {
+                if(is_mobile == 0) {
+
                     clearAndHideRegForms();
                     $('#modal_confirm_phone').html(response.html).fadeIn(100);
-            //     }else {
-            //         clearAndHideMobileRegForms();
-            //         $('#entersmscode-mobile').html(response.html).fadeIn(100);
-            //     }
 
-                    $(document).on('click', '#confirm_phone_link', function(){
+                }else {
 
-                        $.ajax({
-                            url: '/user/ajax-get-call-auth?number='+ response.number +'&reg_number='+ response.reg_number +'&reg_time_limit='+ response.reg_time_limit,
-                            type: 'post',
-                            data: {},
-                            success: function (response) {
-
-                                console.log(response);
-                    //             // if(response.user_is_exist == true) {
-                    //             //     alert('С таким телефоном пользователь уже зарегистрирован. Авторизуйтесь пожалуйста для дальнейшего оформления заказа.');
-                    //             // }
-                            },
-                            error: function (data, textStatus, jqXHR) {
-
-                                if (textStatus == 'error' && data != undefined) {
-                                    if (void 0 !== data.responseJSON) {
-                                        if (data.responseJSON.message.length > 0) {
-                                            alert(data.responseJSON.message);
-                                        }
-                                    } else {
-                                        if (data.responseText.length > 0) {
-                                            alert(data.responseText);
-                                        }
-                                    }
-                                } else {
-                                    alert('Ошибка');
-                                }
-                            }
-                        });
-
+                    clearAndHideMobileRegForms();
+                    $('#confirm_phone-mobile').iziModal({
+                        width: '100%',
+                        top: 0,
+                        loop: false,
+                        overlayColor: 'rgba(0,0,0,.9)',
+                        zindex: 9999,
+                        onOpening: function(modal){
+                            modal.startLoading();
+                            $('#confirm_phone-mobile .iziModal-content').html(response.html)
+                            modal.stopLoading();
+                        }
                     });
+                    $('#confirm_phone-mobile').iziModal('open');
+
+                }
+
+                $(document).on('click', '#confirm_phone_link', function(event){
+
+                    $.ajax({
+                        url: '/user/ajax-get-call-auth?number='+ response.number +'&reg_number='+ response.reg_number +'&reg_time_limit='+ response.reg_time_limit,
+                        type: 'post',
+                        data: {},
+                        dataType: 'json',
+                        success: function () {
+
+                            if(is_mobile == 0) {
+
+                                $('#modal_confirm_actions').html('<p>Ожидание звонка: <span id = "modal_confirm_timer">'+ response.reg_time_limit +'</span></p>');
+
+                            } else {
+
+                                $('#confirm_phone-mobile .modal_global__btn').html('<p class = "text_16">Ожидание звонка: <span id = "modal_confirm_timer">'+ response.reg_time_limit +'</span></p>');
+
+                            }
+
+                            var limit = response.reg_time_limit;
+                            var interval = setInterval(function(){
+
+                                if( limit ){
+
+                                    limit -= 1;
+                                    $('#modal_confirm_timer').text(limit);
+
+                                } else {
+
+                                    clearInterval(interval);
+
+                                    if(is_mobile == 0) {
+
+                                        $('#modal_confirm_phone').html('<div class = "for_enter">Указанный вами телефон не подтвержден</div>')
+
+                                    } else {
+
+                                        $('#confirm_phone-mobile .modal_global__enter').html('<div class="modal_global__content" style="padding: 20px;"><p class = "text_16">Указанный вами телефон не подтвержден</p></div>');
+
+                                    }
+
+                                }
+
+                                if(limit % 10 == 1){
+
+                                    $.ajax({
+                                        url: '/user/ajax-get-auth-result?number='+ response.number +'&user_phone='+ user_phone,
+                                        type: 'post',
+                                        data: {},
+                                        success: function (response) {
+
+                                            console.log(response);
+                                            if( response.success && response.auth ){
+
+                                                clearInterval(interval);
+                                                openEmailAndPasswordForm(response.access_code, is_mobile);
+
+                                            }
+
+                                        }
+                                    });
+
+                                }
+
+                            }, 1000);
+
+                        }
+                    });
+
+                });
 
             }else {
                 alert('Ошибка');
@@ -537,10 +593,12 @@ function openConfirmPhoneForm(user_phone, is_mobile) {
 
 }
 
-function openInputCodeForm(access_code, client_ext_id, is_mobile) {
+
+
+function openInputCodeForm(access_code, is_mobile) {
 
     $.ajax({
-        url: '/site/ajax-get-input-code-form?c='+access_code + '&client_ext_id=' + client_ext_id+'&is_mobile=' + is_mobile,
+        url: '/site/ajax-get-input-code-form?c='+access_code + '&client_ext_id='+ window.client_ext_id +'&is_mobile=' + is_mobile,
         type: 'post',
         data: {},
         success: function (response) {
@@ -589,6 +647,7 @@ function openInsertPassword(user_phone, is_mobile) {
         type: 'post',
         data: {},
         success: function (response) {
+            console.log(response);
             if(response.success == true) {
 
                 // $('#default-modal').find('.modal-body').html(response.html);
@@ -601,6 +660,7 @@ function openInsertPassword(user_phone, is_mobile) {
                     clearAndHideRegForms();
                     $('#modal_enter_password').html(response.html).fadeIn(100);
                 }else {
+                    console.log('trololo');
                     clearAndHideMobileRegForms();
                     $('#enter_password-mobile').html(response.html).fadeIn(100);
                 }
@@ -628,10 +688,10 @@ function openInsertPassword(user_phone, is_mobile) {
 }
 
 
-function openEmailAndPasswordForm(access_code, client_ext_id, is_mobile) {
+function openEmailAndPasswordForm(access_code, is_mobile) {
 
     $.ajax({
-        url: '/site/ajax-get-input-email-password-form?c='+access_code + '&client_ext_id=' + client_ext_id + '&is_mobile=' + is_mobile,
+        url: '/site/ajax-get-input-email-password-form?c='+access_code + '&client_ext_id='+ window.client_ext_id +'&is_mobile=' + is_mobile,
         type: 'post',
         data: {},
         success: function (response) {
@@ -670,30 +730,33 @@ function openEmailAndPasswordForm(access_code, client_ext_id, is_mobile) {
 }
 
 
-function sendMobileForm(phone, client_ext_id, is_mobile) {
+function sendMobileForm(phone, is_mobile) {
 
     $.ajax({
-        url: '/site/ajax-get-login-form?client_ext_id=' + client_ext_id + '&is_mobile=' + is_mobile,
+        url: '/site/ajax-get-login-form?client_ext_id='+ window.client_ext_id +'&is_mobile=' + is_mobile,
         type: 'post',
         data: {
             'InputPhoneForm[mobile_phone]': phone
         },
         success: function (response) {
 
-            console.log(response);
             if(response.success == true) {
 
                 if(response.next_step == "confirm_phone") {
+
                     // alert('registration');
                     openConfirmPhoneForm(response.user_phone, is_mobile);
 
                 } else if(response.next_step == "registration") {
+
                     // alert('registration');
-                    openInputCodeForm(response.access_code, client_ext_id, is_mobile);
+                    openEmailAndPasswordForm(response.access_code, is_mobile);
 
                 } else if(response.next_step == "insert_password") {
+
                     // alert('insert_password');
                     openInsertPassword(response.user_phone, is_mobile);
+
                 }
 
             } else {
@@ -732,16 +795,14 @@ function sendMobileForm(phone, client_ext_id, is_mobile) {
 $(document).on('click', '#submit-login-phone-mobile', function() {
 
     var phone = $('#inputphone-form-mobile').find('input[name="InputPhoneForm[mobile_phone2]"]').val();
-    var client_ext_id = $('#inputphone-form-mobile').attr('client-ext-id');
-    sendMobileForm(phone, client_ext_id, 1);
+    sendMobileForm(phone, 1);
 
     return false;
 });
 $(document).on('click', '#submit-login-phone', function() {
 
     var phone = $('#inputphone-form').find('input[name="InputPhoneForm[mobile_phone]"]').val();
-    var client_ext_id = $('#inputphone-form').attr('client-ext-id');
-    sendMobileForm(phone, client_ext_id, 0);
+    sendMobileForm(phone, 0);
 
     return false;
 });
@@ -867,7 +928,7 @@ $(document).on('click', '#resend-code-button-mobile', function() {
 });
 
 
-function checkCode(access_code, sms_code, client_ext_id, is_mobile) {
+function checkCode(access_code, sms_code, is_mobile) {
 
     $.ajax({
         url: '/site/ajax-check-code?c=' + access_code + '&sms_code=' + sms_code + '&is_mobile=' + is_mobile,
@@ -877,7 +938,7 @@ function checkCode(access_code, sms_code, client_ext_id, is_mobile) {
 
             if(response.success == true) {
 
-                openEmailAndPasswordForm(access_code, client_ext_id, is_mobile);  // открываем форму заполнения email и пароля для входа
+                openEmailAndPasswordForm(access_code, is_mobile);  // открываем форму заполнения email и пароля для входа
 
             }else {
                 //$('#registration-step-2').yiiActiveForm('updateAttribute', 'currentreg-check_code', [response.error]);
@@ -920,9 +981,8 @@ $(document).on('click', '#check-code-button', function() {
 
     var access_code = $(this).attr('access_code');
     var sms_code = $('input[name="CurrentReg[check_code]"]').val();
-    var client_ext_id = $('#registration-step-2').attr('client-ext-id');
 
-    checkCode(access_code, sms_code, client_ext_id, 0);
+    checkCode(access_code, sms_code, 0);
 
     return false;
 });
@@ -932,19 +992,18 @@ $(document).on('click', '#check-code-button-mobile', function() {
 
     var access_code = $(this).attr('access_code');
     var sms_code = $('input[name="CurrentReg[check_code]"]').val();
-    var client_ext_id = $('#registration-step-2').attr('client-ext-id');
 
-    checkCode(access_code, sms_code, client_ext_id, 1);
+    checkCode(access_code, sms_code, 1);
 
     return false;
 });
 
 
 
-function sendEmailPasswordForm(access_code, email, password, client_ext_id, is_mobile) {
+function sendEmailPasswordForm(access_code, email, password, is_mobile) {
 
     $.ajax({
-        url: '/site/ajax-get-input-email-password-form?c=' + access_code + '&client_ext_id=' + client_ext_id + '&is_mobile='+is_mobile,
+        url: '/site/ajax-get-input-email-password-form?c=' + access_code + '&client_ext_id=' + window.client_ext_id + '&is_mobile='+ is_mobile,
         type: 'post',
         data: {
             "CurrentReg[email]": email,
@@ -989,9 +1048,8 @@ $(document).on('click', '#send-email-password-button', function() {
     var access_code = $(this).attr('access_code');
     var email = $('input[name="CurrentReg[email]"]').val();
     var password = $('input[name="CurrentReg[password]"]').val();
-    var client_ext_id = $('#registration-step-3').attr('client-ext-id');
 
-    sendEmailPasswordForm(access_code, email, password, client_ext_id, 0);
+    sendEmailPasswordForm(access_code, email, password, 0);
 
     return false;
 });
@@ -1000,9 +1058,8 @@ $(document).on('click', '#send-email-password-button-mobile', function() {
     var access_code = $(this).attr('access_code');
     var email = $('input[name="CurrentReg[email]"]').val();
     var password = $('input[name="CurrentReg[password]"]').val();
-    var client_ext_id = $('#registration-step-3').attr('client-ext-id');
 
-    sendEmailPasswordForm(access_code, email, password, client_ext_id, 1);
+    sendEmailPasswordForm(access_code, email, password, 1);
 
     return false;
 });

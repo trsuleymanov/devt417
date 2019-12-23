@@ -42,6 +42,9 @@ endif;
     <link rel="stylesheet" type="text/css" href="/css/main_new.css">*/ ?><!--[if lt IE 9]>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script><![endif]-->
     <?php $this->head() ?>
+    <script>
+        window.client_ext_id = '<?=($client_ext != null ? $client_ext->id : 0);?>';
+    </script>
 </head>
 <body class="index-page <?=$addClass?>">
 <?php $this->beginBody() ?>
@@ -82,7 +85,7 @@ endif;
                         $form = ActiveForm::begin([
                             'id' => 'inputphone-form',
                             'options' => [
-                                //'client-ext-id' => ($client_ext != null ? $client_ext->id : 0),
+                                // 'client-ext-id' => ($client_ext != null ? $client_ext->id : 0),
                             ]
                         ]);
                         ?>
@@ -122,22 +125,7 @@ endif;
                         ?>
                     </div>
                     <div id="modal_confirm_phone" class="for_enter_wrap"></div>
-
-                    <div id="modal_enter_password" class="for_enter_wrap">
-                        <?php /*
-                        // Форма загружается отдельно
-                        <div class="for_enter fix_height">
-                            <input class="for_enter__input" type="tel" name="phone" placeholder="+7 (000) 000 - 00 - 00" autocomplete="off">
-                            <input class="for_enter__input" type="email" name="email" placeholder="Введите Email" autocomplete="off">
-                            <input class="for_enter__input" type="password" name="phone" placeholder="Введите пароль" autocomplete="off">
-                            <div class="children__checkbox">
-                                <button class="children__btn" type="button" name="check" data-name="Запомнить меня"></button>
-                                <input type="checkbox" name="checkbox" hidden="">
-                            </div>
-                            <button class="for_enter__submit text_16 test-next" type="button" name="submit">Продолжить</button>
-                        </div>
-                        */ ?>
-                    </div>
+                    <div id="modal_enter_password" class="for_enter_wrap"></div>
                     <div id="modal_restorepassword" class="for_enter_wrap"></div>
                     <div id="modal_entersmscode" class="for_enter_wrap"></div>
                     <div id="modal_registration" class="for_enter_wrap"></div>
@@ -356,7 +344,7 @@ endif;
         $form = ActiveForm::begin([
             'id' => 'inputphone-form-mobile',
             'options' => [
-                //'client-ext-id' => ($client_ext != null ? $client_ext->id : 0),
+                // 'client-ext-id' => ($client_ext != null ? $client_ext->id : 0),
             ]
         ]);
         ?>
@@ -404,41 +392,11 @@ endif;
         ActiveForm::end();
         ?>
     </div>
-    <div id="enter_password-mobile" class="mobile_menu">
-        <?php /*
-        <div class="modal_global">
-            <div class="modal_global__name">
-                <button class="prev" type="button" name="prev" data-izimodal-close>
-                    <svg class="icon icon-right-arrow close__svg">
-                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#right-arrow"></use>
-                    </svg>
-                </button><a class="modal_global__login text_20" href="#">
-                    <svg class="icon icon-user header__icon">
-                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#user"></use>
-                    </svg>Войти</a>
-                <button class="close" type="button" name="close" data-izimodal-close>
-                    <svg class="icon icon-close close__svg">
-                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                    </svg>
-                </button>
-            </div>
-            <div class="modal_global__enter">
-                <div class="modal_global__content">
-                    <input class="modal_global__input" type="tel" name="phone" placeholder="+7 (000) 000 - 00 - 00" autocomplete="off">
-                    <input class="modal_global__input" type="email" name="email" placeholder="Введите Email" autocomplete="off">
-                    <input class="modal_global__input" type="password" name="phone" placeholder="Введите пароль" autocomplete="off">
-                    <div class="children__checkbox">
-                        <button class="children__btn" type="button" name="check" data-name="Запомнить меня"></button>
-                        <input type="checkbox" name="checkbox" hidden="">
-                    </div>
-                </div>
-                <div class="modal_global__btn">
-                    <button class="modal_global__submit text_16 test" type="button" name="submit">Продолжить</button>
-                </div>
-            </div>
-        </div>*/ ?>
-    </div>
+    <div id="enter_password-mobile" class="mobile_menu"></div>
     <div id="restorepassword-mobile" class="mobile_menu"></div>
+    <div style = "display: none">
+        <div id="confirm_phone-mobile"></div>
+    </div>
     <div id="entersmscode-mobile" class="mobile_menu"></div>
     <div id="registration-mobile" class="mobile_menu"></div>
     <!--include ../modules/menuGlobal-->
