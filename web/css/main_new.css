@@ -58,6 +58,16 @@
   font-size: 14px;
 }
 
+#modal_confirm_actions {
+  margin-top: 10px;
+  width: 100%;
+}
+
+#modal_confirm_phone .for_enter {
+  height: auto;
+  min-height: auto;
+}
+
 #modal_confirm_phone .for_enter call {
   white-space: nowrap;
 }

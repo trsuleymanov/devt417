@@ -33,13 +33,13 @@ class NewAppAsset extends AssetBundle
     public $js = [
         //'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
         //'https://api-maps.yandex.ru/2.1/?lang=ru_RU',
-        'js/site.js',
         //'js/main_page/main_page.js',
         'js/select-widget.js',
         'js/libs.js',
         'js/imask.js',
-        'js/main_new.js',
         'js/editable-text-widget.js',
+        'js/main_new.js',
+        'js/site.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

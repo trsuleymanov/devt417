@@ -103,28 +103,42 @@ class UserController extends Controller
 
     public function actionAjaxGetCallAuth($number, $reg_number, $reg_time_limit) {
 
-        Yii::$app->response->format = 'json';
-
         $url = 'http://82.146.45.127:9000/add?number='. $number .'&reg_number='. $reg_number .'&reg_time_limit='. $reg_time_limit;
-        // $data = [
-        //     'number' => $number,
-        //     'reg_number' => $reg_number,
-        //     'reg_time_limit' => $reg_time_limit
-        // ];
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_TIMEOUT, $reg_time_limit);
-        // curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data) );
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        $result = [
-            'success' => true,
-            'result' => curl_exec($ch)
-        ];
+        $result = curl_exec($ch);
 
         curl_close($ch);
         return $result;
 
     }
+
+    public function actionAjaxGetAuthResult($number, $user_phone) {
+
+        Yii::$app->response->format = 'json';
+
+        $url = 'http://82.146.45.127:9000/result?number='. $number;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $reg_time_limit);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($ch);
+        $result = json_decode($result);
+        if( $result->success && $result->auth ):
+
+            $current_reg = CurrentReg::find()->where(['mobile_phone' => '+'. trim($user_phone)])->one();
+            $current_reg->setField('is_confirmed_mobile_phone', true);
+            $result->access_code = $current_reg->access_code;
+
+        endif;
+
+        curl_close($ch);
+        return $result;
+
+    }
+
 }

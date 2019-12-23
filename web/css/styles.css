@@ -296,12 +296,6 @@ header {
   padding-left: 0px;
   list-style: none;
 }
-/*.for_enter ul li{
-  padding-left: 30px;
-}
-.for_enter ul li:nth-of-type(1){
- padding-top: 20px;
-}*/
 
 .for_enter ul li a {
   padding: 15px 30px;
@@ -320,6 +314,17 @@ header {
   height: 1px
 }
 
+.for_enter .form-group {
+  width: 100%;
+}
+
+#registration-step-3 {
+  width: 100%;
+}
+
+#registration-step-3 input {
+  width: 100%;
+}
 
 .content {
   padding-top: 70px;
@@ -336,22 +341,6 @@ header {
     padding-top: 17vw;
   }
 }
-/*.sticky .content {
-  padding-top: 85px;
-}
-@media (max-width: 992px) {
-  .sticky .content {
-    padding-top: 22.666666666666664vw;
-  }
-}
-.sticky .header {
-  height: 85px;
-}
-@media (max-width: 992px) {
-  .sticky .header {
-    height: 22.666666666666664vw;
-  }
-}*/
 @media (max-width: 992px) {
   .container {
     max-width: 100%;

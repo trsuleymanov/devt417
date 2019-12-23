@@ -9,8 +9,6 @@
 // яндекс-точки посадки из последних 3 заказов
 // echo "last_yandex_points:<pre>"; print_r($last_yandex_points); echo "</pre>";
 
-// $super_yandex_points = $last_yandex_points;
-
 // echo "tariff:<pre>"; print_r($tariff); echo "</pre>";
 
 ?>
@@ -28,7 +26,9 @@
             <?php foreach ($super_yandex_points as $yandex_point) { ?>
                 <li class="reservation-drop-offer__item" yandex-point-id="<?= $yandex_point->id ?>">
                     <div class="reservation-drop-offer__item-title">«<?= $yandex_point->name ?>» - <b><?= $tariff->superprepayment_common_price ?></b> руб.</div>
-                    <!--<div class="reservation-drop-offer__item-subtitle">ул. Ленина, 92</div>-->
+                    <? if( $yandex_point->description != '' ): ?>
+                        <div class="reservation-drop-offer__item-subtitle"><?=$yandex_point->description;?></div>
+                    <? endif; ?>
                 </li>
             <?php } ?>
         </ul>

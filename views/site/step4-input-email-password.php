@@ -34,10 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     */ ?>
 
-    <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'placeholder' => 'Для регистрации введите Email'])->label(false); ?>
+    <?= $form->field($model, 'email')->textInput(['autofocus' => true, 'class' => 'for_enter__input', 'placeholder' => 'Для регистрации введите Email'])->label(false); ?>
 
     <br />
-    <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Для регистрации введите пароль', 'autocomplete' => "off"])->label(false) ?>
+    <?= $form->field($model, 'password')->passwordInput(['class' => 'for_enter__input', 'placeholder' => 'Для регистрации введите пароль', 'autocomplete' => "off"])->label(false) ?>
 
     <br />
     <button id="send-email-password-button" access_code="<?= $model->access_code ?>" class="for_enter__submit text_18" style="width: 100%;" type="button">Зарегистрироваться</button>
