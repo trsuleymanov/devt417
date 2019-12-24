@@ -187,12 +187,25 @@ class MainServerController extends Controller
                     }
 
                     $client_ext->user_id = $user->id;
+                    $client_ext->fio = $order['client_name'];
                     $client_ext->phone = $order['client_mobile_phone'];
                     $client_ext->email = $order['client_email'];
                     $client_ext->direction_id = ($order['direction_name'] == 'АК' ? 1 : 2);
+                    if($client_ext->direction_id == 1) {
+                        $client_ext->city_from_id = 2;
+                        $client_ext->city_to_id = 1;
+                    }else {
+                        $client_ext->city_from_id = 1;
+                        $client_ext->city_to_id = 2;
+                    }
+
                     $client_ext->data = $order['date'];
                     $client_ext->time = $order['trip_mid_time'];
                     $client_ext->time_confirm = $order['time_confirm'];
+
+                    if(empty($client_ext->access_code)) {
+                        $client_ext->access_code = $client_ext->generateAccessCode();
+                    }
 
                     $trip = null;
                     if(!empty($order['trip_name'])) {
