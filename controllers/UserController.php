@@ -152,13 +152,13 @@ class UserController extends Controller
 
         $user = User::find()->where(['id' => Yii::$app->user->getId()])->one();
 
-        /*
+
         // 1. Подтверждения e-mail;
         if($user->sendConfirmEmail()) {
             echo "письмо Подтверждения e-mail ушло";
         }else {
             echo "Подтверждения e-mail - не работает!";
-        }*/
+        }
 
         /*
         // 2. Восстановление пароля; - отправка письма со ссылкой на сайт чтобы можно было восстановить доступ
@@ -180,7 +180,7 @@ class UserController extends Controller
         }
         */
 
-
+        /*
         // 3. Инфо сообщение 1
         $aData = [  // какой-то произвольный набор данных для сообщения
             'xz' => 'бла бла бла',
@@ -191,8 +191,9 @@ class UserController extends Controller
         }else {
             echo "sendInfo1 - не работает!";
         }
+*/
 
-
+        /*
         // 4. Инфо сообщение 2
         $aData = [  // какой-то произвольный набор данных для сообщения
             'xz' => 'бла бла бла',
@@ -203,7 +204,7 @@ class UserController extends Controller
         }else {
             echo "sendInfo2 - не работает!";
         }
-
+*/
     }
 
 }
