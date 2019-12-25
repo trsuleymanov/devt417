@@ -282,16 +282,21 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public function sendConfirmEmail() {
 
+        $current_reg = CurrentReg::find()->where(['email' => $this->email])->one();
+        if($current_reg == null) {
+            throw new ErrorException('Регистрация не найдена');
+        }
+
         $message = Yii::$app->mailer->compose();
         $message->setFrom(\Yii::$app->params['callbackEmail']);
         $message->setTo($this->email);
         $message->setSubject('Подтверждение регистрации на сайте '.Yii::$app->params['siteUrl']);
         $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [
-            'registration_url' =>  Yii::$app->params['siteUrl'].'/user/confirm-registration/?registration_code='.$this->registration_code,
+            'registration_url' =>  Yii::$app->params['siteUrl'].'/user/confirm-registration/?registration_code='.$current_reg->registration_code,
             'site' => Yii::$app->params['siteUrl'],
             'img' => $message->embed(Yii::$app->params['siteUrl'].'/images/417.gif'),
             'email' => $this->email,
-            'phone' => $this->mobile_phone,
+            'phone' => $this->phone,
         ]));
         return $message->send();
 
