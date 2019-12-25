@@ -279,9 +279,28 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return true;
     }
 
+
+    public function sendConfirmEmail() {
+
+        $message = Yii::$app->mailer->compose();
+        $message->setFrom(\Yii::$app->params['callbackEmail']);
+        $message->setTo($this->email);
+        $message->setSubject('Подтверждение регистрации на сайте '.Yii::$app->params['siteUrl']);
+        $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [
+            'registration_url' =>  Yii::$app->params['siteUrl'].'/user/confirm-registration/?registration_code='.$this->registration_code,
+            'site' => Yii::$app->params['siteUrl'],
+            'img' => $message->embed(Yii::$app->params['siteUrl'].'/images/417.gif'),
+            'email' => $this->email,
+            'phone' => $this->mobile_phone,
+        ]));
+        return $message->send();
+
+        //return true;
+    }
+
     public function sendRestoreCode() {
 
-        Yii::$app->mailer->compose('restore_code', [
+        return Yii::$app->mailer->compose('restore_code', [
             'restore_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/restore-access/?restore_code='.$this->restore_code,
             'site' => $_SERVER['HTTP_HOST']
         ])
@@ -291,12 +310,12 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ->setSubject('Код восстановления доступа')
             ->send();
 
-        return true;
+        // return true;
     }
 
     public function sendTempPassword($password) {
 
-        Yii::$app->mailer->compose('temp_password', [
+        return Yii::$app->mailer->compose('temp_password', [
             //'restore_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/restore-access/?restore_code='.$this->restore_code,
             //'site' => $_SERVER['HTTP_HOST']
             'password' => $password,
@@ -307,8 +326,22 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ->setSubject('Временный пароль для входа на сайт')
             ->send();
 
-        return true;
+        //return true;
     }
+
+
+    public function sendInfo($aData) {
+
+        return Yii::$app->mailer->compose('info', $aData)
+            ->setFrom(\Yii::$app->params['callbackEmail'])
+            ->setBcc(\Yii::$app->params['fromEmail'])
+            ->setTo($this->email)
+            ->setSubject('Временный пароль для входа на сайт')
+            ->send();
+
+        //return true;
+    }
+
 
 
     public static function generateCodeForFriends() {
