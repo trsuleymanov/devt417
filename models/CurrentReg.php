@@ -162,21 +162,8 @@ class CurrentReg extends \yii\db\ActiveRecord
     }
 
 
+    // эта функция устарела и перенена аналогичтная функция подтверждения email в модель User
     public function sendRegistrationCode() {
-
-//        Yii::$app->mailer->compose('registration_code', [
-//            'registration_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/confirm-registration/?registration_code='.$this->registration_code,
-//            'site' => $_SERVER['HTTP_HOST']
-//        ])
-//            ->setFrom(\Yii::$app->params['callbackEmail'])
-//            ->setBcc(\Yii::$app->params['fromEmail'])
-//            ->setTo($this->email)
-//            //->setTo('nara-dress@yandex.ru')
-//            ->setSubject('Регистрационный код')
-//            //->setTextBody('Текст сообщения')
-//            //->setHtmlBody('<b>текст сообщения в формате HTML</b>')
-//            ->send();
-
 
         $message = Yii::$app->mailer->compose();
         $message->setFrom(\Yii::$app->params['callbackEmail']);
