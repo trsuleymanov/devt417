@@ -170,6 +170,7 @@ class UserController extends Controller
         */
 
 
+        /*
         // 2. Восстановление пароля; - отправка временного пароля (хотя я пока не уверен на 100% что это письмо нужно),
         //   но оно в старой логике точно использовалось
         if($user->sendTempPassword('123456')) {
@@ -177,8 +178,9 @@ class UserController extends Controller
         }else {
             echo "sendTempPassword - не работает!";
         }
+        */
 
-        /*
+
         // 3. Инфо сообщение 1
         $aData = [  // какой-то произвольный набор данных для сообщения
             'xz' => 'бла бла бла',
@@ -188,9 +190,9 @@ class UserController extends Controller
             echo "письмо sendInfo1 ушло";
         }else {
             echo "sendInfo1 - не работает!";
-        }*/
+        }
 
-        /*
+
         // 4. Инфо сообщение 2
         $aData = [  // какой-то произвольный набор данных для сообщения
             'xz' => 'бла бла бла',
@@ -201,7 +203,7 @@ class UserController extends Controller
         }else {
             echo "sendInfo2 - не работает!";
         }
-        */
+
     }
 
 }
