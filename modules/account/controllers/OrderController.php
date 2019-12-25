@@ -31,13 +31,12 @@ class OrderController extends Controller
         $orders = ClientExt::find()
             ->where(['user_id' => Yii::$app->getUser()->getId()])
             //->andWhere(['!=', 'status', ''])
-            ->andWhere([
-                'OR',
-                ['but_checkout' => 'reservation'],
-                ['but_checkout' => ''],
-                ['but_checkout' => NULL],
-            ])
-
+//            ->andWhere([
+//                'OR',
+//                ['but_checkout' => 'reservation'],
+//                ['but_checkout' => ''],
+//                ['but_checkout' => NULL],
+//            ])
             ->andWhere(['status' => ['created_with_time_confirm', 'created_without_time_confirm', 'created_with_time_sat']]) // pending_send - не беру, 'sended' - не беру
             ->orderBy(['id' => SORT_DESC])
             ->all();
