@@ -184,7 +184,7 @@ class UserController extends Controller
         // 3. Инфо сообщение 1
         $aData = [  // какой-то произвольный набор данных для сообщения
             'xz' => 'бла бла бла',
-            'test_field2' => 'wwwww'
+            'test_field' => 'wwwww'
         ];
         if($user->sendInfo($aData)) {
             echo "письмо sendInfo1 ушло";
@@ -196,7 +196,7 @@ class UserController extends Controller
         // 4. Инфо сообщение 2
         $aData = [  // какой-то произвольный набор данных для сообщения
             'xz' => 'бла бла бла',
-            'test_field' => 'qqq'
+            'test_field2' => 'qqq'
         ];
         if($user->sendInfo($aData)) {
             echo "письмо sendInfo2 ушло";
