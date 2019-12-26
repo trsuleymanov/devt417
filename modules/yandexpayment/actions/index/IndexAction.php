@@ -205,7 +205,7 @@ class IndexAction extends \yii\rest\Action
                 $clientext->payment_source = 'client_site';
                 $clientext->sync_date = null;
                 if(empty($clientext->status)) {
-                    $clientext->status = 'created';
+                    $clientext->status = 'created_with_time_confirm';
                     $clientext->status_setting_time = time();
                 }
 
