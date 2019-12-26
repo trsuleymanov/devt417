@@ -62,13 +62,6 @@ class SetPaymentAction extends \yii\rest\Action
 
         $client_ext->setField('payment_in_process', true);
 
-//        return [
-//            'status' => 'unknown',
-//            'redirect_url' => ''
-//        ];
-
-        //sleep(20);
-
         // проводим мобильный платеж
         $yandex_response = $yandex_payment->createMobilePayment();
 

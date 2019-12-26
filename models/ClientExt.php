@@ -69,7 +69,8 @@ class ClientExt extends \yii\db\ActiveRecord
             [['is_mobile', 'is_not_places'], 'boolean'],
             [['main_server_order_id', 'price', 'paid_summ',
                 'accrual_cash_back', 'penalty_cash_back', 'used_cash_back',
-                'discount', 'source_type', 'city_from_id', 'city_to_id', 'but_checkout', 'gen'], 'safe'],
+                'discount', 'source_type', 'city_from_id', 'city_to_id', 'but_checkout', 'gen',
+                'payment_source'], 'safe'],
         ];
     }
 
@@ -237,6 +238,7 @@ class ClientExt extends \yii\db\ActiveRecord
             'paid_summ' => 'Оплачено',
             'paid_time' => 'Время оплаты',
             'payment_in_process' => 'Платеж обрабатывается',
+            'payment_source' => 'Источник оплаты',
             'is_paid' => 'Заказ оплачен (да/нет)',
             'discount' => 'Скидка',
             'accrual_cash_back' => 'Начисление кэш-бэка',
@@ -380,9 +382,13 @@ class ClientExt extends \yii\db\ActiveRecord
         if($this->price > 0 && ($this->price == $this->paid_summ + $this->used_cash_back)) {
             $this->is_paid = true;
             $this->paid_time = time();
+            if(empty($this->payment_source)) { // application
+                $this->payment_source = 'client_site';
+            }
         }else {
             $this->is_paid = false;
             $this->paid_time = NULL;
+            $this->payment_source = '';
         }
 
         return parent::beforeSave($insert);
