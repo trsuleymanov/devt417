@@ -90,6 +90,7 @@ class GetNotSyncClientextsAction extends \yii\rest\Action
                     'paid_summ' => $client_ext->paid_summ,
                     'is_paid' => $client_ext->is_paid,
                     'paid_time' => $client_ext->paid_time,
+                    'payment_source' => $client_ext->payment_source,
                     'yandex_point_from_id' => $client_ext->yandex_point_from_id,
                     'yandex_point_from_name' => $client_ext->yandex_point_from_name,
                     'yandex_point_from_lat' => $client_ext->yandex_point_from_lat,

@@ -239,6 +239,10 @@ class MainServerController extends Controller
                     $client_ext->yandex_point_to_long = $order['yandex_point_to_long'];
 
                     $client_ext->price = $order['price'];
+                    $client_ext->paid_summ = $order['paid_summ'];
+                    $client_ext->is_paid = $order['is_paid'];
+                    $client_ext->payment_source = $order['payment_source'];
+
                     $client_ext->accrual_cash_back = $order['accrual_cash_back'];
                     $client_ext->penalty_cash_back = $order['penalty_cash_back'];
                     $client_ext->used_cash_back = $order['used_cash_back'];

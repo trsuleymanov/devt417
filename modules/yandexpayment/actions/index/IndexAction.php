@@ -202,6 +202,7 @@ class IndexAction extends \yii\rest\Action
                 }
 
                 $clientext->payment_in_process = false;
+                $this->payment_source = 'application';
                 $clientext->sync_date = null;
                 if(empty($clientext->status)) {
                     $clientext->status = 'created';
@@ -213,6 +214,7 @@ class IndexAction extends \yii\rest\Action
                 if ($yandex_payment->currency == 'RUB') {
                     $clientext->paid_summ -= $yandex_payment->value;
                 }
+                $this->payment_source = 'application';
                 $clientext->sync_date = null;
             }
 
