@@ -824,6 +824,9 @@ class MainServerController extends Controller
 
                 $setting = Setting::find()->where(['id' => 1])->one();
                 $setting->setField('count_hours_before_trip_to_cancel_order', $aSetting['count_hours_before_trip_to_cancel_order']);
+                $setting->setField('max_time_short_trip_AK', $aSetting['max_time_short_trip_AK']);
+                $setting->setField('max_time_short_trip_KA', $aSetting['max_time_short_trip_KA']);
+                $setting->setField('loyalty_switch', $aSetting['loyalty_switch']);
 
                 // пошлем обратно ответ на основной сервер чтобы там была установлена дата синхронизации
                 $request_2 = new Client();
