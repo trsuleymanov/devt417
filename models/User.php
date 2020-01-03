@@ -227,6 +227,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public function validatePassword2($attribute, $params)
     {
+        if(empty($this->password)) {
+            $this->addError($attribute, 'Введите пароль');
+        }
+
         if (!$this->hasErrors()) {
 //            $user = $this->getUser();
 //            if($user == null) {

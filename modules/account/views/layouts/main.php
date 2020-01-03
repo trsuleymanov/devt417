@@ -389,7 +389,7 @@ $user = Yii::$app->user->identity;
                     <input class="modal_global__input" type="password" name="phone" placeholder="Введите пароль" autocomplete="off">
                     <div class="children__checkbox">
                         <button class="children__btn" type="button" name="check" data-name="Запомнить меня"></button>
-                        <input type="checkbox" name="checkbox" hidden="">
+                        <input type="checkbox" name="checkbox" hidden="" checked="true">
                     </div>
                 </div>
                 <div class="modal_global__btn">

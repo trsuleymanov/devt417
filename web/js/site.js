@@ -822,7 +822,7 @@ $(document).on('click', '#input-password-submit', function() {
 
     var phone = $('input[name="User[phone]"]').val();
     var password = $('input[name="User[password]"]').val();
-    var rememberMe = $('input[name="User[rememberMe]"]').val();
+    var rememberMe = ($('input[name="User[rememberMe]"]').is(':checked') ? 1 : 0);
 
     $.ajax({
         url: '/site/ajax-get-insert-password-form?phone=' + phone,
@@ -835,15 +835,6 @@ $(document).on('click', '#input-password-submit', function() {
 
             if(response.success == true) {
 
-                //$('#default-modal').find('.modal-body').html(response.html);
-                //$('#default-modal').find('.modal-dialog').width('550px');
-                // $('#default-modal .modal-title').html('Регистрация');
-                // $('#default-modal').modal('show');
-
-                // (редирект) личный кабинет где страница со списком заказов.
-                // - нельзя так как если авторизация может происходить на странице проверки заказа
-                // location.href = '/account/order';
-
                 if($('#order-client-form').length > 0 || $('.reservation-form').length > 0) {
                     location.reload();
                 }else {
@@ -853,7 +844,6 @@ $(document).on('click', '#input-password-submit', function() {
             }else {
                 for (var field in response.errors) {
                     var field_errors = response.errors[field];
-                    console.log(field_errors);
                     $('#input-password-form').yiiActiveForm('updateAttribute', 'user-' + field, field_errors);
                 }
             }

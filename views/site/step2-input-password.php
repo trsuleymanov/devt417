@@ -54,8 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'readonly' => true
         ])->label(false) ?>
 
-        <?= $form->field($model, 'rememberMe')->checkbox(['template' => '{input}<label for = "user-rememberme">Запомнить меня</label>']);
-        ?>
+        <?= $form->field($model, 'rememberMe')->checkbox(['template' => '{input}<label for = "user-rememberme">Запомнить меня</label>']); ?>
 
         <button id="input-password-submit" class="for_enter__submit text_18" type="button" name="submit">Продолжить</button>
     </div>

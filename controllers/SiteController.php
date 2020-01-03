@@ -616,6 +616,8 @@ class SiteController extends Controller
 
         }else {
 
+            $model->rememberMe = true;
+
             if($is_mobile == 0) {
                 return [
                     'success' => true,
