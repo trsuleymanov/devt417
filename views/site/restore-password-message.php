@@ -4,10 +4,9 @@ use yii\bootstrap\ActiveForm;
 
 $this->title = 'Восстановление пароля';
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
-<div class="restore-password-form for_enter" style="height: auto;">
+<div class="restore-password-form for_enter" style="min-height: auto;">
 
-    <p>Вам на почту отправлена ссылка. Пройдите по ней и установите новый пароль на вход.</p>
+    <p>Для восстановления пароля пройдите по ссылке, отправленной на адрес вашей электронной почты {замаскированный e-mail}</p>
 
 </div>

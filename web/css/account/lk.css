@@ -44,21 +44,22 @@ header .container {
   transition: all 0.3s ease-in-out;
 }
 
-content{
+.content{
   display: flex;
 }
 @media (max-width: 1000px) {
-  content {
+  .content {
     flex-direction: column;
     width: 100%;
   }
 }
 
 .content_menu {
-  background-color: #fbfbfb;
+  padding-top: 25px;
+  padding-bottom: 50px;
   margin-top: 3px;
   width:25%;
-  padding-top: 25px;
+  background-color: #fbfbfb;
 }
 @media (max-width: 1000px) {
   .content_menu {

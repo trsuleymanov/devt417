@@ -93,7 +93,7 @@
   $('#picker-time').datepicker({
     timepicker: true,
     onlyTimepicker: true,
-    minutesStep: 5
+    minutesStep: 15
     // onShow: function() {
     //   //datepicker_is_visible = true;
     //   console.log('onShow');
@@ -258,6 +258,7 @@
   $(document).on('click', '*', function (event) {
 
     event.stopPropagation();
+
     if( $('.header__login').hasClass('click_fix') && !$(this).closest('.for_enter_wrap').length ){
 
       $('.header__login').removeClass('click_fix');
@@ -433,6 +434,7 @@ $(document).on('click', '.select_city__item', function (event) {
 
 $(document).on('click', '.btn_reverse', function() {
 
+  console.log('btn_reverse');
   var city_from_id = $('*[name="ClientExt[city_from_id]"]').val();
   if(city_from_id == 1) {
     $('*[name="ClientExt[city_from_id]"]').val(2);
@@ -526,7 +528,6 @@ $(document).on('click', '#submit-order-form', function() {
     },
     success: function (response) {
 
-      // console.log(response);
       if (response.success === true) {
 
         location.href = response.redirect_url;

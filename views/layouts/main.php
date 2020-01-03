@@ -230,7 +230,7 @@ endif;
         </div>
     </footer>
     <?php if($current_route == 'site/index') { ?>
-    <ul class="social_box">
+    <!-- <ul class="social_box">
         <li class="social_box__item"><a class="social_box__link" href="#">
                 <svg class="icon icon-facebook social_box__icon">
                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#facebook"></use>
@@ -247,7 +247,7 @@ endif;
                 <svg class="icon icon-youtube social_box__icon">
                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#youtube"></use>
                 </svg></a></li>
-    </ul>
+    </ul> -->
     <?php } ?>
     <div id="modal-video"></div>
     <div class="iziModal" id="modal1">

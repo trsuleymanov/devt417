@@ -17,7 +17,7 @@
     <div class="reservation-drop-offer">
         <div class="reservation-drop-offer__cover">
             <div class="reservation-drop-offer__cover-wrap">
-                <div class="reservation-drop-offer__cover-title">Совершите<br>поездку за <b><?= $tariff->superprepayment_common_price ?></b> руб.</div>
+                <div class="reservation-drop-offer__cover-title">Совершите поездку за <b><?= $tariff->superprepayment_common_price ?></b> руб.</div>
                 <div class="reservation-drop-offer__cover-subtitle">Выберите адрес из опций быстрого выезда. Цена за одно место действует при условии предоплаты.</div>
             </div>
             <img src="/images_new/arrow-tab.png" alt="" class="reservation-drop-offer__cover-arrow">

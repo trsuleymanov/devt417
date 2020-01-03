@@ -236,7 +236,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 //            }
 
             if (!$this->validatePassword($this->password)) {
-                $this->addError($attribute, 'Неправильный пароль. <a id="open-restore-password-form" href = "#">Восстановить</a>');
+                $this->addError($attribute, 'Неправильный пароль. Попробуйте еще раз или <a id="open-restore-password-form" href = "#">Восстановить</a>');
             }
         }
     }
@@ -294,7 +294,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [
             'registration_url' =>  Yii::$app->params['siteUrl'].'/user/confirm-registration/?registration_code='.$current_reg->registration_code,
             'site' => Yii::$app->params['siteUrl'],
-            'img' => $message->embed(Yii::$app->params['siteUrl'].'/images/417.gif'),
+            // 'img' => $message->embed(Yii::$app->params['siteUrl'].'/images/417.gif'),
             'email' => $this->email,
             'phone' => $this->phone,
         ]));
@@ -304,6 +304,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
     public function sendRestoreCode() {
+
+        $this->generateRestoreCode();
+        $this->setField('restore_code', $this->restore_code);
 
         return Yii::$app->mailer->compose('restore_code', [
             'restore_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/restore-access/?restore_code='.$this->restore_code,
@@ -341,7 +344,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ->setFrom(\Yii::$app->params['callbackEmail'])
             ->setBcc(\Yii::$app->params['fromEmail'])
             ->setTo($this->email)
-            ->setSubject('Временный пароль для входа на сайт')
+            ->setSubject('Информационное сообщение с сайта')
             ->send();
 
         //return true;
