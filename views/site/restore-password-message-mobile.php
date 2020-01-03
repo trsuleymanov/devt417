@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="modal_global__enter">
             <div class="modal_global__content" style="padding: 20px;">
-                <p>Вам на почту отправлена ссылка. Пройдите по ней и установите новый пароль на вход.</p>
+                <p>Для восстановления пароля пройдите по ссылке, отправленной на адрес вашей электронной почты {замаскированный e-mail}</p>
             </div>
         </div>
     </div>

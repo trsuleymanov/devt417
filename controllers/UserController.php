@@ -141,4 +141,70 @@ class UserController extends Controller
 
     }
 
+
+
+    public function actionTestEmail() {
+
+        if (Yii::$app->user->isGuest) {
+
+            throw new ForbiddenHttpException('Нужна вначале авторизоваться на сайте, чтобы тестировать отправку писем');
+        }
+
+        $user = User::find()->where(['id' => Yii::$app->user->getId()])->one();
+
+
+        // // 1. Подтверждения e-mail;
+        // if($user->sendConfirmEmail()) {
+        //     echo "письмо Подтверждения e-mail ушло";
+        // }else {
+        //     echo "Подтверждения e-mail - не работает!";
+        // }
+
+        
+        // // 2. Восстановление пароля; - отправка письма со ссылкой на сайт чтобы можно было восстановить доступ
+        // if($user->sendRestoreCode()) {
+        //     echo "письмо Восстановление пароля ушло";
+        // }else {
+        //     echo "Восстановление пароля - не работает!";
+        // }
+        
+
+
+        
+        // // 2. Восстановление пароля; - отправка временного пароля (хотя я пока не уверен на 100% что это письмо нужно),
+        // //   но оно в старой логике точно использовалось
+        // if($user->sendTempPassword('123456')) {
+        //     echo "письмо sendTempPassword ушло";
+        // }else {
+        //     echo "sendTempPassword - не работает!";
+        // }
+        
+
+
+        // // 3. Инфо сообщение 1
+        // $aData = [  // какой-то произвольный набор данных для сообщения
+        //     'xz' => 'бла бла бла',
+        //     'test_field' => 'wwwww'
+        // ];
+        // if($user->sendInfo($aData)) {
+        //     echo "письмо sendInfo1 ушло";
+        // }else {
+        //     echo "sendInfo1 - не работает!";
+        // }
+
+
+        /*
+        // 4. Инфо сообщение 2
+        $aData = [  // какой-то произвольный набор данных для сообщения
+            'xz' => 'бла бла бла',
+            'test_field2' => 'qqq'
+        ];
+        if($user->sendInfo($aData)) {
+            echo "письмо sendInfo2 ушло";
+        }else {
+            echo "sendInfo2 - не работает!";
+        }
+*/
+    }
+
 }

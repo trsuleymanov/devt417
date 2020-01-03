@@ -236,7 +236,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 //            }
 
             if (!$this->validatePassword($this->password)) {
-                $this->addError($attribute, 'Неправильный пароль. <a id="open-restore-password-form" href = "#">Восстановить</a>');
+                $this->addError($attribute, 'Неправильный пароль. Попробуйте еще раз или <a id="open-restore-password-form" href = "#">Восстановить</a>');
             }
         }
     }
@@ -279,9 +279,36 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return true;
     }
 
+
+    public function sendConfirmEmail() {
+
+        $current_reg = CurrentReg::find()->where(['email' => $this->email])->one();
+        if($current_reg == null) {
+            throw new ErrorException('Регистрация не найдена');
+        }
+
+        $message = Yii::$app->mailer->compose();
+        $message->setFrom(\Yii::$app->params['callbackEmail']);
+        $message->setTo($this->email);
+        $message->setSubject('Подтверждение регистрации на сайте '.Yii::$app->params['siteUrl']);
+        $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [
+            'registration_url' =>  Yii::$app->params['siteUrl'].'/user/confirm-registration/?registration_code='.$current_reg->registration_code,
+            'site' => Yii::$app->params['siteUrl'],
+            // 'img' => $message->embed(Yii::$app->params['siteUrl'].'/images/417.gif'),
+            'email' => $this->email,
+            'phone' => $this->phone,
+        ]));
+        return $message->send();
+
+        //return true;
+    }
+
     public function sendRestoreCode() {
 
-        Yii::$app->mailer->compose('restore_code', [
+        $this->generateRestoreCode();
+        $this->setField('restore_code', $this->restore_code);
+
+        return Yii::$app->mailer->compose('restore_code', [
             'restore_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/restore-access/?restore_code='.$this->restore_code,
             'site' => $_SERVER['HTTP_HOST']
         ])
@@ -291,12 +318,12 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ->setSubject('Код восстановления доступа')
             ->send();
 
-        return true;
+        // return true;
     }
 
     public function sendTempPassword($password) {
 
-        Yii::$app->mailer->compose('temp_password', [
+        return Yii::$app->mailer->compose('temp_password', [
             //'restore_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/restore-access/?restore_code='.$this->restore_code,
             //'site' => $_SERVER['HTTP_HOST']
             'password' => $password,
@@ -307,8 +334,22 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             ->setSubject('Временный пароль для входа на сайт')
             ->send();
 
-        return true;
+        //return true;
     }
+
+
+    public function sendInfo($aData) {
+
+        return Yii::$app->mailer->compose('info', $aData)
+            ->setFrom(\Yii::$app->params['callbackEmail'])
+            ->setBcc(\Yii::$app->params['fromEmail'])
+            ->setTo($this->email)
+            ->setSubject('Информационное сообщение с сайта')
+            ->send();
+
+        //return true;
+    }
+
 
 
     public static function generateCodeForFriends() {

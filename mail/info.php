@@ -10,7 +10,7 @@
   <meta name="x-apple-disable-message-reformatting"> 
   <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
   <meta content="telephone=no" name="format-detection"> 
-  <title>Подтверждение регистрации на сайте <?=$siteUrl;?></title> 
+  <title>Информационное сообщение с сайта <?=$siteUrl;?></title> 
   <!--[if (mso 16)]>
     <style type="text/css">
     a {text-decoration: none;}
@@ -748,21 +748,14 @@ If you don't need responsive layout, please delete this section.
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="esd-block-text es-p25t es-p15b" align="center">
-                                                                                        <h2 style="font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif;">Верифицируйте вашу</h2>
-                                                                                        <h2 style="font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif;">электронную почту</h2>
+                                                                                        <h2 style="font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif;">Информационное сообщение</h2>
                                                                                     </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="center" class="esd-block-button es-p10"><span class="es-button-border" style="border-color: rgb(44, 181, 67); background: rgb(243, 243, 245); border-radius: 7px; border-width: 0px;"><a href class="es-button" target="_blank" style="font-family: roboto, &quot;helvetica neue&quot;, helvetica, arial, sans-serif; background: rgb(243, 243, 245); border-color: rgb(243, 243, 245); color: rgb(51, 51, 51); border-radius: 7px; border-width: 10px 50px;"><?=$email?></a></span></td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p15t es-p15b">
-                                                                                        <p>Верифицируйте свою электронную почту, привязанную <nobr>к телефону <?=$phone?></nobr>
+                                                                                        <p>Жил был код, и было в коде тестовое поле <?=$test_field;?> и второе <?=$xz;?></nobr>
                                                                                         </p>
                                                                                     </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="center" class="esd-block-button es-p10"><span class="es-button-border" style="border-radius: 7px; border-color: rgb(44, 181, 67); border-width: 0px; background: rgb(255, 177, 0);"><a href="<?=$registration_url?>" class="es-button" target="_blank" style="background: rgb(255, 177, 0); border-color: rgb(255, 177, 0); font-family: roboto, &quot;helvetica neue&quot;, helvetica, arial, sans-serif; font-size: 20px; border-radius: 7px;">Подтвердить</a></span></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>

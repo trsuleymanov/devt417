@@ -1,3 +1,13 @@
+function is_mobile() {
+
+    if( $(document).width() > 992 ){
+        return false;
+    } else {
+        return true;
+    }
+
+}
+
 
 function clearAndHideRegForms() {
 
@@ -843,6 +853,7 @@ $(document).on('click', '#input-password-submit', function() {
             }else {
                 for (var field in response.errors) {
                     var field_errors = response.errors[field];
+                    console.log(field_errors);
                     $('#input-password-form').yiiActiveForm('updateAttribute', 'user-' + field, field_errors);
                 }
             }
@@ -1553,18 +1564,10 @@ function getRestorePasswordForm(phone, is_mobile) {
 $(document).on('click', '#open-restore-password-form', function() {
 
     var phone = $('input[name="User[phone]"]').val();
-    getRestorePasswordForm(phone, 0);
+    getRestorePasswordForm(phone, is_mobile());
 
     return false;
 });
-$(document).on('click', '#open-restore-password-form-mobile', function() {
-
-    var phone = $('input[name="User[phone]"]').val();
-    getRestorePasswordForm(phone, 1);
-
-    return false;
-});
-
 
 // Восстановление пароля - отправка данных - доработать !
 $(document).on('submit', '#restore-password-form', function(event) {
@@ -1613,7 +1616,6 @@ $(document).on('submit', '#restore-password-form', function(event) {
 
     return false;
 });
-
 
 // Изменение пароля - открытие формы
 $(document).on('click', '#open-change-password-form', function() {

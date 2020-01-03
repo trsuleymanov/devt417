@@ -27,13 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
 		<div class="modal_global__enter">
 			<div class="modal_global__content" style = "padding: 20px;">
 
-				<p class = "text_16">Для подтверждения номера и регистрации в личном кабинете необходимо позвонить с указанного вами телефона на <call><?=$reg_number_pretty;?></call>.</p>
-				<p class = "text_16">Это бесплатно и займет несколько секунд. Ваш звонок будет автоматически сброшен.</p>
+				<p class = "text_16">Для регистрации в личном кабинете необходимо позвонить с указанного вами телефона на <b><?=$reg_number_pretty;?></b>.</p>
+				<p class = "text_16" style = "color: #999">Это бесплатно и займет несколько секунд. Ваш звонок будет автоматически сброшен.</p>
 
 			</div>
 			<div class = "modal_global__btn">
 
-				<button id = "confirm_phone_link" class = "modal_global__submit text_16" href="tel:<?=$reg_number;?>"><?=$reg_number_pretty;?></button>
+				<button id = "confirm_phone_link" class = "modal_global__submit text_16" href="tel:<?=$reg_number;?>">
+					<svg class="icon icon-phone">
+						<use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#phone"></use>
+					</svg>
+					<?=$reg_number_pretty;?>
+				</button>
 
 			</div>
 		</div>

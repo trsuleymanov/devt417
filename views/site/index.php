@@ -26,7 +26,7 @@
 
                     <label class="welcome__col city_select">
                         <button class="welcome__icon btn_reverse" type="button" name="reverse">
-                            <svg class="icon icon-exchange welcome__svg">
+                            <svg class="icon icon-exchange welcome__svg no-pointer">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#exchange"></use>
                             </svg>
                         </button><span class="welcome__sub text_16">Куда</span>
@@ -42,8 +42,8 @@
                 </div>
                 <div class="welcome__label">
                     <div class="welcome__col date_enter"><span class="welcome__sub text_16">Дата поездки</span>
-                        <input name="ClientExt[data]" class="datepicker-here welcome__input text_18 fix_cursor" type="text" autocomplete="off" readonly id="picker-date">
-                        <button class="welcome__icon" type="button" name="datepicker">
+                        <input name="ClientExt[data]" class="datepicker-here welcome__input text_18 fix_cursor" type="text" name="date" autocomplete="off" readonly id="picker-date">
+                        <button class="welcome__icon no-pointer" type="button" name="datepicker">
                             <svg class="icon icon-date welcome__svg">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#date"></use>
                             </svg>
@@ -51,7 +51,7 @@
                     </div>
                     <div class="welcome__col date_enter"><span class="welcome__sub text_16">Время посадки</span>
                         <input name="ClientExt[time]" class="welcome__input text_18 fix_cursor" type="text" autocomplete="off" readonly data-position="bottom right" id="picker-time">
-                        <button class="welcome__icon" type="button" name="time" id="btn-time">
+                        <button class="welcome__icon no-pointer" type="button" name="time" id="btn-time">
                             <svg class="icon icon-clock welcome__svg">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#clock"></use>
                             </svg>
@@ -118,7 +118,7 @@
                         */ ?>
 
                         <input name="ClientExt[places_count]" class="welcome__input text_18 fix_cursor" type="text" autocomplete="off" value="0 человек" readonly>
-                        <div class="welcome__icon fix_icon">
+                        <div class="welcome__icon fix_icon no-pointer">
                             <svg class="icon icon-users welcome__svg">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#users"></use>
                             </svg>
@@ -143,13 +143,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="select__item"><span class="select__title text_18">Студент</span>
+                        <!-- <div class="select__item"><span class="select__title text_18">Студент</span>
                             <div class="num_package">
                                 <button class="num_package__btn btn_prev text_24" type="button" name="minus">-</button>
                                 <input name="ClientExt[student_count]" class="num_package__counter text_18" type="text" value="0" readonly>
                                 <button class="num_package__btn btn_next text_24" type="button" name="plus">+</button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="welcome__btn error__wrapper">
@@ -308,44 +308,64 @@
         <div class="row">
             <div class="col-lg-7">
                 <div class="map">
-                    <iframe class="map__img" src="https://yandex.ru/map-widget/v1/-/CGGdn05A" allowfullscreen="“true”"></iframe>
+                    <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A7aa0a16a8f46f9e4f70a19b2128ae2e6fd881170d2b286445bca8ff73ea28e62&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
                 </div>
             </div>
             <div class="col-lg-5">
                 <div class="contacts">
                     <h6 class="contacts__title text_28">Наши контакты</h6>
-                    <ul class="social">
-                        <li class="social__item"><a class="social__link" href="#">
+<!--                     <ul class="social">
+                        <li class="social__item">
+                            <a class="social__link" href="#">
                                 <svg class="icon icon-facebook social__icon">
                                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#facebook"></use>
-                                </svg></a></li>
-                        <li class="social__item"><a class="social__link" href="#">
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="social__item">
+                            <a class="social__link" href="#">
                                 <svg class="icon icon-instagram social__icon">
                                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#instagram"></use>
-                                </svg></a></li>
-                        <li class="social__item"><a class="social__link" href="#">
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="social__item">
+                            <a class="social__link" href="#">
                                 <svg class="icon icon-twitter social__icon">
                                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#twitter"></use>
-                                </svg></a></li>
-                        <li class="social__item"><a class="social__link" href="#">
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="social__item">
+                            <a class="social__link" href="#">
                                 <svg class="icon icon-youtube social__icon">
                                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#youtube"></use>
-                                </svg></a></li>
-                    </ul>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul> -->
                     <ul class="contacts_list">
+                        <li class="contacts_list__item">
+                            <svg class = "icon contacts_list__icon"  width = "30" height = "30" viewBox="0 0 512 512"><path style="fill:#ffb100;" d="M440.649,295.361c16.984,16.582,34.909,32.182,50.142,50.436 c6.729,8.112,13.099,16.482,17.973,25.896c6.906,13.382,0.651,28.108-11.348,28.907l-74.59-0.034 c-19.238,1.596-34.585-6.148-47.489-19.302c-10.327-10.519-19.891-21.714-29.821-32.588c-4.071-4.444-8.332-8.626-13.422-11.932 c-10.182-6.609-19.021-4.586-24.84,6.034c-5.926,10.802-7.271,22.762-7.853,34.8c-0.799,17.564-6.108,22.182-23.751,22.986 c-37.705,1.778-73.489-3.926-106.732-22.947c-29.308-16.768-52.034-40.441-71.816-67.24 C58.589,258.194,29.094,200.852,2.586,141.904c-5.967-13.281-1.603-20.41,13.051-20.663c24.333-0.473,48.663-0.439,73.025-0.034 c9.89,0.145,16.437,5.817,20.256,15.16c13.165,32.371,29.274,63.169,49.494,91.716c5.385,7.6,10.876,15.201,18.694,20.55 c8.65,5.923,15.236,3.96,19.305-5.676c2.582-6.11,3.713-12.691,4.295-19.234c1.928-22.513,2.182-44.988-1.199-67.422 c-2.076-14.001-9.962-23.065-23.933-25.714c-7.129-1.351-6.068-4.004-2.616-8.073c5.995-7.018,11.634-11.387,22.875-11.387h84.298 c13.271,2.619,16.218,8.581,18.035,21.934l0.072,93.637c-0.145,5.169,2.582,20.51,11.893,23.931 c7.452,2.436,12.364-3.526,16.836-8.251c20.183-21.421,34.588-46.737,47.457-72.951c5.711-11.527,10.622-23.497,15.381-35.458 c3.526-8.875,9.059-13.242,19.056-13.049l81.132,0.072c2.406,0,4.84,0.035,7.17,0.434c13.671,2.33,17.418,8.211,13.195,21.561 c-6.653,20.945-19.598,38.4-32.255,55.935c-13.53,18.721-28.001,36.802-41.418,55.634 C424.357,271.756,425.336,280.424,440.649,295.361L440.649,295.361z"/></svg>
+                            <div class="contacts_list__info">
+                                <a class="contacts_list__link text_18" href = "https://vk.com/firma417">Группа VK</a>
+                            </div>
+                        </li>
                         <li class="contacts_list__item">
                             <svg class="icon icon-flag contacts_list__icon">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#flag"></use>
                             </svg>
                             <div class="contacts_list__info">
-                                <p class="contacts_list__text text_18">г. Название города, ул. Название улицы, дом 111</p>
+                                <p class="contacts_list__text text_18">г.Альметьевск, проспект Тукая, д.37</p>
                             </div>
                         </li>
                         <li class="contacts_list__item">
                             <svg class="icon icon-phone contacts_list__icon">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#phone"></use>
                             </svg>
-                            <div class="contacts_list__info"><a class="contacts_list__link text_18" href="#">+7(000) 000-00-00</a></div>
+                            <div class="contacts_list__info">
+                                <a class="contacts_list__link text_18" href="tel:+7(8553) 420-417">+7(8553) 420-417</a>
+                            </div>
                         </li>
                         <li class="contacts_list__item">
                             <svg class="icon icon-envelope contacts_list__icon">

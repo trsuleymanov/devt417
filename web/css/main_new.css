@@ -74,10 +74,8 @@
 
 #modal_confirm_phone .for_enter #confirm_phone_link {
   margin: 0 auto;
+  padding: 7px 10px;
   display: block;
-  width: 70%;
-  height: 37px;
-  line-height: 37px;
   font-weight: 500;
   border: 1px solid #ffb100;
   background-color: #ffb100;
@@ -85,6 +83,13 @@
   cursor: pointer;
   border-radius: 7px;
   text-align: center;
+}
+
+#confirm_phone_link svg {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  fill: white;
 }
 
 .welcome {
@@ -1177,6 +1182,7 @@ input[name="ClientExt[places_count]"] {
   }
 }
 .contacts_list {
+  margin-top: 30px;
   position: relative;
 }
 @media (max-width: 992px) {
@@ -1186,19 +1192,18 @@ input[name="ClientExt[places_count]"] {
     box-shadow: inset 0 0.8vw 2.666666666666667vw 0 rgba(0,0,0,0.31);
   }
 }
-.contacts_list__item:not(:last-child) {
+.contacts_list li:not(:last-child) {
   margin-bottom: 30px;
 }
 @media (max-width: 992px) {
-  .contacts_list__item:not(:last-child) {
+  .contacts_list li:not(:last-child) {
     margin-bottom: 8vw;
   }
 }
 .contacts_list__item {
-  width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex;
+  display: inline-flex;
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
@@ -1258,7 +1263,7 @@ input[name="ClientExt[places_count]"] {
   color: #ffae00;
 }
 .icon-flag {
-  width: 40px;
+  flex: 0 0 30px;
   height: 40px;
 }
 @media (max-width: 992px) {
@@ -1534,4 +1539,7 @@ input[name="ClientExt[places_count]"] {
 .search-result-block ul.main-list li[aria-selected="true"] {
   background-color: #ddf5ff;
   color: #226688;
+}
+.no-pointer {
+  pointer-events: none;
 }

@@ -11,6 +11,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin([
         'id' => 'input-password-form',
+        'fieldConfig' => [
+          'errorOptions' => [
+               'encode' => false
+           ],
+        ]
     ]); ?>
 
 
@@ -65,8 +70,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo $form->field($model, 'rememberMe')->hiddenInput()->label(false);
                     ?>
                 </div>
-
-                <a id="open-restore-password-form-mobile" href="" style="margin-left: 15px;">Восстановить пароль</a>
 
             </div>
             <div class="modal_global__btn">

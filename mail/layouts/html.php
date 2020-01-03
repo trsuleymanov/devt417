@@ -14,7 +14,7 @@ use yii\helpers\Html;
     <?php $this->head() ?>
 </head>
 <body>
-    <?php $this->beginBody() ?>
+    <?php $this->beginBody() ?>qqq
     <?= $content ?>
     <?php $this->endBody() ?>
 </body>
