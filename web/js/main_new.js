@@ -83,8 +83,72 @@
   });
   $('#picker-date').datepicker({
     autoClose: true,
-    minDate: new Date()
+    minDate: new Date(),
+    onSelectDate: function() {
+      var selected_date = $('#picker-date').val();
+      //alert('date='+date);
+
+      // получим сегодняшнюю дату
+      var now = new Date();
+      var today_day = now.getDate();
+      if(today_day < 10) {
+        today_day = '0' + today_day;
+      }
+      var today_month = now.getMonth() + 1;
+      if(today_month < 10) {
+        today_month = '0' + today_month;
+      }
+      var today_date = today_day + '.' + today_month + '.' + now.getFullYear();
+      //alert('today_date='+today_date);
+
+      // если выбран сегодняшний день, то установить автоматически время в поле "Время посадки"
+      //   +1 час к текущему с округлением до 15 минут в нижнюю сторону; если любой другой - то 03:00
+      if(selected_date == today_date) {
+
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+
+        //alert('hours='+hours+' minutes='+minutes);
+
+        if(hours < 23) {
+          hours = hours + 1;
+        }
+        if(minutes < 15) {
+          minutes = 0;
+        }else if(minutes < 30) {
+          minutes = 15;
+        }else if(minutes < 45) {
+          minutes = 30;
+        } else {
+          minutes = 45;
+        }
+
+        if(hours < 10) {
+          hours = '0' + hours;
+        }
+        if(minutes < 10) {
+          minutes = '0' + minutes;
+        }
+
+        var new_time = hours + ':' + minutes;
+        $('#picker-time').val(new_time);
+
+      }else {
+        $('#picker-time').val('03:00');
+      }
+
+    },
   });
+
+  // $(document).on('keyup', '#picker-date', function () {
+  //   alert('keyup');
+  // });
+  // $(document).on('change', '#picker-date', function () {
+  //   alert('ch');
+  // });
+  // $('#picker-date').change(function() {
+  //   alert('ch');
+  // });
 
   var datepicker_is_visible = false;
   // $(document).on('click', '#picker-time', function() {
@@ -613,6 +677,12 @@ $(document).on('click', '.modal_global__logout', function() {
   });
 });
 
+
+// $(document).on('change', 'input[name="ClientExt[data]"]', function() {
+//
+//   //alert($(this).val());
+//   alert('val=');
+// });
 
 
 

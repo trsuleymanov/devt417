@@ -42,7 +42,7 @@
                 </div>
                 <div class="welcome__label">
                     <div class="welcome__col date_enter"><span class="welcome__sub text_16">Дата поездки</span>
-                        <input name="ClientExt[data]" class="datepicker-here welcome__input text_18 fix_cursor" type="text" name="date" autocomplete="off" readonly id="picker-date">
+                        <input name="ClientExt[data]" class="datepicker-here welcome__input text_18 fix_cursor" type="text" autocomplete="off" readonly id="picker-date">
                         <button class="welcome__icon" type="button" name="datepicker">
                             <svg class="icon icon-date welcome__svg">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#date"></use>

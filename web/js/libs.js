@@ -12259,6 +12259,8 @@ return jQuery;
         this.el = el;
         this.$el = $(el);
 
+        //console.log('options1:'); console.log(options);
+
         this.opts = $.extend(true, {}, defaults, options, this.$el.data());
 
         if ($body == undefined) {
@@ -12346,7 +12348,7 @@ return jQuery;
             this.inited = true;
         },
 
-        _createShortCuts: function () {
+		_createShortCuts: function () {
             this.minDate = this.opts.minDate ? this.opts.minDate : new Date(-8639999913600000);
             this.maxDate = this.opts.maxDate ? this.opts.maxDate : new Date(8639999913600000);
         },
@@ -12608,6 +12610,7 @@ return jQuery;
 
 
         selectDate: function (date) {
+
             var _this = this,
                 opts = _this.opts,
                 d = _this.parsedDate,
@@ -12708,6 +12711,11 @@ return jQuery;
             }
 
             _this.views[this.currentView]._render()
+
+			// добавлено вручную в библиотеку
+			if(this.opts.onSelectDate != undefined) {
+				this.opts.onSelectDate();
+			}
         },
 
         removeDate: function (date) {
