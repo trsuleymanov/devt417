@@ -43,7 +43,7 @@ endif;
     <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script><![endif]-->
     <?php $this->head() ?>
     <script>
-        window.client_ext_id = '<?=($client_ext != null ? $client_ext->id : 0);?>';
+        window.client_ext_id = '<?= (isset($client_ext) && $client_ext != null ? $client_ext->id : 0); ?>';
     </script>
 </head>
 <body class="index-page <?=$addClass?>">
