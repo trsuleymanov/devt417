@@ -187,12 +187,25 @@ class MainServerController extends Controller
                     }
 
                     $client_ext->user_id = $user->id;
+                    $client_ext->fio = $order['client_name'];
                     $client_ext->phone = $order['client_mobile_phone'];
                     $client_ext->email = $order['client_email'];
                     $client_ext->direction_id = ($order['direction_name'] == 'АК' ? 1 : 2);
+                    if($client_ext->direction_id == 1) {
+                        $client_ext->city_from_id = 2;
+                        $client_ext->city_to_id = 1;
+                    }else {
+                        $client_ext->city_from_id = 1;
+                        $client_ext->city_to_id = 2;
+                    }
+
                     $client_ext->data = $order['date'];
                     $client_ext->time = $order['trip_mid_time'];
                     $client_ext->time_confirm = $order['time_confirm'];
+
+                    if(empty($client_ext->access_code)) {
+                        $client_ext->access_code = $client_ext->generateAccessCode();
+                    }
 
                     $trip = null;
                     if(!empty($order['trip_name'])) {
@@ -226,6 +239,10 @@ class MainServerController extends Controller
                     $client_ext->yandex_point_to_long = $order['yandex_point_to_long'];
 
                     $client_ext->price = $order['price'];
+                    $client_ext->paid_summ = $order['paid_summ'];
+                    $client_ext->is_paid = $order['is_paid'];
+                    $client_ext->payment_source = $order['payment_source'];
+
                     $client_ext->accrual_cash_back = $order['accrual_cash_back'];
                     $client_ext->penalty_cash_back = $order['penalty_cash_back'];
                     $client_ext->used_cash_back = $order['used_cash_back'];
@@ -807,6 +824,9 @@ class MainServerController extends Controller
 
                 $setting = Setting::find()->where(['id' => 1])->one();
                 $setting->setField('count_hours_before_trip_to_cancel_order', $aSetting['count_hours_before_trip_to_cancel_order']);
+                $setting->setField('max_time_short_trip_AK', $aSetting['max_time_short_trip_AK']);
+                $setting->setField('max_time_short_trip_KA', $aSetting['max_time_short_trip_KA']);
+                $setting->setField('loyalty_switch', $aSetting['loyalty_switch']);
 
                 // пошлем обратно ответ на основной сервер чтобы там была установлена дата синхронизации
                 $request_2 = new Client();

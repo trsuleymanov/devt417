@@ -22,7 +22,7 @@ class ClientExtSearch extends ClientExt
             [['id', 'main_server_order_id', 'user_id', 'yandex_point_from_id',
                 'yandex_point_to_id', 'places_count', 'is_paid', 'payment_in_process',
                 'suitcase_count', 'bag_count', 'prize_trip_count',
-                'student_count', 'child_count', 'paid_time'], 'integer'],
+                'student_count', 'child_count', 'paid_time', ], 'integer'],
             [['status', 'direction_id', 'data', 'time', 'trip_name',
                 // 'street_from', 'point_from',
                 'yandex_point_from_name',
@@ -34,7 +34,8 @@ class ClientExtSearch extends ClientExt
                 'price', 'paid_summ',
                 'accrual_cash_back', 'penalty_cash_back', 'used_cash_back',
                 'discount'], 'number'],
-            [['time_air_train_arrival', 'but_checkout', 'is_not_places', 'gen'], 'safe'],
+            [['time_air_train_arrival', 'but_checkout', 'is_not_places', 'gen',
+                'payment_source'], 'safe'],
         ];
     }
 
@@ -104,6 +105,7 @@ class ClientExtSearch extends ClientExt
             'prize_trip_count' => $this->prize_trip_count,
             'price' => $this->price,
             'paid_summ' => $this->paid_summ,
+            'payment_source' => $this->payment_source,
             'accrual_cash_back' => $this->accrual_cash_back,
             'penalty_cash_back' => $this->penalty_cash_back,
             'used_cash_back' => $this->used_cash_back,

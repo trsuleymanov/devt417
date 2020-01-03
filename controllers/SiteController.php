@@ -383,10 +383,12 @@ class SiteController extends Controller
 //
 //        ]);
 
-        $db_mobile_phone = '+7-903-562-1779';
+//        $db_mobile_phone = '+7-903-562-1779';
+//
+//        //Call::makeCallForwarding($db_mobile_phone);
+//        Call::deleteCallForwarding($db_mobile_phone);
 
-        //Call::makeCallForwarding($db_mobile_phone);
-        Call::deleteCallForwarding($db_mobile_phone);
+        echo 'siteUrl='.Yii::$app->params['siteUrl'];
     }
 
     public function actionTest2() {

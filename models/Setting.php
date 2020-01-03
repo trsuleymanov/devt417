@@ -30,6 +30,7 @@ class Setting extends \yii\db\ActiveRecord
                 'reg_time_limit'], 'integer'],
             [['phone_number'], 'string', 'min' => 6, 'max' => 20],
             ['disable_number_validation', 'boolean'],
+            [['loyalty_switch'], 'safe']
         ];
     }
 
@@ -47,6 +48,7 @@ class Setting extends \yii\db\ActiveRecord
             'phone_number' => 'Номер телефона',
             'reg_time_limit' => 'Время в течение которого можно позвонить на номер подтверждения при регистрации, сек',
             'disable_number_validation' => 'Отключить валидацию номеров',
+            'loyalty_switch' => 'Переключатель лояльности',
         ];
     }
 
