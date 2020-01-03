@@ -1,4 +1,6 @@
 <?php
+
+use app\components\Helper;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
@@ -33,12 +35,13 @@ $this->params['breadcrumbs'][] = $this->title;
         -->
         <?php
 
-        $length = strlen($model->email) - 3;
-        $stars = '';
-        for($i = 0; $i < $length; $i++) {
-            $stars .= '*';
-        }
-        $model->email = substr($model->email, 0, 3).$stars;
+//        $length = strlen($model->email) - 3;
+//        $stars = '';
+//        for($i = 0; $i < $length; $i++) {
+//            $stars .= '*';
+//        }
+//        $model->email = substr($model->email, 0, 3).$stars;
+        $model->email = Helper::setMaskToEmail($model->email);
         echo $form->field($model, 'email')->textInput(['autofocus' => true, 'disabled' => true, 'class' => 'for_enter__input'])->label(false);
         ?>
 

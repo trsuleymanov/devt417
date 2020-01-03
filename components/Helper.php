@@ -188,4 +188,36 @@ class Helper
 
         return '';
     }
+
+    /*
+     * email прячется под маской
+     */
+    public static function setMaskToEmail($email) {
+
+        $aEmails = explode('@', $email);
+        $len = strlen($aEmails[0]);
+        if($len > 3) {
+            $astr = '';
+            for($i = 3; $i < $len; $i++) {
+                $astr .= '*';
+            }
+            $aEmails[0] = substr($aEmails[0], 0, 2) . $astr . substr($aEmails[0], $len - 1);
+        }elseif($len == 3) {
+            $aEmails[0] = substr($aEmails[0], 0, 1).'*'.substr($aEmails[0], 2);
+        }
+
+
+        $aEmailsDot = explode('.', $aEmails[1]);
+        $len = strlen($aEmailsDot[0]);
+        if($len > 2) {
+            $astr = '';
+            for($i = 2; $i < $len; $i++) {
+                $astr .= '*';
+            }
+            $aEmailsDot[0] = substr($aEmailsDot[0], 0, 1) . $astr . substr($aEmailsDot[0], $len - 1);
+        }
+        $email = $aEmails[0]."@".$aEmailsDot[0].".".$aEmailsDot[1];
+
+        return $email;
+    }
 }

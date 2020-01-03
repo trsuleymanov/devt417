@@ -1,5 +1,6 @@
 <?php
 
+use app\components\Helper;
 use app\models\InputPhoneForm;
 use yii\web\JsExpression;
 use app\widgets\EditableTextWidget;
@@ -7,15 +8,15 @@ use app\widgets\EditableTextWidget;
 $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset']);
 
 //$email = $user->email;
-$aEmails = explode('@', $user->email);
-if(strlen($aEmails[0]) >= 4) {
-    $aEmails[0] = substr($aEmails[0], 0, 2) . "**" . substr($aEmails[0], 4);
-}
-$aEmailsDot = explode('.', $aEmails[1]);
-if(strlen($aEmailsDot[0]) >= 4) {
-    $aEmailsDot[0] = "**". substr($aEmailsDot[0], 2);
-}
-$user->email = $aEmails[0]."@".$aEmailsDot[0].".".$aEmailsDot[1];
+//$aEmails = explode('@', $user->email);
+//if(strlen($aEmails[0]) >= 4) {
+//    $aEmails[0] = substr($aEmails[0], 0, 2) . "**" . substr($aEmails[0], 4);
+//}
+//$aEmailsDot = explode('.', $aEmails[1]);
+//if(strlen($aEmailsDot[0]) >= 4) {
+//    $aEmailsDot[0] = "**". substr($aEmailsDot[0], 2);
+//}
+//$user->email = $aEmails[0]."@".$aEmailsDot[0].".".$aEmailsDot[1];
 // echo 'email='.$user->email.'<br />';
 ?>
 
@@ -225,7 +226,7 @@ $user->email = $aEmails[0]."@".$aEmailsDot[0].".".$aEmailsDot[1];
                 Электронная почта
             </div>
             <div class = "personal__row__value">
-                <a class = "etw-element"><?= $user->email ?></a>
+                <a class = "etw-element"><?= Helper::setMaskToEmail($user->email) ?></a>
             </div>
         </div>
     </div>

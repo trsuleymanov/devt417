@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\Helper;
 use app\models\Call;
 use app\models\ChangePasswordForm;
 use app\models\ClientExt;
@@ -360,35 +361,11 @@ class SiteController extends Controller
 
     public function actionTest() {
 
-//        Yii::$app->controller->layout = false;
-
-//        $password = '123456';
-//        $model = User::find()->where(['id' => 1])->one();
-//        if($model->validatePassword($password)) {
-//            echo "совпадение";
-//        }else {
-//            echo "не совпадение";
-//        }
-
-//        echo date("d.m.Y", 1570741200).'<br />';
-//        echo date("d.m.Y", 1569272400).'<br />';
-//        echo date("d.m.Y", 1571000400).'<br />';
-//        $registration_code = 'qqq';
-//
-//        return $this->render('email-test', [
-//            'registration_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/confirm-registration/?registration_code='.$registration_code,
-//            'site' => $_SERVER['HTTP_HOST'],
-//            'email' => 'vlad.shetinin@gmail.com',
-//            'phone' => '+7(966) 112-80-06',
-//
-//        ]);
-
-//        $db_mobile_phone = '+7-903-562-1779';
-//
-//        //Call::makeCallForwarding($db_mobile_phone);
-//        Call::deleteCallForwarding($db_mobile_phone);
-
-        echo 'siteUrl='.Yii::$app->params['siteUrl'];
+        // $email = 'vlad.shetinin@gmail.com'; // vl**********n@g***l.com
+        // $email = 'kal@li.ru'; // k*l@li.ru
+        // $email = 'absuz@cook.com'; // ab**z@c**k.com
+        $email = 'ya@ya.ru'; // ya@ya.ru
+        echo Helper::setMaskToEmail($email);
     }
 
     public function actionTest2() {
@@ -916,13 +893,16 @@ class SiteController extends Controller
             if($is_mobile == 0) {
                 return [
                     'success' => true,
-                    'html' => $this->renderAjax('restore-password-message')
+                    'html' => $this->renderAjax('restore-password-message', [
+                        'email' => $user->email
+                    ])
                 ];
             }else {
                 return [
                     'success' => true,
                     'html' => $this->renderAjax('restore-password-message-mobile', [
                         'phone' => $phone,
+                        'email' => $user->email
                     ])
                 ];
             }

@@ -1,4 +1,6 @@
 <?php
+
+use app\components\Helper;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
@@ -19,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="modal_global__enter">
             <div class="modal_global__content" style="padding: 20px;">
-                <p>Для восстановления пароля пройдите по ссылке, отправленной на адрес вашей электронной почты {замаскированный e-mail}</p>
+                <p>Для восстановления пароля пройдите по ссылке, отправленной на адрес вашей электронной почты <?= Helper::setMaskToEmail($email) ?></p>
             </div>
         </div>
     </div>
