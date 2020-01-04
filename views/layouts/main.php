@@ -136,7 +136,7 @@ endif;
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#user"></use>
                             </svg>
                         </i>
-                        Кабинет
+                        Я, <?= (mb_strlen(Yii::$app->user->identity->fio) > 11 ? mb_substr(Yii::$app->user->identity->fio, 0, 11) : Yii::$app->user->identity->fio) ?>
                     </a>
                     <div class="for_enter_wrap modal_enter" style="display: none;">
                      <div class="for_enter">

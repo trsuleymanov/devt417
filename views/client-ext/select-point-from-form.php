@@ -1,6 +1,6 @@
 <?php
 
-// популярные яндекс-точки посадки
+// популярные яндекс-точки отправления
 // echo "popular_yandex_points:<pre>"; print_r($popular_yandex_points); echo "</pre>";
 
 // яндекс-точки посадки с супер тарифом
