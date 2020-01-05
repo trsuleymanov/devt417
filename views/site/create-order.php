@@ -108,7 +108,7 @@ $form = ActiveForm::begin([
                             <div id="city-from" city-id="<?= $model->city_from_id ?>" class="reservation-step-line-title">
                                 <?= $model->cityFrom->name ?>
                             </div>
-                            <div id="search-place-from_qqq_" class="reservation-step-line-undertitle">
+                            <div class="reservation-step-line-undertitle">
                                 <input name="ClientExt[yandex_point_from_id]" type="hidden" value="<?= ($model->yandexPointFrom != null ? $model->yandexPointFrom->id : '') ?>" />
                                 Выберите наиболее удобное место посадки в автобус
                             </div>
@@ -153,9 +153,10 @@ $form = ActiveForm::begin([
                     <? endif; ?>
 
                     <div class="reservation-step-line-map reservation-step-line-map--address">
-                        
+                        <!--
                         <iframe src="https://yandex.ua/map-widget/v1/?um=constructor%3Ad85c33d8c2998c0058266a0bafaaa69c1c2197088f04a1e4ed222bdbeca7aa6b&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
-                        
+                        -->
+                        <div id="ya-map-from-static"></div>
                     </div>
                 </div>
             </div>

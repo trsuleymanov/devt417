@@ -63,8 +63,8 @@
 
     <div class="reservation-drop__select">
         <div class="reservation-drop__select-title">Выберите из списка точку высадки, наиболее удобную для вас</div>
-        <div id="search-to-block" class="reservation-drop__select-select-wrap">
-            <input id="search-place-to" type="text" class="reservation-drop__select-select" autocomplete="off">
+        <div id="search-from-block" class="reservation-drop__select-select-wrap">
+            <input id="search-place-from" type="text" class="reservation-drop__select-select" autocomplete="off">
             <div class="search-result-block sw-select-block"></div>
             <div class="reservation-popup reservation-popup-select">
                 <ul class="reservation-popup__list"></ul>
@@ -99,7 +99,10 @@
         </div>
     </div>
     <div class="reservation-drop__selected-map">
+        <?php /*
         <iframe src="https://yandex.ua/map-widget/v1/?um=constructor%3Ad85c33d8c2998c0058266a0bafaaa69c1c2197088f04a1e4ed222bdbeca7aa6b&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
+        */ ?>
+        <div id="ya-map-from2"></div>
     </div>
 </div>
 <div class="reservation-drop__time"></div>
