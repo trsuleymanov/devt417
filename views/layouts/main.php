@@ -392,10 +392,10 @@ endif;
         ActiveForm::end();
         ?>
     </div>
-    <div id="restorepassword-mobile" class="mobile_menu"></div>
     <div style = "display: none">
         <div id="enter_password-mobile"></div>
         <div id="confirm_phone-mobile"></div>
+        <div id="restorepassword-mobile"></div>
     </div>
     <div id="entersmscode-mobile" class="mobile_menu"></div>
     <div id="registration-mobile" class="mobile_menu"></div>

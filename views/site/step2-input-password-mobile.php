@@ -8,12 +8,16 @@ $this->title = 'Вход на сайт';
 $this->params['breadcrumbs'][] = $this->title;
 
 //$this->registerJsFile('js/login.js', ['depends'=>'app\assets\AppAsset']);
+Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
+
 ?>
 <div class="site-login">
 
     <?php $form = ActiveForm::begin([
         'id' => 'input-password-form',
         // 'enableClientScript' => false,
+        // 'enableAjaxValidation' => true,
+        // 'enableClientValidation' => true,
         'fieldConfig' => [
           'errorOptions' => [
                'encode' => false

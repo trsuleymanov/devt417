@@ -878,6 +878,9 @@ $(document).on('click', '#input-password-submit', function() {
             }
         }
     });
+
+    $('#enter_password-mobile')
+
 });
 
 function resendCode(access_code, is_mobile) {
@@ -1531,6 +1534,7 @@ function getRestorePasswordForm(phone, is_mobile) {
         type: 'post',
         data: {},
         success: function (response) {
+
             // $('.for_enter_wrap').hide();
             if(is_mobile == 0) {
                 clearAndHideRegForms();
@@ -1539,6 +1543,7 @@ function getRestorePasswordForm(phone, is_mobile) {
                 clearAndHideMobileRegForms();
                 $('#restorepassword-mobile').html(response.html).fadeIn(100);
             }
+
         },
         error: function (data, textStatus, jqXHR) {
             if (textStatus == 'error' && data != undefined) {
