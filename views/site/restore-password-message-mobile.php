@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="modal_global__enter">
             <div class="modal_global__content" style="padding: 20px;">
                 <p>Для восстановления пароля пройдите по ссылке, отправленной на адрес вашей электронной почты <?= Helper::setMaskToEmail($email) ?></p>
+                <button id="close-restore-password-form" class="for_enter__submit text_16" type="button">Принимаю</button>
             </div>
         </div>
     </div>

@@ -660,23 +660,37 @@ function openInsertPassword(user_phone, is_mobile) {
             console.log(response);
             if(response.success == true) {
 
-                // $('#default-modal').find('.modal-body').html(response.html);
-                // $('#default-modal').find('.modal-dialog').width('550px');
-                // $('#default-modal .modal-title').html('Регистрация');
-                // $('#default-modal').modal('show');
-                // $('.for_enter_wrap').hide();
-
                 if(is_mobile == 0) {
+
                     clearAndHideRegForms();
                     $('#modal_enter_password').html(response.html).fadeIn(100);
-                }else {
-                    console.log('trololo');
-                    clearAndHideMobileRegForms();
-                    $('#enter_password-mobile').html(response.html).fadeIn(100);
+
+                } else {
+
+                    // clearAndHideMobileRegForms();
+                    $('#enter_password-mobile').iziModal({
+                        width: '100%',
+                        top: 0,
+                        loop: false,
+                        overlayColor: 'rgba(0,0,0,.9)',
+                        zindex: 9999,
+                        onOpening: function(modal){
+                            modal.startLoading();
+                            $('#enter_password-mobile .iziModal-content').html(response.html)
+                            modal.stopLoading();
+                        }
+                    });
+                    $('#enter_password-mobile').iziModal('open');
+                    // $('#enter_password-mobile').iziModal('startLoading');
+                    // $('#enter_password-mobile').iziModal('setContent', response.html);
+                    // $('#enter_password-mobile').iziModal('stopLoading');
+
                 }
 
             }else {
+
                 //alert('Ошибка');
+
             }
         },
         error: function (data, textStatus, jqXHR) {
@@ -865,7 +879,6 @@ $(document).on('click', '#input-password-submit', function() {
         }
     });
 });
-
 
 function resendCode(access_code, is_mobile) {
 
@@ -1510,7 +1523,7 @@ $(document).on('submit', '#registration-form', function(event) {
 */
 
 
-
+// Восстановление пароля
 function getRestorePasswordForm(phone, is_mobile) {
 
     $.ajax({
@@ -1518,10 +1531,6 @@ function getRestorePasswordForm(phone, is_mobile) {
         type: 'post',
         data: {},
         success: function (response) {
-
-            // $('#default-modal .modal-title').html('Восстановление пароля');
-            // $('#default-modal').find('.modal-body').html(response.html);
-
             // $('.for_enter_wrap').hide();
             if(is_mobile == 0) {
                 clearAndHideRegForms();
@@ -1548,14 +1557,16 @@ function getRestorePasswordForm(phone, is_mobile) {
         }
     });
 }
-
-
-// Восстановление пароля - открытие формы
 $(document).on('click', '#open-restore-password-form', function() {
 
     var phone = $('input[name="User[phone]"]').val();
     getRestorePasswordForm(phone, is_mobile());
 
+    return false;
+});
+$(document).on('click', '#close-restore-password-form', function() {
+
+    
     return false;
 });
 

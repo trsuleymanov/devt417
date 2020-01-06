@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin([
         'id' => 'input-password-form',
+        // 'enableClientScript' => false,
         'fieldConfig' => [
           'errorOptions' => [
                'encode' => false
@@ -23,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="modal_global">
         <div class="modal_global__name">
-            <button class="prev modal-prev" type="button" prev-modal="enter-mobile">
+            <button class="prev modal-prev" type="button" data-izimodal-open="#enter-mobile">
                 <svg class="icon icon-right-arrow close__svg">
                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#right-arrow"></use>
                 </svg>
@@ -64,15 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 -->
                 <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Введите пароль', 'autocomplete' => "off", 'class' => 'modal_global__input', ])->label(false) ?>
 
-                <div class="children__checkbox">
-                    <button class="children__btn" type="button" name="check" data-name="Запомнить меня"></button>
-                    <!--
-                    <input type="checkbox" name="checkbox" hidden="">
-                    -->
-                    <?php
-                    echo $form->field($model, 'rememberMe')->hiddenInput()->label(false);
-                    ?>
-                </div>
+                <?= $form->field($model, 'rememberMe')->checkbox(['template' => '{input}<label for = "user-rememberme" class = "modal_global__checkbox">Запомнить меня</label>']); ?>
 
             </div>
             <div class="modal_global__btn">

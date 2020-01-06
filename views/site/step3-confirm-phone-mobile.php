@@ -8,7 +8,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<div class="modal_global">
 		<div class="modal_global__name">
-			<button class="prev modal-prev" type="button" prev-modal="enter-mobile">
+			<button class="prev modal-prev" type="button" data-izimodal-open="#enter-mobile">
 				<svg class="icon icon-right-arrow close__svg">
 					<use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#right-arrow"></use>
 				</svg>

@@ -118,7 +118,7 @@ endif;
                                     ->label(false);
                             }
                             ?>
-                            <button id="submit-login-phone" class="for_enter__submit text_16" type="button">Продолжить</button>
+                            <button id="submit-login-phone" class="for_enter__submit text_16" type="button" disabled>Продолжить</button>
                         </div>
                         <?php
                         ActiveForm::end();
@@ -384,7 +384,7 @@ endif;
                     ?>
                 </div>
                 <div class="modal_global__btn">
-                    <button id="submit-login-phone-mobile" class="modal_global__submit text_16 test" type="button">Продолжить</button>
+                    <button id="submit-login-phone-mobile" class="modal_global__submit text_16 test" type="button" disabled>Продолжить</button>
                 </div>
             </div>
         </div>
@@ -392,9 +392,9 @@ endif;
         ActiveForm::end();
         ?>
     </div>
-    <div id="enter_password-mobile" class="mobile_menu"></div>
     <div id="restorepassword-mobile" class="mobile_menu"></div>
     <div style = "display: none">
+        <div id="enter_password-mobile"></div>
         <div id="confirm_phone-mobile"></div>
     </div>
     <div id="entersmscode-mobile" class="mobile_menu"></div>

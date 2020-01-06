@@ -1,5 +1,6 @@
 <?php
 
+$this->registerJsFile('https://www.google.com/recaptcha/api.js?render=6Lewg8wUAAAAABhM-tLlmiRNYSLdf17N87agjkmR', ['depends'=>'app\assets\NewAppAsset']);
 // $this->registerJsFile('/js/libs.js', ['depends'=>'app\assets\NewAppAsset']);
 // $this->registerJsFile('/js/main_new.js', ['depends'=>'app\assets\NewAppAsset']);
 
@@ -153,7 +154,7 @@
                     </div>
                 </div>
                 <div class="welcome__btn error__wrapper">
-                    <button id="submit-order-form" class="welcome__submit text_24" type="button" name="submit">Заказать</button>
+                    <button id="submit-order-form" class="welcome__submit text_24" type="button" name="submit" disabled>Заказать</button>
                     <div class="error"></div>
                 </div>
             </div>
