@@ -747,7 +747,7 @@ footer {
       -ms-flex-align: center;
           align-items: center;
   width: 100%;
-  height: 80vw;
+  min-height: 80vw;
   padding-bottom: 5.333333333333334vw;
 }
 .modal_global__content {
@@ -764,6 +764,18 @@ footer {
   border-right: none;
   border-left: none;
   border-bottom: 1px solid #dfdfdf;
+}
+.modal_global__checkbox {
+  width: 100%;
+  padding: 4vw 4vw 4vw calc(4vw + 28px) !important;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: 1px solid #dfdfdf;
+}
+.modal_global__checkbox:before,
+.modal_global__checkbox:after {
+  left: 4vw !important;
 }
 .modal_global__submit {
   margin: 0 auto;
@@ -843,6 +855,7 @@ footer {
   width: 100%;
   height: 100%;
   fill: #fff;
+  pointer-events: none;
 }
 .prev {
   right: initial;

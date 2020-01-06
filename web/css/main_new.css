@@ -1477,7 +1477,8 @@ input[name="ClientExt[places_count]"] {
 .guest .field-user-rememberme label:before {
   position: absolute;
   z-index: 1;
-  top: 0;
+  top: 50%;
+  margin-top: -9px;
   left: 0;
   display: block;
   content: '';
@@ -1491,7 +1492,8 @@ input[name="ClientExt[places_count]"] {
 .guest .field-user-rememberme input[type="checkbox"]:checked + label:after {
   position: absolute;
   z-index: 2;
-  top: 0;
+  top: 50%;
+  margin-top: -9px;
   left: 0;
   display: block;
   content: '';

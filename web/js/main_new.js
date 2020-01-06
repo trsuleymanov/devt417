@@ -2,7 +2,16 @@
 
 (function ($) {
   $(document).ready(function () {
+
     svg4everybody({});
+
+    grecaptcha.ready(function() {
+      grecaptcha.execute('6Lewg8wUAAAAABhM-tLlmiRNYSLdf17N87agjkmR', {action: 'homepage'}).then(function(token) {
+        $('button:disabled').each(function(){
+          $(this).attr('disabled', false);
+        });
+      });
+    });
 
 
     if($('#inputphoneform-mobile_phone').hasClass('use_imask')) {
