@@ -1521,9 +1521,11 @@
   }
   .reservation-drop--1 #ya-map-from, #ya-map-from-static, #ya-map-to-static {
     height: 300px;
+    width: 100%;
   }
   .reservation-drop--2 #ya-map-to {
     height: 300px;
+    width: 100%;
   }
   .reservation-step-line-map iframe {
     width: 100%;

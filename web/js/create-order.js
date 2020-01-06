@@ -480,11 +480,22 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
                     // travel_time_h    3
                     // travel_time_m
 
-                    trips_html += '<li class="reservation-drop__time-item" trip-id="' + trip_obj.trip_id + '" data-departure-date="'+ trip_obj.departure_date +'" data-departure-time="'+ trip_obj.departure_time +'" data-arrival-date="'+ trip_obj.arrival_date +'" data-arrival-time="'+ trip_obj.arrival_time +'" yandex-point-id="' + response.yandex_point_id + '" yandex-point-lat="' + response.yandex_point_lat +'" yandex-point-lon="' + response.yandex_point_long +'" yandex-point-description="' + response.yandex_point_description + '">' + (response.client_ext_data != trip_obj.data ? trip_obj.data + ' ' : '') + trip_obj.departure_time + '</li>';
+                    trips_html += '<li class="reservation-drop__time-item"' +
+                        ' trip-id="' + trip_obj.trip_id + '"' +
+                        ' data-departure-date="'+ trip_obj.departure_date +'" ' +
+                        'data-departure-time="'+ trip_obj.departure_time +'" ' +
+                        'data-arrival-date="'+ trip_obj.arrival_date +'" ' +
+                        'data-arrival-time="'+ trip_obj.arrival_time +'" ' +
+                        'yandex-point-id="' + response.yandex_point_id + '" ' +
+                        'yandex-point-lat="' + response.yandex_point_lat +'" ' +
+                        'yandex-point-lon="' + response.yandex_point_long +'" ' +
+                        'yandex-point-name="' + response.yandex_point_name + '"' +
+                        'yandex-point-description="' + response.yandex_point_description + '"' +
+                        '>' + (response.client_ext_data != trip_obj.data ? trip_obj.data + ' ' : '') + trip_obj.departure_time + '</li>';
                 }
 
                 var yandex_point_name = response.yandex_point_name;
-                if(response.yandex_point_description != null) {
+                if(response.yandex_point_description != '') {
                     yandex_point_name += ', ' + response.yandex_point_description;
                 }
 
@@ -975,7 +986,7 @@ $(document).on('click', '.reservation-drop__time-item', function() {
     toggleSubmitBut1();
     updatePrice1();
 
-    if(yandex_point_description != 'null') {
+    if(yandex_point_description != '') {
         yandex_point_name += ', ' + yandex_point_description;
     }
 

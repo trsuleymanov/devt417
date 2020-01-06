@@ -135,7 +135,7 @@ class ClientExtController extends Controller
             'trips_time' => $aTripsTimeConfirms,
             'yandex_point_id' => $yandex_point_from->id,
             'yandex_point_name' => $yandex_point_from->name,
-            'yandex_point_description' => $yandex_point_from->description,
+            'yandex_point_description' => !empty($yandex_point_from->description) ? $yandex_point_from->description : '',
             'yandex_point_lat' => $yandex_point_from->lat,
             'yandex_point_long' => $yandex_point_from->long,
         ];
