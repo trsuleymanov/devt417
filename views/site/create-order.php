@@ -153,9 +153,9 @@ $form = ActiveForm::begin([
                     <? endif; ?>
 
                     <div class="reservation-step-line-map reservation-step-line-map--address">
-                        <!--
+                        <?php /*
                         <iframe src="https://yandex.ua/map-widget/v1/?um=constructor%3Ad85c33d8c2998c0058266a0bafaaa69c1c2197088f04a1e4ed222bdbeca7aa6b&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
-                        -->
+                        */ ?>
                         <div id="ya-map-from-static"></div>
                     </div>
                 </div>
@@ -208,9 +208,10 @@ $form = ActiveForm::begin([
                     </div>
 
                     <div class="reservation-step-line-map reservation-step-line-map--dest">
-                        
+                        <?php /*
                         <iframe src="https://yandex.ua/map-widget/v1/?um=constructor%3Ad85c33d8c2998c0058266a0bafaaa69c1c2197088f04a1e4ed222bdbeca7aa6b&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
-                        
+                        */ ?>
+                        <div id="ya-map-to-static"></div>
                     </div>
                 </div>
             </div>
