@@ -226,6 +226,7 @@ function addOverlay($popup, triggerActiveClass) {
         $(event.currentTarget).remove();
     });
 }
+
 // function addMainOverlay($popup, triggerActiveClass) {
 //     $("body").append('<div class="main-overlay"></div>');
 //     $(".main-overlay").click(function(event) {
@@ -240,6 +241,7 @@ function addOverlay($popup, triggerActiveClass) {
 // function removeMainOverlay() {
 //     $(".main-overlay").remove();
 // }
+
 
 //Address steps
 var isCompletedAddress = false;
@@ -712,6 +714,115 @@ function loadMapToForm(finish_function) {
 
 
 
+function loadTripTimes(access_code, yandex_point_id, response_function) {
+
+    // нужна дата заказа и время заказа
+
+    $.ajax({
+        url: '/client-ext/ajax-trips-time-confirm?c=' + access_code + '&yandex_point_from_id=' + yandex_point_id,
+        type: 'post',
+        data: {},
+        success: function (response) {
+
+            if( typeof response_function != 'undefined' ){
+
+
+                var has_elems = false;
+                var trips_html = '';
+                for(var key in response.trips_time) {
+                    has_elems = true;
+                    var trip_obj = response.trips_time[key];
+                    // var str = '';
+                    // if(trip_obj.data != undefined) {
+                    //     str += "<span class='trip-data'>" + trip_obj.data + "</span><br />";
+                    // }
+                    // str += "<span class='trip-time'>" + trip_obj.time + "</span>";
+                    // var i = 1 + parseInt(key);
+                    // $('#trip-time-confirm-' + i).html(str)
+                    //     .attr('trip-id', trip_obj.trip_id)
+                    //     .attr('travel_time_h', trip_obj.travel_time_h)
+                    //     .attr('travel_time_m', trip_obj.travel_time_m);
+
+                    // trip_id  3491
+                    // time 03:10
+                    // data 12.10.2019
+                    // travel_time_h    3
+                    // travel_time_m
+
+                    trips_html += '<li class="reservation-drop__time-item" trip-id="' + trip_obj.trip_id + '" data-departure-date="'+ trip_obj.departure_date +'" data-departure-time="'+ trip_obj.departure_time +'" data-arrival-date="'+ trip_obj.arrival_date +'" data-arrival-time="'+ trip_obj.arrival_time +'" yandex-point-id="' + response.yandex_point_id + '" yandex-point-name="' + response.yandex_point_name + '" yandex-point-lat="' + response.yandex_point_lat +'" yandex-point-lon="' + response.yandex_point_long +'" yandex-point-description="' + response.yandex_point_description + '">' + (response.client_ext_data != trip_obj.data ? trip_obj.data + ' ' : '') + trip_obj.departure_time + '</li>';
+                }
+
+                var yandex_point_name = response.yandex_point_name;
+                if(response.yandex_point_description != null) {
+                    yandex_point_name += ', ' + response.yandex_point_description;
+                }
+
+                $('.reservation-drop--1').find('.reservation-drop__selected-address')
+                    .text(yandex_point_name)
+                    .attr('yandex-point-id', yandex_point_id);
+
+                var time = $('#order-client-form').attr('time');
+
+                var html =
+                    '<div class="reservation-drop__time-paragraph">Указанное вами желаемое время посадки - <span class="reservation-drop__time-time">' + time + '</span>. На выбранной точке можно сесть в указанное время.</div>' +
+                    '    <div class="reservation-drop__time-title">Выберите время посадки:</div>' +
+                    '    <ul class="reservation-drop__time-list">' +
+                    trips_html +
+                    '    </ul>' +
+                    '    <div class="reservation-drop__time-back-wrap">' +
+                    '        <img src="/images_new/back-address.svg" alt="" class="reservation-drop__time-back-arrow">' +
+                    '        <div class="reservation-drop__time-back-text"><span class="reservation-drop__time-back-trigger">Другой адрес?</span></div>' +
+                    '    </div>';
+                $('.reservation-drop--1').find('.reservation-drop__time').html(html);
+
+                // if(has_elems == true) {
+                //     $('#select-trip-list').show();
+                //     $('#map-text').html("<br />Выберите время посадки на указанной точке:");
+                // }else {
+                //     $('#select-trip-list').hide();
+                //     $('#map-text').html("<br />На выбранной точке к сожалению нельзя сесть. Выберите пожалуйста другую точку.");
+                // }
+
+
+                response_function(response);
+            }
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                //handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+}
+
+
+function addressToStep1(parent) {
+    $(".reservation-drop-offer").removeClass("d-n");
+    $(".reservation-drop__search").removeClass("d-n");
+    $(".reservation-drop__selected").removeClass("d-b");
+    $(".reservation-drop__time").removeClass("d-b");
+}
+
+// клик на выпадающем в поиске одном из элементов
+function addressToStep2(parent) {
+    $(".reservation-drop-offer").addClass("d-n");
+    $(".reservation-drop__search").addClass("d-n");
+    $(".reservation-drop__selected").addClass("d-b");
+    $(".reservation-drop__time").addClass("d-b");
+    $(".reservation-drop__map").removeClass("d-b");
+}
+
+
 // выбор точки посадки на всплывающей карте
 $(document).on('click', '#ya-map-from .btn-select-placemark', function() {
 
@@ -930,8 +1041,7 @@ $(document).on('click', '#open-select-point-from', function(e) {
 
 });
 
-// не нашел чтобы где-то использовалось в коде
-/*
+// выбор популярной точки в форме "Адрес и время посадки"
 $(document).on('click', '.select-point-from', function() {
 
     var index = $(this).attr('placemark-index');
@@ -966,7 +1076,7 @@ $(document).on('click', '.select-point-from', function() {
 
     });
 });
-*/
+
 
 $(document).on('click', '#open-select-point-to', function(e) {
 
@@ -1009,113 +1119,6 @@ $(document).on('click', '.select-point-to', function() {
 });
 
 
-function loadTripTimes(access_code, yandex_point_id, response_function) {
-
-    // нужна дата заказа и время заказа
-
-    $.ajax({
-        url: '/client-ext/ajax-trips-time-confirm?c=' + access_code + '&yandex_point_from_id=' + yandex_point_id,
-        type: 'post',
-        data: {},
-        success: function (response) {
-
-            if( typeof response_function != 'undefined' ){
-
-
-                var has_elems = false;
-                var trips_html = '';
-                for(var key in response.trips_time) {
-                    has_elems = true;
-                    var trip_obj = response.trips_time[key];
-                    // var str = '';
-                    // if(trip_obj.data != undefined) {
-                    //     str += "<span class='trip-data'>" + trip_obj.data + "</span><br />";
-                    // }
-                    // str += "<span class='trip-time'>" + trip_obj.time + "</span>";
-                    // var i = 1 + parseInt(key);
-                    // $('#trip-time-confirm-' + i).html(str)
-                    //     .attr('trip-id', trip_obj.trip_id)
-                    //     .attr('travel_time_h', trip_obj.travel_time_h)
-                    //     .attr('travel_time_m', trip_obj.travel_time_m);
-
-                    // trip_id  3491
-                    // time 03:10
-                    // data 12.10.2019
-                    // travel_time_h    3
-                    // travel_time_m
-
-                    trips_html += '<li class="reservation-drop__time-item" trip-id="' + trip_obj.trip_id + '" data-departure-date="'+ trip_obj.departure_date +'" data-departure-time="'+ trip_obj.departure_time +'" data-arrival-date="'+ trip_obj.arrival_date +'" data-arrival-time="'+ trip_obj.arrival_time +'" yandex-point-id="' + response.yandex_point_id + '" yandex-point-name="' + response.yandex_point_name + '" yandex-point-lat="' + response.yandex_point_lat +'" yandex-point-lon="' + response.yandex_point_long +'" yandex-point-description="' + response.yandex_point_description + '">' + (response.client_ext_data != trip_obj.data ? trip_obj.data + ' ' : '') + trip_obj.departure_time + '</li>';
-                }
-
-                var yandex_point_name = response.yandex_point_name;
-                if(response.yandex_point_description != null) {
-                    yandex_point_name += ', ' + response.yandex_point_description;
-                }
-
-                $('.reservation-drop--1').find('.reservation-drop__selected-address')
-                    .text(yandex_point_name)
-                    .attr('yandex-point-id', yandex_point_id);
-
-                var time = $('#order-client-form').attr('time');
-
-                var html =
-                    '<div class="reservation-drop__time-paragraph">Указанное вами желаемое время посадки - <span class="reservation-drop__time-time">' + time + '</span>. На выбранной точке можно сесть в указанное время.</div>' +
-                    '    <div class="reservation-drop__time-title">Выберите время посадки:</div>' +
-                    '    <ul class="reservation-drop__time-list">' +
-                    trips_html +
-                    '    </ul>' +
-                    '    <div class="reservation-drop__time-back-wrap">' +
-                    '        <img src="/images_new/back-address.svg" alt="" class="reservation-drop__time-back-arrow">' +
-                    '        <div class="reservation-drop__time-back-text"><span class="reservation-drop__time-back-trigger">Другой адрес?</span></div>' +
-                    '    </div>';
-                $('.reservation-drop--1').find('.reservation-drop__time').html(html);
-
-                // if(has_elems == true) {
-                //     $('#select-trip-list').show();
-                //     $('#map-text').html("<br />Выберите время посадки на указанной точке:");
-                // }else {
-                //     $('#select-trip-list').hide();
-                //     $('#map-text').html("<br />На выбранной точке к сожалению нельзя сесть. Выберите пожалуйста другую точку.");
-                // }
-
-
-                response_function(response);
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                //handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-}
-
-
-function addressToStep1(parent) {
-    $(".reservation-drop-offer").removeClass("d-n");
-    $(".reservation-drop__search").removeClass("d-n");
-    $(".reservation-drop__selected").removeClass("d-b");
-    $(".reservation-drop__time").removeClass("d-b");
-}
-
-// клик на выпадающем в поиске одном из элементов
-function addressToStep2(parent) {
-    $(".reservation-drop-offer").addClass("d-n");
-    $(".reservation-drop__search").addClass("d-n");
-    $(".reservation-drop__selected").addClass("d-b");
-    $(".reservation-drop__time").addClass("d-b");
-    $(".reservation-drop__map").removeClass("d-b");
-}
 
 
 $(document).on('click', '.reservation-popup__item', function(event) {
@@ -1148,6 +1151,7 @@ $(document).on('click', '.reservation-drop__time-back-trigger', function () {
 
 });
 
+// выбор "синей" точки супер-предложения
 $(document).on('click', '.reservation-drop-offer__item', function () {
 
     var access_code = $('#order-client-form').attr('client-ext-code');
@@ -1160,6 +1164,7 @@ $(document).on('click', '.reservation-drop-offer__item', function () {
     });
 });
 
+// закрытие формы "Адрес и время посадки"
 $(document).on('click', '.reservation-drop__topline-cancel', function () {
 
     // map_to.destructor();
