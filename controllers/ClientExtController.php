@@ -184,7 +184,7 @@ class ClientExtController extends Controller
 
 
 
-    public function actionGetSelectPointFromForm($c) {
+    public function actionGetSelectPointFromForm($c, $yandex_point_from_id = 0) {
 
         $model = ClientExt::find()->where(['access_code' => $c])->one();
         if($model == null) {
@@ -192,6 +192,10 @@ class ClientExtController extends Controller
         }
 
         $city_from_id = ($model->direction_id == 1 ? 2 : 1); // город отправки
+
+        if($yandex_point_from_id > 0) {
+            $model->yandex_point_from_id = $yandex_point_from_id;
+        }
 
 
         // популярные яндекс-точки посадки
@@ -225,9 +229,10 @@ class ClientExtController extends Controller
                 ->where(['user_id' => $user->getId()])
                 //->andWhere(['status' => 'sended'])  // пока любой заказ устроит на время разработки
                 ->andWhere(['direction_id' => $model->direction_id])
-                ->orderBy(['id' => 'SORT_DESC'])
+                ->orderBy(['id' => SORT_DESC])
                 ->limit(3)
                 ->all();
+
             if(count($last_client_exts) > 0) {
                 $last_yandex_points = YandexPoint::find()
                     ->where(['id' => ArrayHelper::map($last_client_exts, 'yandex_point_from_id', 'yandex_point_from_id')])
@@ -246,7 +251,7 @@ class ClientExtController extends Controller
             }
         }
 
-        return $this->renderPartial('select-point-from-form', [
+        return $this->renderAjax('select-point-from-form', [
             'model' => $model,
             'tariff' => $tariff,
             'popular_yandex_points' => $popular_yandex_points,
@@ -280,7 +285,7 @@ class ClientExtController extends Controller
                 ->where(['user_id' => $user->getId()])
                 //->andWhere(['status' => 'sended']) // пока любой заказ устроит на время разработки
                 ->andWhere(['direction_id' => $model->direction_id])
-                ->orderBy(['id' => 'SORT_DESC'])
+                ->orderBy(['id' => SORT_DESC])
                 ->limit(3)
                 ->all();
             if(count($last_client_exts) > 0) {
@@ -301,7 +306,7 @@ class ClientExtController extends Controller
             }
         }
 
-        return $this->renderPartial('select-point-to-form', [
+        return $this->renderAjax('select-point-to-form', [
             'model' => $model,
             'popular_yandex_points' => $popular_yandex_points,
             'last_yandex_points' => $last_yandex_points
