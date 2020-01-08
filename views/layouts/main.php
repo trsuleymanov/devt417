@@ -298,7 +298,7 @@ endif;
             </button>
         </div>
     </div>
-    <div class="mobile_menu" id="menu">
+    <div id="menu" class="mobile_menu">
         <div class="modal_global">
             <div class="modal_global__name"><span class="text_22">Главное меню</span>
                 <button class="close" type="button" name="close" data-izimodal-close>
@@ -338,6 +338,45 @@ endif;
                 <li class="nav__item"><a class="nav__link text_16" href="/">t417417.ru</a></li>
             </ul>
         </div>
+    </div>
+    <div id="peoples-mobile" class="mobile_menu">
+        <div class="modal_global">
+            <div class="modal_global__name">
+                <span class="text_22">Пассажиры</span>
+                <button class="close" type="button" name="close" data-izimodal-close>
+                    <svg class="icon icon-close close__svg">
+                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal_global__enter">
+                <div class="modal_global__content">
+                    <div class="modal_global__input">
+                        <div class="select__wrap">
+                            <div class="select__title text_18">Взрослый</div>
+                            <div class="num_package">
+                                <button class="num_package__btn btn_prev text_24" type="button" name="minus">-</button>
+                                <input class="num_package__counter text_18" type="text" name="counter" value="0" readonly>
+                                <button class="num_package__btn btn_next text_24" type="button" name="plus">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal_global__input children_append">
+                        <div class="select__wrap">
+                            <div class="select__title"><span class="text_18">Ребенок до 10 лет</span></div>
+                            <div class="num_package last">
+                                <button class="num_package__btn btn_prev text_24" type="button" name="minus">-</button>
+                                <input name="ClientExt[child_count]" class="num_package__counter text_18" type="text" value="0" readonly>
+                                <button class="num_package__btn btn_next text_24" type="button" name="plus">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal_global__bottom">
+                    <button id="close-peoples-mobile" class="modal_global__submit text_16 test" type="button" disabled>Продолжить</button>
+                </div>
+            </div>
+        </div> 
     </div>
     <div id="enter-mobile" class="mobile_menu">
         <?php

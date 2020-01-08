@@ -385,15 +385,12 @@
     event.stopPropagation();
 
     $(this).toggleClass('slide_down');
-    $('.city_select').removeClass('rotate_ping').find('.select_city_wrap').slideUp(1); // // это разве нужно?
-    $('.for_enter_wrap').slideUp(100);   // это разве нужно?
-    $('.header__login').removeClass('click_fix'); // это разве нужно?
 
-    // открытие выпадающего меню вниз
-    $('.select').slideToggle(100);
-
-    // открытие выпадающего меню вверх
-    //$(".reservation-popup-calc").addClass("d-b");
+    if( is_mobile() ){
+      $('#peoples-mobile').iziModal('open');
+    } else {
+      $('.select').slideToggle(100);
+    }
 
   });
   $(document).on('click', '.select', function (event) {
@@ -553,7 +550,7 @@ $(document).on('click', '#submit-order-form', function() {
     time: $('input[name="ClientExt[time]"]').val(),
     places_count: parseInt($('input[name="ClientExt[places_count]"]').val()),
     child_count: $('input[name="ClientExt[child_count]"]').val(),
-    student_count: $('input[name="ClientExt[student_count]"]').val()
+    // student_count: $('input[name="ClientExt[student_count]"]').val()
   };
 
   var ClientExtChilds = [];
@@ -579,83 +576,72 @@ $(document).on('click', '#submit-order-form', function() {
     }
 
     ClientExtChilds[ClientExtChilds.length] = ClientExtChild;
-
-    // ClientExtChilds.add({
-    //   age: age,
-    //   self_baby_chair: self_baby_chair
-    // });
   });
 
   var post = {
     ClientExt: ClientExt,
     ClientExtChild: ClientExtChilds
   };
-  // console.log('post:'); console.log(post);
 
-  $.ajax({
-    url: '/site/index',
-    type: 'post',
-    data: {
-      ClientExt: ClientExt,
-      ClientExtChild: ClientExtChilds
-    },
-    success: function (response) {
+  if( ClientExt['city_from_id'] == '' || ClientExt['city_to_id'] == '' || ClientExt['data'] == '' || ClientExt['time'] == '' ){
 
-      if (response.success === true) {
+    $('#new-order .error').text('Для заказа поездки заполните все поля').show();
+    setTimeout(function(){
+      $('#new-order .error').text('').hide();
+    }, 3000);
 
-        location.href = response.redirect_url;
+  } else {
 
-      }else {
+    $.ajax({
+      url: '/site/index',
+      type: 'post',
+      data: {
+        ClientExt: ClientExt,
+        ClientExtChild: ClientExtChilds
+      },
+      success: function (response) {
 
-          // var errors = response.errors;
-          // if(errors.city_from_id !== void 0) {
-          //   $('#city_from_id_error').text(errors.city_from_id.join('. '));
-          // }
-          // if(errors.city_to_id !== void 0) {
-          //   $('#city_to_id_error').text(errors.city_to_id.join('. '));
-          // }
-          // if(errors.data !== void 0) {
-          //   $('#data_error').text(errors.data.join('. '));
-          // }
-          // if(errors.time !== void 0) {
-          //   $('#time_error').text(errors.time.join('. '));
-          // }
-          // if(errors.places_count !== void 0) {
-          //   $('#places_count_error').text(errors.places_count.join('. '));
-          // }
+        if (response.success === true) {
 
-        var errors = [];
-        for(var field in response.errors) {
-          var field_errors = response.errors[field];
-          for(var key in field_errors) {
-            errors[errors.length] = field_errors[key];
+          location.href = response.redirect_url;
+
+        }else {
+
+          var errors = [];
+          for(var field in response.errors) {
+            var field_errors = response.errors[field];
+            for(var key in field_errors) {
+              errors[errors.length] = field_errors[key];
+            }
           }
+
+          var str_errors = errors.join(' ');
+          $('#new-order .error').text(str_errors).show();
+          setTimeout(function(){
+            $('#new-order .error').text('').hide();
+          }, 3000);
+
+         }
+      },
+      error: function (data, textStatus, jqXHR) {
+        if (textStatus == 'error' && data != undefined) {
+          if (void 0 !== data.responseJSON) {
+            if (data.responseJSON.message.length > 0) {
+              alert(data.responseJSON.message);
+            }
+          } else {
+            if (data.responseText.length > 0) {
+              alert(data.responseText);
+            }
+          }
+        }else {
+          //handlingAjaxError(data, textStatus, jqXHR);
         }
-
-        var str_errors = errors.join(' ');
-        $('#new-order .error').text(str_errors).show();
-        setTimeout(function(){
-          $('#new-order .error').text('').hide();
-        }, 3000);
-
-       }
-    },
-    error: function (data, textStatus, jqXHR) {
-      if (textStatus == 'error' && data != undefined) {
-        if (void 0 !== data.responseJSON) {
-          if (data.responseJSON.message.length > 0) {
-            alert(data.responseJSON.message);
-          }
-        } else {
-          if (data.responseText.length > 0) {
-            alert(data.responseText);
-          }
-        }
-      }else {
-        //handlingAjaxError(data, textStatus, jqXHR);
       }
-    }
-  });
+    });
+
+  }
+
 });
 
 

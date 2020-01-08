@@ -777,6 +777,9 @@ footer {
 .modal_global__checkbox:after {
   left: 4vw !important;
 }
+.modal_global__bottom {
+  margin-top: 20px;
+}
 .modal_global__submit {
   margin: 0 auto;
   width: 53.333333333333336vw;

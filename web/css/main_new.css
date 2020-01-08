@@ -35,6 +35,9 @@
   cursor: pointer;
   border-radius: 7px;
 }
+#close-restore-password-form {
+  margin-top: 20px;
+}
 .guest .for_enter .children__checkbox {
   padding: 0;
 }
@@ -431,11 +434,9 @@ only screen and (min-resolution: 2dppx) and (min-width: 539px) {
 }
 .children {
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
+  align-items: center;
   padding: 15px 0 0;
 }
 .children_wrap {
@@ -448,6 +449,7 @@ only screen and (min-resolution: 2dppx) and (min-width: 539px) {
           flex-direction: column;
 }
 .children__placeholder {
+  position: relative;
   width: 68%;
 }
 @media (max-width: 992px) {
@@ -503,12 +505,22 @@ only screen and (min-resolution: 2dppx) and (min-width: 539px) {
   -webkit-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
+  pointer-events: none;
 }
 .children__list {
   width: 100%;
   display: none;
   padding: 15px;
   border: 1px solid #dfdfdf;
+  background-color: white
+}
+#peoples-mobile .children__list {
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  right: 0;
+  left: 0;
+  padding: 5px 15px;
 }
 .children__item {
   padding: 0;
@@ -554,6 +566,11 @@ only screen and (min-resolution: 2dppx) and (min-width: 539px) {
 .check_active {
   background: #aeaeae url("/images_new/svg/check.svg") no-repeat center center;
   background-size: 70% 70%;
+}
+#peoples-mobile .select__wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .num_package {
   width: 80px;

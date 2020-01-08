@@ -15,9 +15,6 @@ Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
 
     <?php $form = ActiveForm::begin([
         'id' => 'input-password-form',
-        // 'enableClientScript' => false,
-        // 'enableAjaxValidation' => true,
-        // 'enableClientValidation' => true,
         'fieldConfig' => [
           'errorOptions' => [
                'encode' => false

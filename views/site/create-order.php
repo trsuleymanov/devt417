@@ -143,7 +143,7 @@ $form = ActiveForm::begin([
                     </div>
 
                     <? if( $model->cityFrom->extended_external_use ): ?>
-                        <div class="reservation-step-line-selecte reservation-step-line-selecte--1 <?= $model->yandexPointFrom != null ? 'd-n' : '' ?>">
+                        <div class="reservation-step-line-selecte reservation-step-line-selecte--1 input-arrow <?= $model->yandexPointFrom != null ? 'd-n' : '' ?>">
                             <input id="open-select-point-from" data-external-use = "<?=$model->cityFrom->extended_external_use;?>" type="text" placeholder="Начните вводить адрес..." readonly>
                         </div>
                     <? else: ?>

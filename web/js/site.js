@@ -1527,21 +1527,36 @@ $(document).on('submit', '#registration-form', function(event) {
 
 
 // Восстановление пароля
-function getRestorePasswordForm(phone, is_mobile) {
+function getRestorePasswordForm(phone) {
 
     $.ajax({
-        url: '/site/ajax-get-restore-password-form?phone=' + phone + '&is_mobile=' + is_mobile,
+        url: '/site/ajax-get-restore-password-form?phone=' + phone + '&is_mobile=' + is_mobile(),
         type: 'post',
         data: {},
         success: function (response) {
 
-            // $('.for_enter_wrap').hide();
-            if(is_mobile == 0) {
+            if( is_mobile() ) {
+
+                clearAndHideMobileRegForms();
+                $('#restorepassword-mobile').iziModal({
+                    width: '100%',
+                    top: 0,
+                    loop: false,
+                    overlayColor: 'rgba(0,0,0,.9)',
+                    zindex: 9999,
+                    onOpening: function(modal){
+                        modal.startLoading();
+                        $('#restorepassword-mobile .iziModal-content').html(response.html)
+                        modal.stopLoading();
+                    }
+                });
+                $('#restorepassword-mobile').iziModal('open');
+
+            } else {
+
                 clearAndHideRegForms();
                 $('#modal_restorepassword').html(response.html).fadeIn(100);
-            }else {
-                clearAndHideMobileRegForms();
-                $('#restorepassword-mobile').html(response.html).fadeIn(100);
+
             }
 
         },
@@ -1565,13 +1580,22 @@ function getRestorePasswordForm(phone, is_mobile) {
 $(document).on('click', '#open-restore-password-form', function() {
 
     var phone = $('input[name="User[phone]"]').val();
-    getRestorePasswordForm(phone, is_mobile());
+    getRestorePasswordForm(phone);
 
     return false;
 });
 $(document).on('click', '#close-restore-password-form', function() {
 
-    
+    if( is_mobile() ){
+
+        $('#restorepassword-mobile').iziModal('close');
+
+    } else {
+
+        $('#modal_restorepassword').hide();
+
+    }
+
     return false;
 });
 

@@ -61,63 +61,8 @@ $this->registerJsFile('https://www.google.com/recaptcha/api.js?render=6Lewg8wUAA
                 </div>
                 <div class="welcome__label welcome__label__peoples last_label">
 
-                    <div class="welcome__row" id="peoples"><span class="welcome__sub text_16">Пассажиры</span>
-
-                        <?php /*
-                        <div class="reservation-popup reservation-popup-calc">
-                            <div class="reservation-popup__title">
-                                <div class="reservation-popup__title-text">Пассажиры</div>
-                                <img src="/images_new/passengers.png" alt="" class="reservation-popup__title-img">
-                            </div>
-                            <ul class="reservation-popup__list">
-                                <li class="reservation-popup__item-big">
-                                    <div class="reservation-popup__item-wrap">
-                                        <div class="reservation-popup__item-text">Взрослый</div>
-                                        <div class="reservation-popup__counter">
-                                            <div class="reservation-popup__counter-minus" field-type="adult">-</div>
-                                            <div class="reservation-popup__counter-num">0</div>
-                                            <div class="reservation-popup__counter-plus" field-type="adult">+</div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="reservation-popup__item-big reservation-popup__item-big-child children_append">
-                                    <div class="reservation-popup__item-wrap">
-                                        <input name="ClientExt[child_count]" type="hidden" value="0">
-                                        <div class="reservation-popup__item-text">Ребенок</div>
-                                        <div class="reservation-popup__counter reservation-popup__counter-child">
-                                            <div class="reservation-popup__counter-minus btn_prev" field-type="child">-</div>
-                                            <div class="reservation-popup__counter-num">0</div>
-                                            <div class="reservation-popup__counter-plus btn_next" field-type="child">+</div>
-                                        </div>
-                                    </div>
-                                    <div class="reservation-popup__child-item">
-                                        <div class="reservation-popup__input-wrap input-arrow reservation-popup__input-child-wrap">
-                                            <input type="text" class="reservation-item__input reservation-popup__input reservation-popup__input-child" placeholder="Выберите возраст ребенка на момент поездки">
-                                        </div>
-                                        <div class="reservation-popup reservation-popup-child">
-                                            <ul class="reservation-popup__list">
-                                                <li class="reservation-popup__item-small">Меньше года</li>
-                                                <li class="reservation-popup__item-small">От 1 до 2 лет</li>
-                                                <li class="reservation-popup__item-small">От 3 до 6 лет</li>
-                                                <li class="reservation-popup__item-small">От 7 до 10 лет</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="reservation-popup__item-big">
-                                    <div class="reservation-popup__item-wrap">
-                                        <input name="ClientExt[student_count]" type="hidden" value="0">
-                                        <div class="reservation-popup__item-text">Студент</div>
-                                        <div class="reservation-popup__counter">
-                                            <div class="reservation-popup__counter-minus" field-type="student">-</div>
-                                            <div class="reservation-popup__counter-num">0</div>
-                                            <div class="reservation-popup__counter-plus" field-type="student">+</div>
-                                        </div>
-                                    </div>
-                                </li>
-                        </div>
-                        */ ?>
-
+                    <div class="welcome__row" id="peoples">
+                        <span class="welcome__sub text_16">Пассажиры</span>
                         <input name="ClientExt[places_count]" class="welcome__input text_18 fix_cursor" type="text" autocomplete="off" value="0 человек" readonly>
                         <div class="welcome__icon fix_icon no-pointer">
                             <svg class="icon icon-users welcome__svg">

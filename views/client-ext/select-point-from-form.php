@@ -13,7 +13,7 @@
 
 ?>
 
-<?php if(count($super_yandex_points) > 0) { ?>
+<?php if(count($super_yandex_points) || count($yandex_point) ) { ?>
     <div class="reservation-drop-offer">
         <div class="reservation-drop-offer__cover">
             <div class="reservation-drop-offer__cover-wrap">

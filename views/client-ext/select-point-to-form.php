@@ -11,7 +11,7 @@
 
 <div class="reservation-drop__select">
     <div class="reservation-drop__select-title">Выберите из списка точку высадки, наиболее удобную для вас</div>
-    <div id="search-to-block" class="reservation-drop__select-select-wrap">
+    <div id="search-to-block" class="reservation-drop__select-select-wrap input-arrow">
         <input id="search-place-to" type="text" class="reservation-drop__select-select" autocomplete="off">
         <div class="search-result-block sw-select-block"></div>
         <div class="reservation-popup reservation-popup-select">

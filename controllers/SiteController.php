@@ -874,7 +874,7 @@ class SiteController extends Controller
     }
 
 
-    public function actionAjaxGetRestorePasswordForm($phone, $is_mobile = 0) {
+    public function actionAjaxGetRestorePasswordForm($phone, $is_mobile) {
 
         Yii::$app->response->format = 'json';
 
@@ -892,14 +892,8 @@ class SiteController extends Controller
         if($user->generateRestoreCode() && $user->save(false) && $user->sendRestoreCode()) {
             //return; // + stasus 200 by default
 
-            if($is_mobile == 0) {
-                return [
-                    'success' => true,
-                    'html' => $this->renderAjax('restore-password-message', [
-                        'email' => $user->email
-                    ])
-                ];
-            }else {
+            if($is_mobile == 'true') {
+
                 return [
                     'success' => true,
                     'html' => $this->renderAjax('restore-password-message-mobile', [
@@ -907,6 +901,16 @@ class SiteController extends Controller
                         'email' => $user->email
                     ])
                 ];
+
+            } else {
+
+                return [
+                    'success' => true,
+                    'html' => $this->renderAjax('restore-password-message', [
+                        'email' => $user->email
+                    ])
+                ];
+
             }
 
         }else {

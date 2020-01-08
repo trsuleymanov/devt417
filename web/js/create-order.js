@@ -956,7 +956,11 @@ $(document).on('click', ".reservation-drop__selected-showmap-trigger", function 
 // выбор одного из 3-х времен рейса
 $(document).on('click', '.reservation-drop__time-item', function() {
 
-    $(this).addClass('selected');
+    var $this = $(this);
+    var timeItemAnimate = setInterval(function(){
+        $this.toggleClass('selected');
+    }, 300);
+
     var trip_id = $(this).attr('trip-id');
     var yandex_point_description = $(this).attr('yandex-point-description');
     $('input[name="ClientExt[trip_id]"]').val(trip_id);
@@ -1002,7 +1006,9 @@ $(document).on('click', '.reservation-drop__time-item', function() {
         $(".reservation-step-line-selecte--1").addClass("d-n");
         $(".main-overlay").remove();
 
-    }, 1000);
+        clearInterval(timeItemAnimate);
+
+    }, 2000);
 
     // закрываю/удаляю текущую форму
     // $('#city-from').hide();
@@ -1016,6 +1022,11 @@ $(document).on('click', '.reservation-drop__time-item', function() {
 
 
 // поиск в точке откуда в адресной строке
+$(document).on('focus', '#search-place-from', function(e) {
+
+    $('.reservation-drop-offer__list').removeClass('d-b');
+
+});
 $(document).on('keyup', '#search-place-from', function(e) {
 
     var search = $.trim($(this).val());
