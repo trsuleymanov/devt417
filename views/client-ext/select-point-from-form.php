@@ -1,5 +1,8 @@
 <?php
 
+use app\widgets\SelectWidget;
+use yii\web\JsExpression;
+
 // популярные яндекс-точки отправления
 // echo "popular_yandex_points:<pre>"; print_r($popular_yandex_points); echo "</pre>";
 
@@ -13,7 +16,9 @@
 
 ?>
 
-<?php if(count($super_yandex_points) || count($yandex_point) ) { ?>
+<?php
+
+if(count($super_yandex_points) > 0) { ?>
     <div class="reservation-drop-offer">
         <div class="reservation-drop-offer__cover">
             <div class="reservation-drop-offer__cover-wrap">
@@ -40,8 +45,8 @@
     <div class="reservation-drop__search">
 
         <div class="reservation-drop__search-text">… или введите адрес вручную для выбора точки посадки рядом с домом</div>
-        <div id="search-from-block" class="reservation-drop__search-input-wrap">
-            <input id="search-place-from" type="text" class="reservation-drop__search-input" autocomplete="none" placeholder="Начните вводить адрес..." />
+        <div id="search-from-block" city-extended-external-use="1" class="reservation-drop__search-input-wrap">
+            <input id="search-place-from" type="text" class="reservation-drop__search-input" autocomplete="off" placeholder="Начните вводить адрес..." />
             <div class="search-result-block sw-select-block"></div>
         </div>
         <div class="reservation-drop__search-geo"><span>использовать мою геопозицию</span></div>
@@ -61,8 +66,51 @@
 
 <? else: ?>
 
+    <div class="reservation-drop__search">
+        <div class="reservation-drop__search-text">Выберите из списка точку посадки, наиболее удобную для вас</div>
+        <div id="search-from-block" city-extended-external-use="0" class="reservation-drop__search-input-wrap">
+            <?php
+            // поиск по точкам города
+            echo SelectWidget::widget([
+                'name' => 'search_yandex_point_from_id',
+                'initValueText' => ($model->yandex_point_from_id > 0 ? $model->yandexPointFrom->name : ''),
+                'options' => [
+                    'placeholder' => 'Выберите точку',
+                    'class' => 'reservation-drop__search-input'
+                ],
+                'ajax' => [
+                    'url' => '/yandex-point/ajax-yandex-points?is_from=1&simple_id=1',
+                    'data' => new JsExpression('function(params) {
+                        return {
+                            search: params.search,
+                            direction_id: "'.$model->direction_id.'"
+                        };
+                    }')
+                ],
+                'using_delete_button' => false // отключен bootstrap, поэтому значка нет
+            ]);
+            ?>
+        </div>
+        <div class="reservation-drop__search-geo"><span>использовать мою геопозицию</span></div>
+
+        <ul class="reservation-drop__select-list">
+            <? if( count($last_yandex_points) || count($popular_yandex_points) ): ?>
+                <ul class="reservation-drop__select-list">
+                    <? foreach($last_yandex_points as $point): ?>
+                        <li class="reservation-drop__select-item select-point-from" data-id = "<?= $point->id ?>" data-name = "<?= $point->name ?>" lat="<?= $point->lat ?>" lon="<?= $point->long ?>"><?= $point->name ?></li>
+                    <? endforeach; ?>
+                    <? foreach($popular_yandex_points as $point): ?>
+                        <li class="reservation-drop__select-item select-point-from" data-id = "<?= $point->id ?>" data-name = "<?= $point->name ?>" lat="<?= $point->lat ?>" lon="<?= $point->long ?>"><?= $point->name ?></li>
+                    <? endforeach; ?>
+                </ul>
+            <? endif; ?>
+
+        </ul>
+
+    </div>
+
+    <?php /*
     <div class="reservation-drop__select">
-        <div class="reservation-drop__select-title">Выберите из списка точку высадки, наиболее удобную для вас</div>
         <div id="search-from-block" class="reservation-drop__select-select-wrap">
             <input id="search-place-from" type="text" class="reservation-drop__select-select" autocomplete="off">
             <div class="search-result-block sw-select-block"></div>
@@ -76,7 +124,7 @@
                 <li class="reservation-drop__select-item select-point-from" data-id = "<?= $point->id ?>" data-name = "<?= $point->name ?>" lat="<?= $point->lat ?>" lon="<?= $point->long ?>"><?= $point->name ?></li>
             <?php } ?>
         </ul>
-    </div>
+    </div>*/ ?>
 
 <? endif; ?>
 

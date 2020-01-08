@@ -33,7 +33,7 @@ class ClientextController extends Controller
             ->where(['status' => 'waiting_for_capture'])
             // 10 секунд пропускаем так как этот платеж может обрабатываться запросом из приложения
             ->andWhere(['<=', 'waiting_for_capture_at', time() - 10])
-            ->orderBy(['id' => 'SORT_ASC'])
+            ->orderBy(['id' => SORT_ASC])
             ->limit(10) // больше 5 не стоит, иначе скрипт может 2 раза обрабатывать один и тот же платеж
             ->all();
         if(count($yandex_payments) > 0) {

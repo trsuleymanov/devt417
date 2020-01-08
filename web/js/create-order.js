@@ -67,7 +67,7 @@ function selectPointPlacemark(map, params) {
         params['can_change_params'] = false;
     }
     if(params['is_allowed_edit'] == undefined) {
-        params['is_allowed_edit'] = getIsAllowedEditParam();
+        params['is_allowed_edit'] = false;
     }
     if(params['create_new_point'] != true) {
         params['create_new_point'] = false;
@@ -97,6 +97,7 @@ function selectPointPlacemark(map, params) {
                 if(params['point_text'] == '') {
                     params['point_text'] = parseNameFromTemplate(balloonContent);
                 }
+                //alert('point_text='+params['point_text']);
 
                 return;
             }
@@ -107,6 +108,7 @@ function selectPointPlacemark(map, params) {
     }else {
         alert('Невозможно найти точку на карте');
     }
+
 
     var hintContent = params['point_text'] + ' (точка выбрана)';
 
@@ -127,10 +129,10 @@ function selectPointPlacemark(map, params) {
         can_change_params: params['can_change_params'],
         is_allowed_edit: params['is_allowed_edit']
     };
-
     //var balloonContent = getPlacemarketTemplate(point_text, index, point_id, edit, create_new_point, can_change_params, critical_point, alias)
     var balloonContent = getPlacemarketTemplate(placemarket_template_params)
         + ' (точка выбрана)';
+
 
     var fio = $.trim($('#client-name').val());
     if(fio == '') {
@@ -145,6 +147,7 @@ function selectPointPlacemark(map, params) {
         iconContent: fio
     });
 
+
     point_placemark.options.unset('iconImageOffset');
     point_placemark.options.unset('iconImageSize');
     point_placemark.options.unset('iconLayout');
@@ -157,10 +160,14 @@ function selectPointPlacemark(map, params) {
     });
     //point_placemark.balloon.open();
 
+
     if(params['point_focusing_scale'] > 0) {
         var coordinates = point_placemark.geometry.getCoordinates();
         map.setCenter(coordinates, params['point_focusing_scale'], {duration: 500});
     }
+
+    //console.log('selectPointPlacemark отработала');
+
 
     return point_placemark;
 }
@@ -178,17 +185,16 @@ function unselectOldPointPlacemark() {
         var index = parseIndexFromTemplate(balloonContent);
         var yandex_point_id = parseIdFromTemplate(balloonContent);
         var yandex_point_name = parseNameFromTemplate(balloonContent);
-        var yandex_point_description = parseDescriptionFromTemplate(balloonContent);
-
+        // var yandex_point_description = parseDescriptionFromTemplate(balloonContent);
         var hintContent = '<button class="btn-select-placemark hint-btn" placemark-index="' + index + '">Выбрать</button> ' + yandex_point_name;
 
 
         var params = {
             point_text: yandex_point_name,
-            point_description: yandex_point_description,
+            // point_description: yandex_point_description,
             index: index,
             point_id: yandex_point_id,
-            is_allowed_edit: getIsAllowedEditParam()
+            is_allowed_edit: false
         };
         //var balloonContent = getPlacemarketTemplate(yandex_point_name, index, yandex_point_id)
         var balloonContent = getPlacemarketTemplate(params)
@@ -203,9 +209,10 @@ function unselectOldPointPlacemark() {
             point_placemark.options.set({'iconColor': '#1E98FF'});
         }
 
-        point_placemark.options.unset('preset');
+        // point_placemark.options.unset('preset'); // вызывает ошибку
         point_placemark.options.unset('draggable');
         point_placemark.properties.unset('iconContent');
+
 
         point_placemark.options.set({
             iconLayout: 'islands#circleIcon',
@@ -219,6 +226,8 @@ function unselectOldPointPlacemark() {
                 radius: 8
             }
         });
+
+        // console.log('unselectOldPointPlacemark отработал');
     }
 }
 
@@ -285,11 +294,11 @@ function parseIdFromTemplate(content) {
 // извлечение из html-контента названия яндекс-точки
 function parseNameFromTemplate(content) {
 
-    var pos_start = content.indexOf('span-placemark') + 14;
+    var pos_start = content.indexOf('span-placemark');
     var text = content.substring(pos_start);
     var pos_start = text.indexOf('>') + 1;
     var text = text.substring(pos_start);
-    var pos_end = text.indexOf('</span></div>');
+    var pos_end = text.indexOf('</span>');
     var text = text.substring(0, pos_end);
 
     return text;
@@ -421,7 +430,6 @@ function loadMap(map_name, map_id, is_from, return_function) {
 
                     return_function();
                 }
-
             });
 
         },
@@ -480,11 +488,22 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
                     // travel_time_h    3
                     // travel_time_m
 
-                    trips_html += '<li class="reservation-drop__time-item" trip-id="' + trip_obj.trip_id + '" data-departure-date="'+ trip_obj.departure_date +'" data-departure-time="'+ trip_obj.departure_time +'" data-arrival-date="'+ trip_obj.arrival_date +'" data-arrival-time="'+ trip_obj.arrival_time +'" yandex-point-id="' + response.yandex_point_id + '" yandex-point-lat="' + response.yandex_point_lat +'" yandex-point-lon="' + response.yandex_point_long +'" yandex-point-description="' + response.yandex_point_description + '">' + (response.client_ext_data != trip_obj.data ? trip_obj.data + ' ' : '') + trip_obj.departure_time + '</li>';
+                    trips_html += '<li class="reservation-drop__time-item"' +
+                        ' trip-id="' + trip_obj.trip_id + '"' +
+                        ' data-departure-date="'+ trip_obj.departure_date +'" ' +
+                        'data-departure-time="'+ trip_obj.departure_time +'" ' +
+                        'data-arrival-date="'+ trip_obj.arrival_date +'" ' +
+                        'data-arrival-time="'+ trip_obj.arrival_time +'" ' +
+                        'yandex-point-id="' + response.yandex_point_id + '" ' +
+                        'yandex-point-lat="' + response.yandex_point_lat +'" ' +
+                        'yandex-point-lon="' + response.yandex_point_long +'" ' +
+                        'yandex-point-name="' + response.yandex_point_name + '"' +
+                        'yandex-point-description="' + response.yandex_point_description + '"' +
+                        '>' + (response.client_ext_data != trip_obj.data ? trip_obj.data + ' ' : '') + trip_obj.departure_time + '</li>';
                 }
 
                 var yandex_point_name = response.yandex_point_name;
-                if(response.yandex_point_description != null) {
+                if(response.yandex_point_description != '') {
                     yandex_point_name += ', ' + response.yandex_point_description;
                 }
 
@@ -554,6 +573,8 @@ function addressToStep2(parent) {
 }
 
 
+
+
 // выбор точки посадки на всплывающей карте
 $(document).on('click', '#ya-map-from .btn-select-placemark', function() {
 
@@ -588,7 +609,7 @@ $(document).on('click', '#ya-map-from-static .btn-select-placemark', function() 
     var placemark = map_from_static.geoObjects.get(index);
     var balloonContent = placemark.properties.get('balloonContent');
     var yandex_point_from_id = parseIdFromTemplate(balloonContent);
-    var yandex_point_from_name = parseNameFromTemplate(balloonContent);
+    // var yandex_point_from_name = parseNameFromTemplate(balloonContent);
     var access_code = $('#order-client-form').attr('client-ext-code');
 
     // loadTripTimes(access_code, yandex_point_id, function(ajax_response) {
@@ -602,15 +623,78 @@ $(document).on('click', '#ya-map-from-static .btn-select-placemark', function() 
 
     // всплытие формы с открытой картой с наведением на выбранную ранее точку откуда
     openSelectPointFromModal(function() {
-
         loadTripTimes(access_code, yandex_point_from_id, function(ajax_response) {
             addressToStep2();
         });
     });
-
 });
 
+
+$(document).on('click', '#ya-map-to .btn-select-placemark', function() {
+
+    var index = $(this).attr('placemark-index');
+    var placemark = map_to.geoObjects.get(index);
+    var balloonContent = placemark.properties.get('balloonContent');
+    var yandex_point_to_id = parseIdFromTemplate(balloonContent);
+    var yandex_point_to_name = parseNameFromTemplate(balloonContent);
+
+    var coordinates = placemark.geometry.getCoordinates();
+    var lat = coordinates[0];
+    var long = coordinates[1];
+    // alert('lat='+lat+' long='+long);
+
+
+    // закрытие текущей формы
+    $('.reservation-drop--2').find('.reservation-drop__content').html('');
+    $('.reservation-drop--2').hide();
+    $(".main-overlay").remove();
+
+    $('input[name="ClientExt[yandex_point_to_id]"]')
+        .val(yandex_point_to_id)
+        .attr('lat', lat)
+        .attr('lon', long)
+        //.attr('point-name', yandex_point_to_name)
+        .attr('point-index', index);
+    $('.reservation-step-line-dest-address').html(yandex_point_to_name);
+    toggleSubmitBut1();
+
+    //$(".reservation-drop--2").removeClass("d-b");
+    $(".reservation-step-line-content-top-left--empty2").addClass("d-n");
+    $(".reservation-step-line-content-top-left--ready2").addClass("d-b");
+    $(".reservation-step-line-selecte--2").addClass("d-n");
+});
+
+$(document).on('click', '#ya-map-to-static .btn-select-placemark', function() {
+
+    var index = $(this).attr('placemark-index');
+    var placemark = map_to_static.geoObjects.get(index);
+    var balloonContent = placemark.properties.get('balloonContent');
+    var yandex_point_to_id = parseIdFromTemplate(balloonContent);
+    var yandex_point_to_name = parseNameFromTemplate(balloonContent);
+
+    var coordinates = placemark.geometry.getCoordinates();
+    var lat = coordinates[0];
+    var long = coordinates[1];
+
+
+    $('input[name="ClientExt[yandex_point_to_id]"]')
+        .val(yandex_point_to_id)
+        .attr('lat', lat)
+        .attr('lon', long)
+        .attr('point-index', index);
+
+
+    $('.reservation-step-line-dest-address').html(yandex_point_to_name);
+    toggleSubmitBut1();
+
+
+    // сворачиваем карту
+    $('.reservation-step-line_arrival .reservation-step-line-showmap').click();
+});
+
+
 // выбор точки высадки на карте
+/*
 $(document).on('click', '.container-drop--2 .btn-select-placemark', function(event) {
 
     // alert('точка высадки');
@@ -644,15 +728,16 @@ $(document).on('click', '.container-drop--2 .btn-select-placemark', function(eve
     $(".reservation-step-line-content-top-left--empty2").addClass("d-n");
     $(".reservation-step-line-content-top-left--ready2").addClass("d-b");
     $(".reservation-step-line-selecte--2").addClass("d-n");
-});
+});*/
 
 
 function openSelectPointFromModal(response_function) {
 
     var access_code = $('#order-client-form').attr('client-ext-code');
+    var yandex_point_from_id = $('input[name="ClientExt[yandex_point_from_id]"]').val();
 
     $.ajax({
-        url: '/client-ext/get-select-point-from-form?c=' + access_code,
+        url: '/client-ext/get-select-point-from-form?c=' + access_code + '&yandex_point_from_id=' + yandex_point_from_id,
         type: 'post',
         data: {},
         success: function (html) {
@@ -769,7 +854,6 @@ $(document).on('click', '.select-point-from', function() {
         //console.log('ajax_response:'); console.log(ajax_response);
 
         addressToStep2();
-
     });
 });
 
@@ -811,12 +895,11 @@ $(document).on('click', '.select-point-to', function() {
         $('.reservation-drop--2').hide();
         $(".main-overlay").remove();
     }, 3000);
-
 });
 
 
 
-
+// ???????
 $(document).on('click', '.reservation-popup__item', function(event) {
 
     var value = $(event.currentTarget).find(".reservation-popup__item-text").text();
@@ -859,6 +942,8 @@ $(document).on('click', '.reservation-drop-offer__item', function () {
         addressToStep2();
     });
 });
+
+
 
 // закрытие формы "Адрес и время посадки"
 $(document).on('click', '.reservation-drop__topline-cancel', function () {
@@ -926,30 +1011,29 @@ $(document).on('click', ".reservation-drop__selected-showmap-trigger", function 
         $elem.addClass('d-b');
 
 
-        if($('#ya-map-from2').html() == '') {
-            loadMap('map_from2', 'ya-map-from2',1, function () {
+        // if($('#ya-map-from2').html() == '') { // всегда html этой карты пуст оказывается
+        loadMap('map_from2', 'ya-map-from2',1, function () {
 
-                var $elem2 = $('.reservation-drop--1').find('.reservation-drop__selected-address');
-                var yandex_point_from_id = $elem2.attr('yandex-point-id');
-                //var yandex_point_from_name = $elem2.text();
+            var $elem2 = $('.reservation-drop--1').find('.reservation-drop__selected-address');
+            var yandex_point_from_id = $elem2.attr('yandex-point-id');
+            //var yandex_point_from_name = $elem2.text();
 
 
-                var select_point_placemark_params = {
-                    //index: yandex_point_from_index,
-                    //point_text: yandex_point_from_name,
-                    point_id: yandex_point_from_id,
-                    //is_editing: true,
-                    //create_new_point: true,
-                    can_change_params: false,
-                    //critical_point: yandex_point.critical_point,
-                    //alias: yandex_point.alias,
-                    draggable: false,
-                    is_allowed_edit: false,
-                    point_focusing_scale: 16
-                };
-                selectPointPlacemark(map_from2, select_point_placemark_params);
-            });
-        }
+            var select_point_placemark_params = {
+                //index: yandex_point_from_index,
+                //point_text: yandex_point_from_name,
+                point_id: yandex_point_from_id,
+                //is_editing: true,
+                //create_new_point: true,
+                can_change_params: false,
+                //critical_point: yandex_point.critical_point,
+                //alias: yandex_point.alias,
+                draggable: false,
+                is_allowed_edit: false,
+                point_focusing_scale: 16
+            };
+            selectPointPlacemark(map_from2, select_point_placemark_params);
+        });
     }
 });
 
@@ -979,7 +1063,7 @@ $(document).on('click', '.reservation-drop__time-item', function() {
     toggleSubmitBut1();
     updatePrice1();
 
-    if(yandex_point_description != 'null') {
+    if(yandex_point_description != '') {
         yandex_point_name += ', ' + yandex_point_description;
     }
 
@@ -1101,8 +1185,10 @@ $(document).on('keyup', '#search-place-from', function(e) {
 
 
 
-// щелчек на строке в выпадающем списке результатов поиска для точки откуда
-$(document).on('click', '#search-from-block .search-result-block li', function() {
+
+
+// в выпадающей списке строки поиска по адресам - показывает карту и наводит на выбранный адрес
+$(document).on('click', '#search-from-block[city-extended-external-use="1"] .search-result-block li', function() {
 
     var str = $(this).text();
     var lat = $(this).attr('lat');
@@ -1137,12 +1223,70 @@ $(document).on('click', '#search-from-block .search-result-block li', function()
     return false;
 });
 
-// щелчек на строке в выпадающем списке результатов поиска для точки куда
+// в выпадающей списке - выбор яндекс-точки посадки
+$(document).on('click', '#search-from-block[city-extended-external-use="0"] .main-list li', function () {
+
+    var access_code = $('#order-client-form').attr('client-ext-code');
+    var yandex_point_id = $(this).val();
+
+    // var yandex_point_from_id = $('input[name="ClientExt[yandex_point_from_id]"]').val();
+
+    // потом нужно вызвать addressToStep2
+    loadTripTimes(access_code, yandex_point_id, function(ajax_response) {
+        //console.log('ajax_response:'); console.log(ajax_response);
+        addressToStep2();
+    });
+});
+
+
+// в выпадающей списке - выбор яндекс-точки высадки
+$(document).on('click', '#search-to-block li', function() {
+
+    var yandex_point_to_id = $(this).val();
+    var yandex_point_to_name = $(this).text();
+
+    //var index = $(this).attr('placemark-index');
+    //var placemark = map_to.geoObjects.get(index);
+    //var balloonContent = placemark.properties.get('balloonContent');
+    //var yandex_point_to_id = parseIdFromTemplate(balloonContent);
+    //var yandex_point_to_name = parseNameFromTemplate(balloonContent);
+
+    //var coordinates = placemark.geometry.getCoordinates();
+    //var lat = coordinates[0];
+    //var long = coordinates[1];
+
+
+    // закрытие текущей формы
+    $('.reservation-drop--2').find('.reservation-drop__content').html('');
+    $('.reservation-drop--2').hide();
+    $(".main-overlay").remove();
+
+
+    $('input[name="ClientExt[yandex_point_to_id]"]')
+        .val(yandex_point_to_id)
+        //.attr('lat', lat)
+        //.attr('lon', long)
+        //.attr('point-index', index)
+    ;
+    $('.reservation-step-line-dest-address').html(yandex_point_to_name);
+    toggleSubmitBut1();
+
+    $(".reservation-step-line-content-top-left--empty2").addClass("d-n");
+    $(".reservation-step-line-content-top-left--ready2").addClass("d-b");
+    $(".reservation-step-line-selecte--2").addClass("d-n");
+});
+
+
+
+
+// поиск по адресам: щелчек на строке в выпадающем списке результатов поиска для точки куда
+/*
 $(document).on('click', '#search-to-block .search-result-block li', function() {
 
     var str = $(this).text();
     var lat = $(this).attr('lat');
     var lon = $(this).attr('lon');
+
 
     // если карта открыта
     // if($(".reservation-drop__map").hasClass('d-b')) {
@@ -1179,6 +1323,7 @@ $(document).on('click', '#search-to-block .search-result-block li', function() {
 
     return false;
 });
+*/
 
 
 function createPlacemark(map, params) {
@@ -1366,6 +1511,8 @@ function getPlacemarketTemplate(params) {
 
 
     if(params['is_allowed_edit'] == false) {
+
+        //console.log('params:'); console.log(params);
 
         var content =
             '<div class="placemark-balloon-content" index="' + params['index'] + '" yandex-point-id="' + params['point_id'] + '">';
@@ -2025,7 +2172,7 @@ $(document).on('click', '#submit-create-order-step-2', function() {
             }else {
 
                 var errors = response.errors;
-                alert('errors');
+                alert(errors);
                 // if(errors.city_from_id !== void 0) {
                 //     $('#city_from_id_error').text(errors.city_from_id.join('. '));
                 // }
@@ -2068,6 +2215,12 @@ $(document).on('click', '#submit-create-order-step-2', function() {
 
 // нажатие на уже выбранный адрес точки откуда - открывает заново карту
 $(document).on('click', "#city-from-block .reservation-step-line-change", function() {
+
+    // закрываем статичную карту если открыта
+    if( $('.reservation-step-line_departure .reservation-step-line-map').hasClass('d-b') ) {
+        $('.reservation-step-line_departure .reservation-step-line-showmap').click(); // сворачиваем карту
+    }
+
 
     var yandex_point_from_id = $('input[name="ClientExt[yandex_point_from_id]"]').val();
 
@@ -2117,60 +2270,75 @@ $(document).on('click', "#city-from-block .reservation-step-line-showmap", funct
         $elem.removeClass('d-b');
     }else { // отображаем карту
         $elem.addClass('d-b');
+
         if($('#ya-map-from-static').html() == '') {
 
             loadMap('map_from_static', 'ya-map-from-static',1, function () {
 
                 var yandex_point_from_id = $('input[name="ClientExt[yandex_point_from_id]"]').val();
-                //var yandex_point_from_name = $('input[name="ClientExt[yandex_point_from_id]"]').attr('point-name');
-
                 var select_point_placemark_params = {
-                    //index: yandex_point_from_index,
-                    //point_text: yandex_point_from_name,
                     point_id: yandex_point_from_id,
-                    //is_editing: true,
-                    //create_new_point: true,
                     can_change_params: false,
-                    //critical_point: yandex_point.critical_point,
-                    //alias: yandex_point.alias,
                     draggable: false,
                     is_allowed_edit: false,
                     point_focusing_scale: 16
                 };
                 selectPointPlacemark(map_from_static, select_point_placemark_params);
             });
+
+        }else {
+
+            var yandex_point_from_id = $('input[name="ClientExt[yandex_point_from_id]"]').val();
+            var select_point_placemark_params = {
+                point_id: yandex_point_from_id,
+                can_change_params: false,
+                draggable: false,
+                is_allowed_edit: false,
+                point_focusing_scale: 16
+            };
+            selectPointPlacemark(map_from_static, select_point_placemark_params);
         }
     }
 });
 
 $(document).on('click', "#city-to-block .reservation-step-line-showmap", function(event) {
+
     var $elem = $(this).closest(".reservation-step-line-content").find(".reservation-step-line-map");
     if($elem.hasClass('d-b')) { // закрытие карты
         $elem.removeClass('d-b');
     }else { // отображаем карту
         $elem.addClass('d-b');
+
         if($('#ya-map-to-static').html() == '') {
 
             loadMap('map_to_static', 'ya-map-to-static',0, function () {
 
                 var yandex_point_to_id = $('input[name="ClientExt[yandex_point_to_id]"]').val();
-                //var yandex_point_from_name = $('input[name="ClientExt[yandex_point_from_id]"]').attr('point-name');
+                // alert('yandex_point_to_id='+yandex_point_to_id);
 
                 var select_point_placemark_params = {
-                    //index: yandex_point_from_index,
-                    //point_text: yandex_point_from_name,
                     point_id: yandex_point_to_id,
-                    //is_editing: true,
-                    //create_new_point: true,
                     can_change_params: false,
-                    //critical_point: yandex_point.critical_point,
-                    //alias: yandex_point.alias,
                     draggable: false,
                     is_allowed_edit: false,
                     point_focusing_scale: 16
                 };
                 selectPointPlacemark(map_to_static, select_point_placemark_params);
             });
+
+        }else {
+
+            // alert('Устанавливаем точку...3');
+
+            var yandex_point_to_id = $('input[name="ClientExt[yandex_point_to_id]"]').val();
+            var select_point_placemark_params = {
+                point_id: yandex_point_to_id,
+                can_change_params: false,
+                draggable: false,
+                is_allowed_edit: false,
+                point_focusing_scale: 16
+            };
+            selectPointPlacemark(map_to_static, select_point_placemark_params);
         }
     }
 });
@@ -2178,6 +2346,13 @@ $(document).on('click', "#city-to-block .reservation-step-line-showmap", functio
 
 // нажатие на уже выбранный адрес точки куда - открывает заново карту
 $(document).on('click', "#city-to-block .reservation-step-line-change2", function() {
+
+
+    // закрываем статичную карту если открыта
+    if( $('.reservation-step-line_arrival .reservation-step-line-map').hasClass('d-b') ) {
+        $('.reservation-step-line_arrival .reservation-step-line-showmap').click(); // сворачиваем карту
+    }
+
 
     var yandex_point_to_id = $('input[name="ClientExt[yandex_point_to_id]"]').val();
     //var yandex_point_to_lat = $('input[name="ClientExt[yandex_point_to_id]"]').attr('lat');
@@ -2191,6 +2366,7 @@ $(document).on('click', "#city-to-block .reservation-step-line-change2", functio
             alert('map_to = null');
         }else {
 
+            //alert('наводим на точку yandex_point_to_id='+yandex_point_to_id);
             var select_point_placemark_params = {
                 //index: yandex_point_from_index,
                 //point_text: yandex_point_from_name,
@@ -2204,7 +2380,11 @@ $(document).on('click', "#city-to-block .reservation-step-line-change2", functio
                 is_allowed_edit: false,
                 point_focusing_scale: 16
             };
-            selectPointPlacemark(map_to, select_point_placemark_params);
+            var point_placemark = selectPointPlacemark(map_to, select_point_placemark_params);
+            var balloonContent = point_placemark.properties.get('balloonContent');
+            var yandex_point_to_name = parseNameFromTemplate(balloonContent);
+
+            selectWidgetInsertValue($('input[name="search_yandex_point_to_id"]').parents('.sw-element'), yandex_point_to_id, yandex_point_to_name);
         }
     });
 });
