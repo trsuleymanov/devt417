@@ -627,10 +627,74 @@ $(document).on('click', '#ya-map-from-static .btn-select-placemark', function() 
             addressToStep2();
         });
     });
-
 });
 
+
+$(document).on('click', '#ya-map-to .btn-select-placemark', function() {
+
+    var index = $(this).attr('placemark-index');
+    var placemark = map_to.geoObjects.get(index);
+    var balloonContent = placemark.properties.get('balloonContent');
+    var yandex_point_to_id = parseIdFromTemplate(balloonContent);
+    var yandex_point_to_name = parseNameFromTemplate(balloonContent);
+
+    var coordinates = placemark.geometry.getCoordinates();
+    var lat = coordinates[0];
+    var long = coordinates[1];
+    // alert('lat='+lat+' long='+long);
+
+
+    // закрытие текущей формы
+    $('.reservation-drop--2').find('.reservation-drop__content').html('');
+    $('.reservation-drop--2').hide();
+    $(".main-overlay").remove();
+
+    $('input[name="ClientExt[yandex_point_to_id]"]')
+        .val(yandex_point_to_id)
+        .attr('lat', lat)
+        .attr('lon', long)
+        //.attr('point-name', yandex_point_to_name)
+        .attr('point-index', index);
+    $('.reservation-step-line-dest-address').html(yandex_point_to_name);
+    toggleSubmitBut1();
+
+    //$(".reservation-drop--2").removeClass("d-b");
+    $(".reservation-step-line-content-top-left--empty2").addClass("d-n");
+    $(".reservation-step-line-content-top-left--ready2").addClass("d-b");
+    $(".reservation-step-line-selecte--2").addClass("d-n");
+});
+
+$(document).on('click', '#ya-map-to-static .btn-select-placemark', function() {
+
+    var index = $(this).attr('placemark-index');
+    var placemark = map_to_static.geoObjects.get(index);
+    var balloonContent = placemark.properties.get('balloonContent');
+    var yandex_point_to_id = parseIdFromTemplate(balloonContent);
+    var yandex_point_to_name = parseNameFromTemplate(balloonContent);
+
+    var coordinates = placemark.geometry.getCoordinates();
+    var lat = coordinates[0];
+    var long = coordinates[1];
+
+
+    $('input[name="ClientExt[yandex_point_to_id]"]')
+        .val(yandex_point_to_id)
+        .attr('lat', lat)
+        .attr('lon', long)
+        .attr('point-index', index);
+
+
+    $('.reservation-step-line-dest-address').html(yandex_point_to_name);
+    toggleSubmitBut1();
+
+
+    // сворачиваем карту
+    $('.reservation-step-line_arrival .reservation-step-line-showmap').click();
+});
+
+
 // выбор точки высадки на карте
+/*
 $(document).on('click', '.container-drop--2 .btn-select-placemark', function(event) {
 
     // alert('точка высадки');
@@ -664,7 +728,7 @@ $(document).on('click', '.container-drop--2 .btn-select-placemark', function(eve
     $(".reservation-step-line-content-top-left--empty2").addClass("d-n");
     $(".reservation-step-line-content-top-left--ready2").addClass("d-b");
     $(".reservation-step-line-selecte--2").addClass("d-n");
-});
+});*/
 
 
 function openSelectPointFromModal(response_function) {
