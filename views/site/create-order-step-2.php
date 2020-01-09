@@ -187,7 +187,7 @@ $form = ActiveForm::begin([
                         'class' => "reservation-step__input-input required-input-step-2",
                         'placeholder' => "sergei@gmail.com",
                         'style' => [
-                            'width' => "200px;"
+                            'width' => "100%"
                         ]
 
                     ])->label(false)

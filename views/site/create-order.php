@@ -198,7 +198,7 @@ $form = ActiveForm::begin([
                                 ~ <?= $arrival->format('H:i'); ?>
                             </div>
                             <div class="reservation-step-line-undertitle reservation-step-line-date">
-                                <?= $arrival->format('d') ?> <?= $aMonths[intval($arrival->format('m'))] ?>
+                                <?= $arrival->format('j') ?> <?= $aMonths[intval($arrival->format('m'))] ?>
                             </div>
                         </div>
                     </div>

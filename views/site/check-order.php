@@ -110,7 +110,7 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
                             <div class="reservation-step-line-title">
                                 <?= $model->time ?>
                             </div>
-                            <div class="reservation-step-line-undertitle reservation-step-line-time">
+                            <div class=" reservation-step-line-time">
                                 <?= intval(date('d', $model->data)) ?> <?= $aMonths[intval(date('m', $model->data))] ?>
                             </div>
                         </div>
@@ -162,7 +162,7 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
                             <div class="reservation-step-line-title">
                                 <?= $model->time ?>
                             </div>
-                            <div class="reservation-step-line-undertitle reservation-step-line-time">
+                            <div class=" reservation-step-line-time">
                                 <?= intval(date('d', $model->data)) ?> <?= $aMonths[intval(date('m', $model->data))] ?>
                             </div>
                         </div>
@@ -180,6 +180,31 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
             </div>
             <div class="reservation-step-hatch reservation-step-hatch--long"></div>
             <div class="reservation-step-info d-b">
+                <div class = "reservation-step-info_row">
+                    <div class = "reservation-step-info_title">Заказчик:</div>
+                    <div class = "reservation-step-info_value">Ахмадиев Артур, +7-917-939-7393</div>
+                </div>
+                <div class = "reservation-step-info_row">
+                    <div class = "reservation-step-info_title">Пассажиры:</div>
+                    <div class = "reservation-step-info_value">ВЗР - 1, ДЕТИ - 2, свое детское кресло</div>
+                </div>
+                <div class = "reservation-step-info_row">
+                    <div class = "reservation-step-info_title">Информация о багаже:</div>
+                    <div class = "reservation-step-info_value">Нет</div>
+                </div>
+                <div class = "reservation-step-info_row">
+                    <div class = "reservation-step-info_title">Сообщение для оператора:</div>
+                    <div class = "reservation-step-info_value">Нет</div>
+                </div>
+                <div class = "reservation-step-info_row">
+                    <div class = "reservation-step-info_deadline">Прибытие поезда в 14:00</div>
+                </div>
+            </div>
+            <div class = "reservation-step-actions">
+                <a href="/site/create-order?c=<?= $model->access_code ?>">Изменить данные заказа</a>
+            </div>
+
+
                 <?php if(!empty($model->time_air_train_arrival)) { ?>
                     <div class="reservation-step-info__arrival">Прибытие поезда / посадка в самолет в <?= $model->time_air_train_arrival ?></div>
                 <?php } ?>
