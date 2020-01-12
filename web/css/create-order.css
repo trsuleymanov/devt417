@@ -1552,7 +1552,7 @@
 #ya-map-from-static .placemark-balloon-content,
 #ya-map-to-static .placemark-balloon-content,
 .reservation-drop--2 #ya-map-to .placemark-balloon-content  {
-  height: 60px;
+  height: 70px;
 }
 
 @media screen and (max-width: 540px){
