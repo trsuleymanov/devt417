@@ -12,6 +12,7 @@ var map_to = null;
 var point_placemark = null;
 var map_scale = 15; // масшаб карты при открытии карты
 var point_focusing_scale = 17; // масштаб фокусировки выбранной точки
+var all_points_show_scale = 12;
 var time_to_close_map = 2000;
 
 // возвращается объект карты - placemark (т.е. точка)
@@ -328,7 +329,7 @@ function addOverlay($popup, triggerActiveClass) {
 // отображение/скрытие точек в зависимости от зума карты
 function showHidePlacemarks(map_name, current_map_zoom, all_points_show_scale) {
 
-    // console.log('пограничный scale=' + all_points_show_scale + ' текущий=' + map_zoom);
+    // console.log('пограничный scale=' + all_points_show_scale + ' current_map_zoom=' + current_map_zoom);
 
     if(this[map_name] != null) {
         if (current_map_zoom < all_points_show_scale) { // прячу все точки кроме выбранной точки
@@ -377,7 +378,7 @@ function loadMap(map_name, map_id, is_from, return_function) {
 
 
                     this[map_name].events.add('boundschange', function (event) {
-                        showHidePlacemarks(map_name, event.get('newZoom'), response.city.all_points_show_scale);
+                        showHidePlacemarks(map_name, event.get('newZoom'), all_points_show_scale);
                     });
 
                     // Множество существующих точек
@@ -397,7 +398,7 @@ function loadMap(map_name, map_id, is_from, return_function) {
                         var placemark = createPlacemark(this[map_name], create_placemark_params);
                     }
 
-                    showHidePlacemarks(map_name, map_scale, response.city.all_points_show_scale);
+                    showHidePlacemarks(map_name, map_scale, all_points_show_scale);
 
                     return_function();
                 }

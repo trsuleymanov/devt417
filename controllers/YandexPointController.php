@@ -54,7 +54,9 @@ class YandexPointController extends Controller
         if($is_from == 1) {
             $yandex_points_query = YandexPoint::find()->where(['city_id' => $direction->city_from]);
         }else {
-            $yandex_points_query = YandexPoint::find()->where(['city_id' => $direction->city_to]);//->andWhere(['point_of_arrival' => true]);
+            $yandex_points_query = YandexPoint::find()
+                ->where(['city_id' => $direction->city_to])
+                ->andWhere(['point_of_arrival' => true]);
         }
 
         if($search != '') {

@@ -47,11 +47,21 @@ class DirectionController extends Controller
 
         $city = ($from == 1 ? $direction->cityFrom :  $direction->cityTo);
 
-        // точки посадки для каждого заказа на направлении
+        if($from == 1) {
+            $yandex_points = $city->yandexPoints;
+        }else {
+            $yandex_points = [];
+            $points =  $city->yandexPoints;
+            foreach ($points as $point) {
+                if($point->point_of_arrival == true) {
+                    $yandex_points[] = $point;
+                }
+            }
+        }
 
         return [
             'city' => $city,
-            'yandex_points' => ($city != null ? $city->yandexPoints : [])
+            'yandex_points' => $yandex_points
         ];
     }
 
