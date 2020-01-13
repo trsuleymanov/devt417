@@ -13,7 +13,7 @@ var point_placemark = null;
 var map_scale = 15; // масшаб карты при открытии карты
 var point_focusing_scale = 17; // масштаб фокусировки выбранной точки
 var all_points_show_scale = 12;
-var time_to_close_map = 2000;
+var time_to_close_map = 3000;
 
 // возвращается объект карты - placemark (т.е. точка)
 function getPlacemarkById(map_name, point_id) {
@@ -74,7 +74,7 @@ function getHintContent(point_name, point_description, is_selected) {
 }
 
 // создание точки
-function createPlacemark(map, params) {
+function createPlacemark(map_name, params) {
 
 
     if(params['point_id'] == undefined) {
@@ -122,6 +122,7 @@ function createPlacemark(map, params) {
         point_name: params['point_name'],
         point_description: params['point_description'],
         is_selected: false,
+        is_highlighted: false,
         type_map: params['type_map']
 
     }, {
@@ -136,7 +137,7 @@ function createPlacemark(map, params) {
     // устанавливаем события на точке
     placemark.events.add('mouseenter', function (event) {
 
-        if(placemark.properties.get('is_selected') != true) {
+        if(placemark.properties.get('is_highlighted') == false) {
 
             placemark.options.unset('iconOffset');
             placemark.options.unset('iconSize');
@@ -182,7 +183,7 @@ function createPlacemark(map, params) {
     });
     placemark.events.add('mouseleave', function (event) {
 
-        if(placemark.properties.get('is_selected') != true) {
+        if(placemark.properties.get('is_highlighted') == false) {
 
             placemark.options.unset('iconOffset');
             placemark.options.unset('iconSize');
@@ -205,7 +206,7 @@ function createPlacemark(map, params) {
     // });
     placemark.events.add('balloonclose', function (event) {
 
-        if(placemark.properties.get('is_selected') != true) {
+        if(placemark.properties.get('is_highlighted') == false) {
 
             placemark.options.unset('iconOffset');
             placemark.options.unset('iconSize');
@@ -219,71 +220,36 @@ function createPlacemark(map, params) {
             });
         }
     });
+    placemark.events.add('click', function (event) {
 
+        // клик на точке делает точку выбранной
+        //selectPlacemark(map_name, params['point_id']);
 
-    if(map == null) {
-        console.log('map = null');
-    }else {
-        map.geoObjects.add(placemark);
-    }
-
-
-    return placemark;
-}
-
-// Метод реализует выбор точки
-function selectPlacemark(map_name, point_id) {
-
-
-    unselectAllPlacemarks(map_name);
-
-    var placemark = getPlacemarkById(map_name, point_id);
-
-    // устанавливаем "внутреннее содержимое точки"
-    placemark.properties.set({
-        is_selected: true,
-        hintContent: getHintContent(
-            placemark.properties.get('point_name'),
-            placemark.properties.get('point_description'),
-            true
-        ),
-        balloonContent: getBalloonContent(
-            placemark.properties.get('point_id'),
-            placemark.properties.get('point_name'),
-            placemark.properties.get('point_description'),
-            true
-        ),
+        // клик на точек делает ее выделенной (is_highlighted = true)
+        highlightePlacemark(map_name, placemark);
     });
 
-    // устанавливаем вид поинта на карте
-    placemark.options.unset('iconImageOffset');
-    placemark.options.unset('iconImageSize');
-    placemark.options.unset('iconLayout');
-    placemark.options.unset('iconShape');
-    placemark.options.unset('iconColor');
-
-    if(placemark.properties.get('type_map') == 'from') {
-        placemark.options.set({
-            preset: "islands#violetStretchyIcon",
-        });
-    }else if(placemark.properties.get('type_map') == 'to') {
-        placemark.options.set({
-            preset: "islands#orangeStretchyIcon",
-        });
+    if(this[map_name] == null) {
+        console.log('map = null');
+    }else {
+        this[map_name].geoObjects.add(placemark);
     }
+
 
     return placemark;
 }
 
-// метод снимает выделение со всех выделенных точек (хотя такая может быть только одна)
-function unselectAllPlacemarks(map_name) {
+
+// Метод снимает выделение со всех точек кроме выбранной
+function unhighlighteAllPlacemarks(map_name) {
 
     this[map_name].geoObjects.each(function (placemark, i) {
-        if(placemark.properties.get('is_selected') == true) {
+        if(placemark.properties.get('is_highlighted') == true && placemark.properties.get('is_selected') != true) {
 
             // устанавливаем "внутреннее содержимое точки"
             placemark.properties.set({
                 is_selected: false,
+                is_highlighted: false,
                 hintContent: getHintContent(
                     placemark.properties.get('point_name'),
                     placemark.properties.get('point_description'),
@@ -309,6 +275,120 @@ function unselectAllPlacemarks(map_name) {
                 //iconColor: '#1E98FF',
                 iconImageSize: [24, 24], // не работает когда НЕТ предустановленного iconLayout='default#image'
             });
+        }
+    });
+}
+
+// Метод реализует выделение точки
+function highlightePlacemark(map_name, placemark) {
+
+    unhighlighteAllPlacemarks(map_name);
+
+    placemark.properties.set('is_highlighted', true);
+
+    // устанавливаем вид поинта на карте
+    placemark.options.unset('iconImageOffset');
+    placemark.options.unset('iconImageSize');
+    placemark.options.unset('iconLayout');
+    placemark.options.unset('iconShape');
+    placemark.options.unset('iconColor');
+
+    if(placemark.properties.get('type_map') == 'from') {
+        placemark.options.set({
+            preset: "islands#violetStretchyIcon",
+        });
+    }else if(placemark.properties.get('type_map') == 'to') {
+        placemark.options.set({
+            preset: "islands#orangeStretchyIcon",
+        });
+    }
+}
+
+// Метод реализует выбор точки
+function selectPlacemark(map_name, point_id) {
+
+
+    unselectAllPlacemarks(map_name); // убрали флаг is_selected=true и поменяли вид подсказки и окошка "статичного"
+    unhighlighteAllPlacemarks(map_name); // убрали выделение is_highlighted=true и поменяли внешний вид точки
+
+    var placemark = getPlacemarkById(map_name, point_id);
+
+    // устанавливаем "внутреннее содержимое точки"
+    placemark.properties.set({
+        is_selected: true,
+        is_highlighted: true,
+        hintContent: getHintContent(
+            placemark.properties.get('point_name'),
+            placemark.properties.get('point_description'),
+            true
+        ),
+        balloonContent: getBalloonContent(
+            placemark.properties.get('point_id'),
+            placemark.properties.get('point_name'),
+            placemark.properties.get('point_description'),
+            true
+        ),
+    });
+
+
+
+    // // устанавливаем вид поинта на карте
+    // placemark.options.unset('iconImageOffset');
+    // placemark.options.unset('iconImageSize');
+    // placemark.options.unset('iconLayout');
+    // placemark.options.unset('iconShape');
+    // placemark.options.unset('iconColor');
+    //
+    // if(placemark.properties.get('type_map') == 'from') {
+    //     placemark.options.set({
+    //         preset: "islands#violetStretchyIcon",
+    //     });
+    // }else if(placemark.properties.get('type_map') == 'to') {
+    //     placemark.options.set({
+    //         preset: "islands#orangeStretchyIcon",
+    //     });
+    // }
+
+    highlightePlacemark(map_name, placemark);
+
+    return placemark;
+}
+
+// метод снимает выделение со всех выделенных точек (хотя такая может быть только одна)
+function unselectAllPlacemarks(map_name) {
+
+    this[map_name].geoObjects.each(function (placemark, i) {
+        if(placemark.properties.get('is_selected') == true) {
+
+            // устанавливаем "внутреннее содержимое точки"
+            placemark.properties.set({
+                is_selected: false,
+                is_highlighted: false,
+                hintContent: getHintContent(
+                    placemark.properties.get('point_name'),
+                    placemark.properties.get('point_description'),
+                    false
+                ),
+                balloonContent: getBalloonContent(
+                    placemark.properties.get('point_id'),
+                    placemark.properties.get('point_name'),
+                    placemark.properties.get('point_description'),
+                    false
+                ),
+            });
+
+            // устанавливаем вид поинта на карте
+            // placemark.options.unset('iconOffset');
+            // placemark.options.unset('iconSize');
+            // placemark.options.unset('iconLayout');
+            // placemark.options.unset('iconColor');
+            // placemark.options.unset('iconShape');
+            //
+            // placemark.options.set({
+            //     iconLayout: 'default#image', // ему нельзя цвет установить
+            //     //iconColor: '#1E98FF',
+            //     iconImageSize: [24, 24], // не работает когда НЕТ предустановленного iconLayout='default#image'
+            // });
         }
     });
 }
@@ -395,7 +475,7 @@ function loadMap(map_name, map_id, is_from, return_function) {
                             point_long: yandex_point.long,
                             type_map: (is_from == 1 ? 'from' : 'to')
                         };
-                        var placemark = createPlacemark(this[map_name], create_placemark_params);
+                        var placemark = createPlacemark(map_name, create_placemark_params);
                     }
 
                     showHidePlacemarks(map_name, map_scale, all_points_show_scale);
@@ -653,6 +733,11 @@ function showMapFromAndOpenTripTimes(yandex_point_from_id) {
             var coordinates = placemark.geometry.getCoordinates();
             map_from.setCenter(coordinates, point_focusing_scale, {duration: 500});
 
+            setTimeout(function () {
+                placemark.balloon.open();
+            }, 500);
+
+
             // var scroll_height = $("#ya-map-from").offset().top + $("#ya-map-from").height()/2 - $("html").scrollTop();
             // var scroll_height = $("#ya-map-from").offset().top - $("html").scrollTop();
             // $("html").animate({
@@ -667,7 +752,8 @@ function showMapFromAndOpenTripTimes(yandex_point_from_id) {
                     addressToStep2();
                 });
 
-            }, time_to_close_map + 500);
+            }, time_to_close_map);
+
         });
 
     }else {
@@ -675,6 +761,10 @@ function showMapFromAndOpenTripTimes(yandex_point_from_id) {
         var placemark = selectPlacemark('map_from', yandex_point_from_id);
         var coordinates = placemark.geometry.getCoordinates();
         map_from.setCenter(coordinates, point_focusing_scale, {duration: 500});
+
+        setTimeout(function () {
+            placemark.balloon.open();
+        }, 500);
 
         // var scroll_height = $("#ya-map-from").offset().top + $("#ya-map-from").height()/2 - $("html").scrollTop();
         // var scroll_height = $("#ya-map-from").offset().top - $("html").scrollTop();
@@ -690,7 +780,8 @@ function showMapFromAndOpenTripTimes(yandex_point_from_id) {
                 addressToStep2();
             });
 
-        }, time_to_close_map + 500);
+        }, time_to_close_map);
+
     }
 }
 
@@ -997,6 +1088,10 @@ $(document).on('click', '.select-point-to', function() {
     var coordinates = placemark.geometry.getCoordinates();
     map_to.setCenter(coordinates, point_focusing_scale, {duration: 500});
 
+    setTimeout(function () {
+        placemark.balloon.open();
+    }, 500);
+
     var yandex_point_to_name = placemark.properties.get('point_name');
 
     // через time_to_close_map секунд закрываем карту
@@ -1290,6 +1385,10 @@ $(document).on('click', '#search-to-block li', function() {
     var placemark = selectPlacemark('map_to', yandex_point_to_id);
     var coordinates = placemark.geometry.getCoordinates();
     map_to.setCenter(coordinates, point_focusing_scale, {duration: 500});
+
+    setTimeout(function () {
+        placemark.balloon.open();
+    }, 500);
 
     var yandex_point_to_name = placemark.properties.get('point_name');
 

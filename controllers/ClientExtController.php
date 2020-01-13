@@ -275,6 +275,7 @@ class ClientExtController extends Controller
         $popular_yandex_points = YandexPoint::find()
             ->where(['city_id' => $city_to_id])
             ->andWhere(['popular_arrival_point' => true])
+            ->andWhere(['point_of_arrival' => true])
             ->all();
 
         // 2. яндекс-точки высадки за последние три заказа для города прибытия
@@ -291,6 +292,7 @@ class ClientExtController extends Controller
             if(count($last_client_exts) > 0) {
                 $last_yandex_points = YandexPoint::find()
                     ->where(['id' => ArrayHelper::map($last_client_exts, 'yandex_point_to_id', 'yandex_point_to_id')])
+                    ->andWhere(['point_of_arrival' => true])
                     ->all();
             }
         }
