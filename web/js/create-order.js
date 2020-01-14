@@ -1852,14 +1852,15 @@ function toggleSubmitBut2() {
     if(phone[13] == '-') {
         phone = phone.substr(0, 13) + phone.substr(14);
     }
-    var fio = $.trim($('input[name="ClientExt[fio]"]').val());
+    var last_name = $.trim($('input[name="ClientExt[last_name]"]').val());
+    var first_name = $.trim($('input[name="ClientExt[first_name]"]').val());
     var email = $.trim($('input[name="ClientExt[email]"]').val());
-    var gender = $.trim($('input[name="ClientExt[gen]"]').val());
+    // var gender = $.trim($('input[name="ClientExt[gen]"]').val());
     var places_count = $('input[name="ClientExt[places_count]"]').val();
 
     // console.log('phone='+phone+' fio='+fio+' email='+email+' gender='+gender+' places_count='+places_count);
 
-    if(phone.length >= 15 && fio != "" && email != "" && gender != "" && places_count > 0) {
+    if(phone.length >= 15 && last_name != "" && first_name != "" && email != "" && places_count > 0) {
         $('#submit-create-order-step-2').removeClass('reservation-calc__button--disabled');
     }else {
         if($('#submit-create-order-step-2').hasClass('.reservation-calc__button--disabled') == false) {
@@ -1882,35 +1883,41 @@ $(document).on('click', '#submit-create-order-step-2', function() {
         phone = phone.substr(0, 13) + phone.substr(14);
     }
     if(phone.length < 15) {
-        alert('Введите телефон');
+        alert('Заполните телефон');
         return false;
     }
 
-    var fio = $.trim($('input[name="ClientExt[fio]"]').val());
-    if(fio == "") {
-        alert('Введите ваше имя');
+    var last_name = $.trim($('input[name="ClientExt[last_name]"]').val());
+    if(last_name == "") {
+        alert('Заполните фамилию');
+        return false;
+    }
+
+    var first_name = $.trim($('input[name="ClientExt[first_name]"]').val());
+    if(first_name == "") {
+        alert('Заполните имя');
         return false;
     }
 
     var email = $.trim($('input[name="ClientExt[email]"]').val());
     if(email == "") {
-        alert('Введите вашу почту');
+        alert('Заполните электронную почту');
         return false;
     }
 
-    var gen = $.trim($('input[name="ClientExt[gen]"]').val());
-    if(gen != "female" && gen != "male") {
-        alert('Выберите пол');
-        return false;
-    }
+    // var gen = $.trim($('input[name="ClientExt[gen]"]').val());
+    // if(gen != "female" && gen != "male") {
+    //     alert('Выберите пол');
+    //     return false;
+    // }
 
 
     var ClientExt = {
 
         phone: phone,
-        fio: fio,
+        last_name: last_name,
+        first_name: first_name,
         email: email,
-        gen: gen,
 
         places_count: parseInt($('input[name="ClientExt[places_count]"]').val()),
         child_count: $('input[name="ClientExt[child_count]"]').val(),

@@ -53,13 +53,17 @@ class ClientExt extends \yii\db\ActiveRecord
                 // 'street_from', 'point_from', 'street_to', 'point_to',
                 'transport_model', 'transport_color', 'email'], 'string', 'max' => 50],
             [['status', 'transport_car_reg', 'phone'], 'string', 'max' => 30],
-            [['fio'], 'string', 'max' => 100],
+            [['last_name'], 'string', 'min' => 2, 'max' => 30, 'skipOnEmpty' => false],
+            [['first_name'], 'string', 'min' => 2, 'max' => 60, 'skipOnEmpty' => false],
+
+
+            //[['fio'], 'string', 'max' => 100],
             ['access_code', 'string', 'min' => 32, 'max' => 32],
             [['time'], 'string', 'min' => 5, 'max' => 7],
             [['time_air_train_arrival'], 'string', 'max' => 5],
             [['friend_code'], 'checkFriendCode'],
             [['places_count'], 'checkPlacesCount'],
-            ['fio', 'checkFio', 'skipOnEmpty' => false],
+            // ['fio', 'checkFio', 'skipOnEmpty' => false],
             ['email', 'email'],
             ['city_from_id', 'checkCityFrom', 'skipOnEmpty' => false],
             ['city_to_id', 'checkCityTo', 'skipOnEmpty' => false],
@@ -69,7 +73,7 @@ class ClientExt extends \yii\db\ActiveRecord
             [['is_mobile', 'is_not_places'], 'boolean'],
             [['main_server_order_id', 'price', 'paid_summ',
                 'accrual_cash_back', 'penalty_cash_back', 'used_cash_back',
-                'discount', 'source_type', 'city_from_id', 'city_to_id', 'but_checkout', 'gen',
+                'discount', 'source_type', 'city_from_id', 'city_to_id', 'but_checkout', //'gen',
                 'payment_source'], 'safe'],
         ];
     }
@@ -100,32 +104,32 @@ class ClientExt extends \yii\db\ActiveRecord
         }
     }
 
-    public function checkFio($attribute, $params) {
-
-        $this->fio = trim($this->fio);
-        if(empty($this->fio)) {
-            $this->addError($attribute, 'Необходимо заполнить "Имя Фамилия"');
-            return false;
-        }
-
-        $aNames = explode(' ', $this->fio);
-        if(count($aNames) == 1) {
-            $this->addError($attribute, 'Необходимо заполнить Имя и Фамилию');
-            return false;
-        }
-
-        if(count($aNames) > 1) {
-            foreach ($aNames as $name) {
-                $name = trim($name);
-                if(strlen($name) < 3) {
-                    $this->addError($attribute, 'Имя и Фамилия должны содержать больше 2-х символов');
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
+//    public function checkFio($attribute, $params) {
+//
+//        $this->fio = trim($this->fio);
+//        if(empty($this->fio)) {
+//            $this->addError($attribute, 'Необходимо заполнить "Имя Фамилия"');
+//            return false;
+//        }
+//
+//        $aNames = explode(' ', $this->fio);
+//        if(count($aNames) == 1) {
+//            $this->addError($attribute, 'Необходимо заполнить Имя и Фамилию');
+//            return false;
+//        }
+//
+//        if(count($aNames) > 1) {
+//            foreach ($aNames as $name) {
+//                $name = trim($name);
+//                if(strlen($name) < 3) {
+//                    $this->addError($attribute, 'Имя и Фамилия должны содержать больше 2-х символов');
+//                    return false;
+//                }
+//            }
+//        }
+//
+//        return true;
+//    }
 
     public function checkFriendCode($attribute, $params)
     {
@@ -174,9 +178,11 @@ class ClientExt extends \yii\db\ActiveRecord
         $scenarios['third_form'] = [
             'phone',
             'email',
-            'fio',
+            // 'fio',
+            'last_name',
+            'first_name',
             'places_count', 'student_count', 'child_count', // +
-            'gen',
+            //'gen',
             'user_id'
         ];
 
@@ -199,10 +205,12 @@ class ClientExt extends \yii\db\ActiveRecord
             'cancellation_click_time' => 'Время отмены',
             'cancellation_clicker_id' => 'Пользователь совершивший отмену',
             'user_id' => 'Пользователь',
-            'fio' => 'ФИО',
+            // 'fio' => 'ФИО',
+            'last_name' => 'Фамилия',
+            'first_name' => 'Имя (иногда это: имя + отчество)',
             'phone' => 'Телефон',
             'email' => 'Электронная почта',
-            'gen' => 'Пол',
+            //'gen' => 'Пол',
             'direction_id' => 'Направление',
             'data' => 'Дата',
             'time' => 'Время',
@@ -366,10 +374,21 @@ class ClientExt extends \yii\db\ActiveRecord
                     $user->email = $this->email;
                     $update_user = true;
                 }
-                if (!empty($this->fio) && $user->fio != $this->fio) {
-                    $user->fio = $this->fio;
+//                if (!empty($this->fio) && $user->fio != $this->fio) {
+//                    $user->fio = $this->fio;
+//                    $update_user = true;
+//                }
+                // 'last_name', 'first_name'
+                if (!empty($this->last_name) && $user->last_name != $this->last_name) {
+                    $user->last_name = $this->last_name;
                     $update_user = true;
                 }
+                if (!empty($this->first_name) && $user->first_name != $this->first_name) {
+                    $user->first_name = $this->first_name;
+                    $update_user = true;
+                }
+
+
                 if ($update_user == true) {
                     if (!$user->save(false)) {
                         throw new ForbiddenHttpException('Не удалось обновить данные пользователя');

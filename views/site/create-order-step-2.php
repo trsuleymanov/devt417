@@ -124,9 +124,14 @@ $form = ActiveForm::begin([
                 <div class="reservation-step__subtitle">Необходимо ввести, как минимум, фамилию - чтобы водитель смог идентифицировать вас при посадке</div>
             </div>
             <div class="reservation-step__input-wrap">
-                <label for="reservation-name" class="reservation-step__input-label">Фамилия Имя Отчество</label>
-                <input type="text" id="reservation-name" name="ClientExt[fio]" value="<?= $model->fio ?>" class="reservation-step__input-input required-input-step-2" placeholder="Иванов Сергей Иванович">
+                <label for="reservation-name" class="reservation-step__input-label">Фамилия</label>
+                <input type="text" name="ClientExt[last_name]" value="<?= $model->last_name ?>" class="reservation-step__input-input required-input-step-2" placeholder="Иванов">
             </div>
+            <div class="reservation-step__input-wrap">
+                <label for="reservation-name" class="reservation-step__input-label">Имя</label>
+                <input type="text" name="ClientExt[first_name]" value="<?= $model->first_name ?>" class="reservation-step__input-input required-input-step-2" placeholder="Сергей">
+            </div>
+            <?php /*
             <label class="reservation-step__input-wrap welcome__col gen_select">
                 <input name="ClientExt[gen]" type="hidden" value="<?= $model->gen ?>" />
                 <label for="reservation-gen" class="reservation-step__input-label">Пол</label>
@@ -146,6 +151,7 @@ $form = ActiveForm::begin([
                     </div>
                 </div>
             </label>
+            */ ?>
         </div>
     </div>
     <div class="container">

@@ -60,11 +60,27 @@ class MainServerController extends Controller
                         $user = User::find()->where(['phone' => $aClient['mobile_phone']])->one();
                     }
 
+
+                    $aNames = explode(' ', $aClient['name']);
+                    $last_name = $aNames[0];
+                    if(isset($aNames[1])) {
+                        $first_name = $aNames[1];
+                        if(isset($aNames[2])) {
+                            $first_name .= ' '.$aNames[2];
+                        }
+                    }else {
+                        $first_name = '';
+                    }
+
+
                     if($user == null) {
                         $user = new User();
                         $user->email = $aClient['email'];
                         $user->phone = $aClient['mobile_phone'];
-                        $user->fio = $aClient['name'];
+                        //$user->fio = $aClient['name'];
+                        $user->last_name = $last_name;
+                        $user->first_name = $first_name;
+
                         $user->cashback = $aClient['cashback'];
                         $user->current_year_sended_places = $aClient['current_year_sended_places'];
                         $user->current_year_sended_prize_places = $aClient['current_year_sended_prize_places'];
@@ -74,8 +90,14 @@ class MainServerController extends Controller
                             throw new ErrorException('Не удалось создать пользователя');
                         }
                     }else {
-                        if($user->fio != $aClient['name']) {
-                            $user->setField('fio', $aClient['name']);
+//                        if($user->fio != $aClient['name']) {
+//                            $user->setField('fio', $aClient['name']);
+//                        }
+                        if($user->last_name != $last_name) {
+                            $user->setField('last_name', $last_name);
+                        }
+                        if($user->first_name != $first_name) {
+                            $user->setField('first_name', $first_name);
                         }
                         if($user->email != $aClient['email'] && !empty($aClient['email'])) {
                             $user->setField('email', $aClient['email']);
@@ -187,7 +209,21 @@ class MainServerController extends Controller
                     }
 
                     $client_ext->user_id = $user->id;
-                    $client_ext->fio = $order['client_name'];
+                    // $client_ext->fio = $order['client_name'];
+
+                    $aNames = explode(' ', $order['client_name']);
+                    $last_name = $aNames[0];
+                    if(isset($aNames[1])) {
+                        $first_name = $aNames[1];
+                        if(isset($aNames[2])) {
+                            $first_name .= ' '.$aNames[2];
+                        }
+                    }else {
+                        $first_name = '';
+                    }
+                    $client_ext->last_name = $last_name;
+                    $client_ext->first_name = $first_name;
+
                     $client_ext->phone = $order['client_mobile_phone'];
                     $client_ext->email = $order['client_email'];
                     $client_ext->direction_id = ($order['direction_name'] == 'АК' ? 1 : 2);

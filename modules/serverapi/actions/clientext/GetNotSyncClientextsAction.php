@@ -64,6 +64,10 @@ class GetNotSyncClientextsAction extends \yii\rest\Action
             foreach($client_exts as $client_ext) {
                 $user = $client_ext->user;
 
+                $fio = $client_ext->last_name;
+                if(!empty($client_ext->first_name)) {
+                    $fio .= ' '.$client_ext->first_name;
+                }
 
                 $aClientExts[] = [
                     'id' => $client_ext->id,
@@ -105,7 +109,8 @@ class GetNotSyncClientextsAction extends \yii\rest\Action
 
                     'time_air_train_arrival' => $client_ext->time_air_train_arrival,
 
-                    'fio' => $client_ext->fio,
+                    //'fio' => $client_ext->fio,
+                    'fio' => $fio,
                     'phone' => $client_ext->phone,
                     'email' => $client_ext->email,
                     //'cashback' => $user->cashback,

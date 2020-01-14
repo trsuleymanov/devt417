@@ -20,13 +20,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['email', 'fio', 'phone'], 'required'],
+            [['email', /*'fio',*/ 'phone'], 'required'],
             ['rememberMe', 'boolean'],
             ['password', 'required', 'skipOnEmpty' => false, 'on' => 'set_password'],
             //[['username', 'email'], 'checkUsernameEmail', 'skipOnEmpty' => false],
             [['last_ip', 'password'], 'string', 'min' => 6, 'max' => 20],
             [['email', 'phone'], 'unique'],
-            [['fio'], 'string', 'max' => 100],
+            //[['fio'], 'string', 'max' => 100],
+            [['last_name'], 'string', 'min' => 2, 'max' => 30, 'skipOnEmpty' => false],
+            [['first_name'], 'string', 'min' => 2, 'max' => 60, 'skipOnEmpty' => false],
+
             [['phone'], 'checkPhone'],
             [['auth_key'], 'string', 'max' => 32],
             [['password_hash', 'token', 'restore_code'], 'string', 'max' => 255],
@@ -67,7 +70,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'push_token' => 'Токен мобильного устройства для пушей',
             'email' => 'Электронная почта',
             'email_is_confirmed' => 'Эл.почта была подтверждена',
-            'fio' => 'ФИО',
+            // 'fio' => 'ФИО',
+            'last_name' => 'Фамилия',
+            'first_name' => 'Имя (иногда это: имя + отчество)',
+
             'phone' => 'Телефон',
             'phone_is_confirmed' => 'Телефон подтвержден',
             'cashback' => 'Кэш-бэк счет',
@@ -122,7 +128,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
         // сценарий создания заказа при нажатии на кнопку "Записать"
         $scenarios['sync_with_main_server'] = [
-            'fio',
+            //'fio',
+            'last_name',
+            'first_name',
+
             'phone',
             'cashback',
             'created_at',
@@ -135,7 +144,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'password_hash',
             'token',
             'email',
-            'fio',
+            // 'fio',
+            'last_name',
+            'first_name',
+
             'phone',
             'cashback',
             'created_at',
@@ -278,7 +290,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public function generateRestoreCode() {
 
-        $this->restore_code = md5($this->email . '.lsshal&3HJ' . $this->fio . time());
+        $this->restore_code = md5($this->email . '.lsshal&3HJ' . $this->last_name.' '.$this->first_code . time());
 
         return true;
     }

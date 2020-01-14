@@ -29,12 +29,14 @@ class ClientExtSearch extends ClientExt
                 // 'street_to', 'point_to',
                 'yandex_point_to_name', 'transport_car_reg', 'transport_model',
                 'transport_color', 'friend_code', 'status_setting_time', 'time_confirm',
-                'created_at', 'updated_at', 'sync_date', 'fio'], 'safe'],
+                'created_at', 'updated_at', 'sync_date', // 'fio',
+                'last_name', 'first_name'
+                ], 'safe'],
             [['yandex_point_from_lat', 'yandex_point_from_long', 'yandex_point_to_lat', 'yandex_point_to_long',
                 'price', 'paid_summ',
                 'accrual_cash_back', 'penalty_cash_back', 'used_cash_back',
                 'discount'], 'number'],
-            [['time_air_train_arrival', 'but_checkout', 'is_not_places', 'gen',
+            [['time_air_train_arrival', 'but_checkout', 'is_not_places', //'gen',
                 'payment_source'], 'safe'],
         ];
     }

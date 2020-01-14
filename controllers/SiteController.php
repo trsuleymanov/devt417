@@ -230,7 +230,9 @@ class SiteController extends Controller
                 $model->user_id = Yii::$app->user->identity->id;
                 $model->phone = Yii::$app->user->identity->phone;
                 $model->email = Yii::$app->user->identity->email;
-                $model->fio = Yii::$app->user->identity->fio;
+                // $model->fio = Yii::$app->user->identity->fio;
+                $model->last_name = Yii::$app->user->identity->last_name;
+                $model->first_name = Yii::$app->user->identity->first_name;
             }
 
             $client_ext_childs = [];
@@ -757,9 +759,9 @@ class SiteController extends Controller
                 && $model->sendRegistrationCode()
                 && $model->save(false)) {
 
-                if(empty($model->fio) && $client_ext != null) {
-                    $model->setField('fio', $client_ext->fio);
-                }
+//                if(empty($model->fio) && $client_ext != null) {
+//                    $model->setField('fio', $client_ext->fio);
+//                }
 
                 // - создается пользователь или для найденного по телефону пользователю устанавливаются email и пароль
                 // - и на почту должна быть отправлена ссылка для подтверждения
@@ -768,8 +770,11 @@ class SiteController extends Controller
                 if($user != null) {
                     $user->email = $model->email;
                     $user->setPassword($model->password);
-                    if(empty($user->fio) && $client_ext != null) {
-                        $user->fio = $client_ext->fio;
+                    if(empty($user->last_name) && $client_ext != null) {
+                        $user->last_name = $client_ext->last_name;
+                    }
+                    if(empty($user->first_name) && $client_ext != null) {
+                        $user->first_name = $client_ext->first_name;
                     }
                     if(!$user->save(false)) {
                         throw new ForbiddenHttpException('Не удалось сохранить пользователя');
@@ -780,8 +785,11 @@ class SiteController extends Controller
                     $user->phone = $model->mobile_phone;
                     $user->email = $model->email;
                     $user->setPassword($model->password);
-                    if(empty($user->fio) && $client_ext != null) {
-                        $user->fio = $client_ext->fio;
+                    if(empty($user->last_name) && $client_ext != null) {
+                        $user->last_name = $client_ext->last_name;
+                    }
+                    if(empty($user->first_name) && $client_ext != null) {
+                        $user->first_name = $client_ext->first_name;
                     }
                     if(!$user->save(false)) {
                         throw new ForbiddenHttpException('Не удалось сохранить пользователя');

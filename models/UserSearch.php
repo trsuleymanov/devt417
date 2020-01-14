@@ -21,7 +21,9 @@ class UserSearch extends User
             [['id', 'last_login_date', 'attempt_count', 'attempt_date',
                 //'confirmed',
                 'created_at', 'updated_at', 'blocked'], 'integer'],
-            [['auth_key', 'password_hash', 'token', 'email', 'fio', 'phone', 'last_ip', 'restore_code', 'code_for_friends',
+            [['auth_key', 'password_hash', 'token', 'email', //'fio',
+                'last_name', 'first_name',
+                'phone', 'last_ip', 'restore_code', 'code_for_friends',
                 'friend_code', 'push_token', 'email_is_confirmed', 'phone_is_confirmed'], 'safe'],
             [['account'], 'number'],
         ];
@@ -82,7 +84,10 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'token', $this->token])
             ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'fio', $this->fio])
+            //->andFilterWhere(['like', 'fio', $this->fio])
+            ->andFilterWhere(['like', 'last_name', $this->last_name])
+            ->andFilterWhere(['like', 'first_name', $this->first_name])
+
             ->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'last_ip', $this->last_ip])
             ->andFilterWhere(['like', 'restore_code', $this->restore_code])
