@@ -85,11 +85,11 @@ $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset
                 Телефон
             </div>
             <div class = "personal__row__value">
-                <span id="phone" class="etw-element"><?= InputPhoneForm::convertDBToWebMobile($user->phone); ?> </span>
+                <span id="phone" class="etw-element"><?= Helper::convertDBToWebMobile($user->phone); ?> </span>
                 <?php
                 echo \yii\widgets\MaskedInput::widget([
                     'name' => 'phone',
-                    'value' => InputPhoneForm::convertDBToWebMobile($user->phone),
+                    'value' => Helper::convertDBToWebMobile($user->phone),
                     'mask' => '+7 (999) 999 99 99',
                     'clientOptions' => [
                         'placeholder' => '–',
@@ -128,7 +128,7 @@ $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset
 //                echo EditableTextWidget::widget([
 //                    'name' => 'phone',
 //                    //'value' => $user->phone,
-//                    'value' => InputPhoneForm::convertDBToWebMobile($user->phone),
+//                    'value' => Helper::convertDBToWebMobile($user->phone),
 //                    'defaultValue' => '<span class="text-danger">Введите номер</span>',
 //                    'onChange' => new JsExpression('function(id, etf_block, name, value) {
 //                        $.ajax({

@@ -1633,7 +1633,10 @@ $(document).on('click', '#submit-create-order-step-1', function() {
             }else {
 
                 var errors = response.errors;
-                alert('errors');
+                for (var field in errors) {
+                    alert(errors[field]);
+                }
+
                 // if(errors.city_from_id !== void 0) {
                 //     $('#city_from_id_error').text(errors.city_from_id.join('. '));
                 // }
@@ -1970,7 +1973,10 @@ $(document).on('click', '#submit-create-order-step-2', function() {
             }else {
 
                 var errors = response.errors;
-                alert(errors);
+                for (var field in errors) {
+                    alert(errors[field]);
+                }
+
                 // if(errors.city_from_id !== void 0) {
                 //     $('#city_from_id_error').text(errors.city_from_id.join('. '));
                 // }

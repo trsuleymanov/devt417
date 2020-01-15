@@ -457,7 +457,7 @@ class SiteController extends Controller
         $model = new InputPhoneForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-            $model->mobile_phone = InputPhoneForm::convertWebToDBMobile($model->mobile_phone);
+            $model->mobile_phone = Helper::convertWebToDBMobile($model->mobile_phone);
 
             $user = User::find()->where(['phone' => $model->mobile_phone])->one();
             if( is_null($user) ):

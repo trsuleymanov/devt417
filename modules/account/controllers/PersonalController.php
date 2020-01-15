@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\account\controllers;
 
+use app\components\Helper;
 use app\models\InputPhoneForm;
 use app\models\User;
 use Yii;
@@ -80,8 +81,8 @@ class PersonalController extends Controller
 
                 //$user->phone = Yii::$app->request->post('phone');
                 $phone = Yii::$app->request->post('phone');
-                if(InputPhoneForm::isValidWebMobile($phone)) {
-                    $user->phone = InputPhoneForm::convertWebToDBMobile($phone);
+                if(Helper::isValidWebMobile($phone)) {
+                    $user->phone = Helper::convertWebToDBMobile($phone);
                 }else {
                     throw new ForbiddenHttpException('Телефон должен быть в формате +7 (***) *** ** **');
                 }

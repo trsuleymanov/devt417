@@ -166,13 +166,16 @@ $form = ActiveForm::begin([
                 echo MaskedInput::widget([
                     'id' => 'reservation-phone',
                     'name' => 'ClientExt[phone]',
-                    'mask' => '+7-999-999-99-99',
+                    //'mask' => '+7-999-999-99-99',
+                    'mask' => '+7 (999) 999 99 99',
                     'value' => $model->phone,
                     'clientOptions' => [
-                        'placeholder' => '*',
+                        //'placeholder' => '*',
+                        'placeholder' => '–',
                     ],
                     'options' => [
-                        'placeholder' => '+7 999 999 99 99',
+                        //'placeholder' => '+7 999 999 99 99',
+                        //'mask' => '+7 (999) 999 99 99',
                         'class' => "reservation-step__input-input required-input-step-2",
                         'style' => [
                             'width' => "200px;"
