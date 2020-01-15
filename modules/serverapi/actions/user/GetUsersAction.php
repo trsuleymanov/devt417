@@ -35,7 +35,7 @@ class GetUsersAction extends \yii\rest\Action
 
                 $aUsers[] = [
                     'id' => $user->id,
-                    'fio' => $user->fio,
+                    'fio' => $user->last_name.' '.$user->first_name,
                     'phone' => $user->phone,
                     'email' => $user->email,
                     'cashback' => $user->cashback,
