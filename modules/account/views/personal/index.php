@@ -1,7 +1,6 @@
 <?php
 
 use app\components\Helper;
-use app\models\InputPhoneForm;
 use yii\web\JsExpression;
 use app\widgets\EditableTextWidget;
 
@@ -33,21 +32,21 @@ $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset
         </div>
         <div class = "personal__row">
             <div class = "personal__row__title">
-                Фамилия Имя Отчество
+                Фамилия
             </div>
-            <div class = "personal__row__value">
+            <div class = "personal__row__value_">
                 <?php
                     echo EditableTextWidget::widget([
-                        'name' => 'fio',
-                        'value' => $user->fio,
-                        'defaultValue' => '<span class="text-danger">Введите имя</span>',
+                        'name' => 'last_name',
+                        'value' => $user->last_name,
+                        'defaultValue' => '<span class="text-danger">Введите Фамилию</span>',
                         'onChange' => new JsExpression('function(id, etf_block, name, value) {
                             $.ajax({
                                 url: "/account/personal/editable-user?id='.$user->id.'",
                                 type: "post",
                                 data: {
                                     hasEditable: 1,
-                                    fio: value
+                                    last_name: value
                                 },
                                 success: function (data) {
                                     if(data.message != "") {
@@ -55,7 +54,7 @@ $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset
                                     }else {
                                         etf_block.hide();
                                         if(data.output == "") {
-                                            $("#" + id).html("<span class=\"text-danger\">Введите имя</span>").show();
+                                            $("#" + id).html("<span class=\"text-danger\">Введите Фамилию</span>").show();
                                         }else {
                                             $("#" + id).text(data.output).show();
                                         }
@@ -80,94 +79,77 @@ $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset
                 ?>
             </div>
         </div>
+        <div class = "personal__row">
+            <div class = "personal__row__title">
+                Имя
+            </div>
+            <div class = "personal__row__value_">
+                <?php
+                echo EditableTextWidget::widget([
+                    'name' => 'last_name',
+                    'value' => $user->first_name,
+                    'defaultValue' => '<span class="text-danger">Введите Имя</span>',
+                    'onChange' => new JsExpression('function(id, etf_block, name, value) {
+                            $.ajax({
+                                url: "/account/personal/editable-user?id='.$user->id.'",
+                                type: "post",
+                                data: {
+                                    hasEditable: 1,
+                                    first_name: value
+                                },
+                                success: function (data) {
+                                    if(data.message != "") {
+                                        alert(data.message);
+                                    }else {
+                                        etf_block.hide();
+                                        if(data.output == "") {
+                                            $("#" + id).html("<span class=\"text-danger\">Введите Имя</span>").show();
+                                        }else {
+                                            $("#" + id).text(data.output).show();
+                                        }
+                                    }
+                                },
+                                error: function (data, textStatus, jqXHR) {
+                                    if (textStatus == "error") {
+                                        if (void 0 !== data.responseJSON) {
+                                            if (data.responseJSON.message.length > 0) {
+                                                alert(data.responseJSON.message);
+                                            }
+                                        } else {
+                                            if (data.responseText.length > 0) {
+                                                alert(data.responseText);
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }')
+                ]);
+                ?>
+            </div>
+        </div>
         <div class = "personal__row personal__row__static">
             <div class = "personal__row__title">
                 Телефон
             </div>
             <div class = "personal__row__value">
-                <span id="phone" class="etw-element"><?= Helper::convertDBToWebMobile($user->phone); ?> </span>
+                <span id="phone"><?= Helper::convertDBToWebMobile($user->phone); ?> </span>
                 <?php
-                echo \yii\widgets\MaskedInput::widget([
-                    'name' => 'phone',
-                    'value' => Helper::convertDBToWebMobile($user->phone),
-                    'mask' => '+7 (999) 999 99 99',
-                    'clientOptions' => [
-                        'placeholder' => '–',
-                    ],
-                    'options' => [
-                        'class' => 'etf-block etf-change',
-                        'for' => 'phone',
-                        'style' => 'display: none;',
-                        'user-id' => $user->id
-                    ]
-                ]);
-                ?>
-
-
-                <?php
-
-//                echo $form->field($model, 'mobile_phone')->textInput(['maxlength' => true])
-//                    ->widget(\yii\widgets\MaskedInput::class, [
-//                        'mask' => '+7 (999) 999 99 99',
-//                        'clientOptions' => [
-//                            'placeholder' => '–',
-//                        ],
-//                        'options' => [
-//                            'class' => 'for_enter__input'
-//                        ]
-//                    ])->label(false);
-
 //                echo \yii\widgets\MaskedInput::widget([
 //                    'name' => 'phone',
-//                    //'mask' => '999-999-9999',
-//                    'mask' => '+7 (999) 999 99 99',
-//                ]);
-
-
-
-//                echo EditableTextWidget::widget([
-//                    'name' => 'phone',
-//                    //'value' => $user->phone,
 //                    'value' => Helper::convertDBToWebMobile($user->phone),
-//                    'defaultValue' => '<span class="text-danger">Введите номер</span>',
-//                    'onChange' => new JsExpression('function(id, etf_block, name, value) {
-//                        $.ajax({
-//                            url: "/account/personal/editable-user?id='.$user->id.'",
-//                            type: "post",
-//                            data: {
-//                                hasEditable: 1,
-//                                phone: value
-//                            },
-//                            success: function (data) {
-//                                if(data.message != "") {
-//                                    alert(data.message);
-//                                }else {
-//                                    etf_block.hide();
-//                                    if(data.output == "") {
-//                                        $("#" + id).html("<span class=\"text-danger\">Введите номер</span>").show();
-//                                    }else {
-//                                        $("#" + id).text(data.output).show();
-//                                    }
-//                                }
-//                            },
-//                            error: function (data, textStatus, jqXHR) {
-//                                if (textStatus == "error") {
-//                                    if (void 0 !== data.responseJSON) {
-//                                        if (data.responseJSON.message.length > 0) {
-//                                            alert(data.responseJSON.message);
-//                                        }
-//                                    } else {
-//                                        if (data.responseText.length > 0) {
-//                                            alert(data.responseText);
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        });
-//                    }')
+//                    'mask' => '+7 (999) 999 99 99',
+//                    'clientOptions' => [
+//                        'placeholder' => '–',
+//                    ],
+//                    'options' => [
+//                        'class' => 'etf-block etf-change',
+//                        'for' => 'phone',
+//                        'style' => 'display: none;',
+//                        'user-id' => $user->id
+//                    ]
 //                ]);
                 ?>
-
             </div>
         </div>
         <div class = "personal__row personal__row__password">
@@ -192,7 +174,9 @@ $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset
                                 success: function (data) {
                                     if(data.message != "") {
                                         alert(data.message);
-                                        $("div[field=\"password\"] .etf-but-cancel").click();
+                                        //$("div[field=\"password\"] .etf-but-cancel").click();
+                                        var $etf_block = $("input[name=\"password\"]").parents(".etf-block");
+                                        etfCancel($etf_block);
                                     }else {
                                         etf_block.hide();
                                         if(data.output == "") {
@@ -226,7 +210,59 @@ $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset
                 Электронная почта
             </div>
             <div class = "personal__row__value">
+                <?php
+                echo EditableTextWidget::widget([
+                    'name' => 'email',
+                    'value' => Helper::setMaskToEmail($user->email),
+                    'defaultValue' => '<span class="text-danger">Введите электронную почту</span>',
+                    'onChange' => new JsExpression('function(id, etf_block, name, value) {
+                        $.ajax({
+                            url: "/account/personal/editable-user?id='.$user->id.'",
+                            type: "post",
+                            data: {
+                                hasEditable: 1,
+                                email: value
+                            },
+                            success: function (data) {
+                                if(data.message != "") {
+                                
+                                    alert(data.message);
+                                    
+                                    var $obj = $("input[name=\"email\"]");
+                                    var val = $obj.val();
+                                    var $etf_block = $obj.parents(".etf-block");
+                                    $etf_block.prev(".etw-element").text(val);
+                                    etfCancel($etf_block);
+                                    
+                                }else {
+                                    etf_block.hide();
+                                    if(data.output == "") {
+                                        $("#" + id).html("<span class=\"text-danger\">Введите электронную почту</span>").show();
+                                    }else {
+                                        $("#" + id).text(data.output).show();
+                                    }
+                                }
+                            },
+                            error: function (data, textStatus, jqXHR) {
+                                if (textStatus == "error") {
+                                    if (void 0 !== data.responseJSON) {
+                                        if (data.responseJSON.message.length > 0) {
+                                            alert(data.responseJSON.message);
+                                        }
+                                    } else {
+                                        if (data.responseText.length > 0) {
+                                            alert(data.responseText);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }')
+                ]);
+                ?>
+                <?php /*
                 <a class = "etw-element"><?= Helper::setMaskToEmail($user->email) ?></a>
+                */ ?>
             </div>
         </div>
     </div>

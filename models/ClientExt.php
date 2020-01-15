@@ -44,7 +44,7 @@ class ClientExt extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['direction_id', 'data', 'time', 'yandex_point_from_id', 'city_from_id', 'city_to_id', 'time', 'places_count'], 'required'],
+            [['direction_id', 'data', 'time', 'yandex_point_from_id', 'city_from_id', 'city_to_id', 'time', 'places_count', 'last_name'], 'required'],
             [['user_id', 'created_at', 'updated_at', 'sync_date', 'status_setting_time', 'time_confirm',
                 'places_count', 'student_count', 'child_count', 'yandex_point_from_id', 'yandex_point_to_id', 'trip_id', 'is_paid', 'payment_in_process',
                 'suitcase_count', 'bag_count', 'prize_trip_count',

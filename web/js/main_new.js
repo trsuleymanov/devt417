@@ -178,6 +178,7 @@
     //   // console.log('onSelect');
     // }
   });
+
   $(document).on('click', '#btn-time', function (event) {
     event.preventDefault();
     event.stopPropagation();
@@ -330,9 +331,11 @@
 
   $(document).on('click', '*', function (event) {
 
-    event.stopPropagation();
+    //event.stopPropagation();
 
     if( $('.header__login').hasClass('click_fix') && !$(this).closest('.for_enter_wrap').length ){
+
+      event.stopPropagation();
 
       $('.header__login').removeClass('click_fix');
       $('.for_enter_wrap').hide();
@@ -341,6 +344,8 @@
 
     if( $('#peoples').hasClass('slide_down') && !$(this).closest('.welcome__label__peoples').length ) {
 
+      event.stopPropagation();
+
       $('#peoples').removeClass('slide_down');
       $('.select').slideUp(100);
       // $(".reservation-popup-calc").removeClass("d-b");
@@ -348,6 +353,8 @@
     }
 
     if ($('.city_select').hasClass('fix_down') && !$(this).closest('.city_select').length ) {
+
+      event.stopPropagation();
 
       $('.select_city_wrap').slideUp(100).removeClass('fix_down');
     }

@@ -125,6 +125,21 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         $scenarios = parent::scenarios();
 
+        $scenarios['check_last_name'] = [
+            'last_name',
+        ];
+        $scenarios['check_first_name'] = [
+            'first_name',
+        ];
+        $scenarios['check_phone'] = [
+            'phone',
+        ];
+        $scenarios['check_password'] = [
+            'password',
+        ];
+        $scenarios['check_email'] = [
+            'email',
+        ];
 
         // сценарий создания заказа при нажатии на кнопку "Записать"
         $scenarios['sync_with_main_server'] = [

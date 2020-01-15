@@ -47,8 +47,8 @@ class PersonalController extends Controller
 
 
     /*
- * Функция изменяем какой-либо поле модели order и возвращает ответ в элемент kartik\editable\Editable::widget
- */
+     * Функция изменяем какой-либо поле модели order и возвращает ответ в элемент kartik\editable\Editable::widget
+     */
     public function actionEditableUser($id)
     {
         Yii::$app->response->format = 'json';
@@ -57,22 +57,47 @@ class PersonalController extends Controller
 
         if (isset($_POST['hasEditable']))
         {
-            if(isset($_POST['fio']))
+            if(isset($_POST['last_name']))
             {
-                $user->fio = Yii::$app->request->post('fio');
-                if(!empty($user->fio)) { // устанавливаем значение
+                $user->last_name = Yii::$app->request->post('last_name');
+                if(!empty($user->last_name)) { // устанавливаем значение
 
+                    $user->scenario = 'check_last_name';
                     if($user->validate() == true) {
-                        $user->setField('fio', $user->fio);
+                        $user->setField('last_name', $user->last_name);
                         $user->setField('sync_date', null);
 
-                        return ['output' => $user->fio, 'message' => ''];
+                        return ['output' => $user->last_name, 'message' => ''];
                     }else {
-                        throw new ForbiddenHttpException(implode('. ', $user->getErrors('fio')));
+                        //throw new ForbiddenHttpException(implode('. ', $user->getErrors('last_name')));
+                        $aErrors = $user->getErrors();
+                        echo "aErrors:<pre>"; print_r($aErrors); echo "</pre>";
+                        exit;
                     }
 
                 }else { // очищаем значение
-                    $user->setField('fio', '');
+                    $user->setField('last_name', '');
+                    $user->setField('sync_date', null);
+                    return ['output' => '', 'message' => ''];
+                }
+
+            }elseif(isset($_POST['first_name'])) {
+
+                $user->first_name = Yii::$app->request->post('first_name');
+                if(!empty($user->first_name)) { // устанавливаем значение
+
+                    $user->scenario = 'check_first_name';
+                    if($user->validate() == true) {
+                        $user->setField('first_name', $user->first_name);
+                        $user->setField('sync_date', null);
+
+                        return ['output' => $user->first_name, 'message' => ''];
+                    }else {
+                        throw new ForbiddenHttpException(implode('. ', $user->getErrors('first_name')));
+                    }
+
+                }else { // очищаем значение
+                    $user->setField('first_name', '');
                     $user->setField('sync_date', null);
                     return ['output' => '', 'message' => ''];
                 }
@@ -87,7 +112,7 @@ class PersonalController extends Controller
                     throw new ForbiddenHttpException('Телефон должен быть в формате +7 (***) *** ** **');
                 }
 
-
+                $user->scenario = 'check_phone';
                 if($user->validate() == true) {
                     $user->setField('phone', $user->phone);
                     $user->setField('sync_date', null);
@@ -100,18 +125,31 @@ class PersonalController extends Controller
             }elseif(isset($_POST['password'])) {
 
                 $user->password = Yii::$app->request->post('password');
+                $user->scenario = 'check_password';
+                if ($user->validate() == true) {
 
-                if($user->validate() == true) {
-
-                    $user->scenario = 'set_password';
                     $user->setPasswordHash($user->password);
-                    if(!$user->save()) {
+                    if (!$user->save()) {
                         throw new ErrorException('Не удалось сохранить новый пароль');
                     }
 
                     return ['output' => $user->password, 'message' => 'Пароль установлен'];
-                }else {
+                } else {
                     throw new ForbiddenHttpException(implode('. ', $user->getErrors('password')));
+                }
+
+            }elseif(isset($_POST['email'])) {
+
+                $user->email = Yii::$app->request->post('email');
+                $user->scenario = 'check_email';
+                if($user->validate() == true) {
+
+                    $user->setField('email', $user->email);
+                    $user->setField('sync_date', null);
+
+                    return ['output' => $user->email, 'message' => 'Эл. почта записана'];
+                }else {
+                    throw new ForbiddenHttpException(implode('. ', $user->getErrors('email')));
                 }
 
             }else {
