@@ -136,7 +136,7 @@ $form = ActiveForm::begin([
                             <div class="reservation-step-line-time">
                                 <?= $model->time ?>
                             </div>
-                            <div class="reservation-step-line-undertitle reservation-step-line-date">
+                            <div class="reservation-step-line-date">
                                 <?= intval(date('d', $model->data)) ?> <?= $aMonths[intval(date('m', $model->data))] ?>
                             </div>
                         </div>
@@ -197,7 +197,7 @@ $form = ActiveForm::begin([
                                 ?>
                                 ~ <?= $arrival->format('H:i'); ?>
                             </div>
-                            <div class="reservation-step-line-undertitle reservation-step-line-date">
+                            <div class="reservation-step-line-date">
                                 <?= $arrival->format('j') ?> <?= $aMonths[intval($arrival->format('m'))] ?>
                             </div>
                         </div>

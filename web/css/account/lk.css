@@ -273,6 +273,10 @@ header .container {
   line-height: 24px;
 }
 
+.history__order__canceled .order__direction span {
+  background-color: #ff5757;
+}
+
 .active__order .order__info,
 .history__order .order__info {
   margin-top: 10px;

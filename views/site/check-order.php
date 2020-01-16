@@ -159,7 +159,7 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
                             -->
                         </div>
                         <div class="reservation-step-line-content-top-right">
-                            <div class="reservation-step-line-title">
+                            <div class="reservation-step-line-date">
                                 <?= $model->time ?>
                             </div>
                             <div class=" reservation-step-line-time">
