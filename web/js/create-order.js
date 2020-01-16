@@ -1708,50 +1708,94 @@ $(document).on('click', "#city-from-block .reservation-step-line-showmap", funct
 // ---------- функционал для формы-2 ------------- - присутствует неработающий устаревший код связанный с картами
 
 
-$(document).on('keyup', 'input[name="ClientExt[fio]"]', function(e) {
+$(document).on('keyup', 'input[name="ClientExt[last_name]"]', function(e) {
 
-    var fio = $(this).val();
-    fio = fio.replace(/^\s+/g, '');
-    if(fio.length > 0) {
-        var arr = fio.split(" ");
-        for(var i = 0; i < arr.length; i++) {
-            if(arr[i][0] != undefined) {
-                arr[i] = (arr[i][0]).toUpperCase() + arr[i].substr(1);
-            }
+    // var fio = $(this).val();
+    // fio = fio.replace(/^\s+/g, '');
+    // if(fio.length > 0) {
+    //     var arr = fio.split(" ");
+    //     for(var i = 0; i < arr.length; i++) {
+    //         if(arr[i][0] != undefined) {
+    //             arr[i] = (arr[i][0]).toUpperCase() + arr[i].substr(1);
+    //         }
+    //     }
+    //     fio = arr.join(" ");
+    //
+    //     $(this).val(fio);
+    // }
+
+    var last_name = $(this).val();
+    last_name = last_name.replace(/^\s+/g, '');
+    if(last_name.length > 0) {
+        if(last_name[0] != undefined) {
+            last_name = (last_name[0]).toUpperCase() + last_name.substr(1);
         }
-        fio = arr.join(" ");
-
-        $(this).val(fio);
+        $(this).val(last_name);
     }
 });
 
-var has_fio_error = false;
-$(document).on('blur', 'input[name="ClientExt[fio]"]', function(e) {
+$(document).on('keyup', 'input[name="ClientExt[first_name]"]', function(e) {
 
-    if(has_fio_error == false) {
+    var first_name = $(this).val();
+    first_name = first_name.replace(/^\s+/g, '');
+    if(first_name.length > 0) {
+        if(first_name[0] != undefined) {
+            first_name = (first_name[0]).toUpperCase() + first_name.substr(1);
+        }
+        $(this).val(first_name);
+    }
+});
 
-        var fio = $(this).val();
-        fio = fio.replace(/^\s+/g, '');
-        if (fio.length == 0) {
-            has_fio_error = true;
-            $('#fio').blur();
-            alert('Заполните Имя Фамилию');
-        } else {
-            var arr = fio.split(" ");
-            if (arr.length < 2) {
-                alert('Заполните имя и фамилию');
-                $('#fio').blur();
-                has_fio_error = true;
-            }
+var has_last_name_error = false;
+$(document).on('blur', 'input[name="ClientExt[last_name]"]', function(e) {
+
+    if(has_last_name_error == false) {
+
+        var last_name = $(this).val();
+        last_name = last_name.replace(/^\s+/g, '');
+        if (last_name.length == 0) {
+            has_last_name_error = true;
+            $('input[name="ClientExt[last_name]"]').blur();
+            alert('Заполните Фамилию');
         }
     }else {
-        has_fio_error = false;
+        has_last_name_error = false;
     }
 
     toggleSubmitBut2();
 
     return true;
 });
+
+var has_first_name_error = false;
+$(document).on('blur', 'input[name="ClientExt[first_name]"]', function(e) {
+
+    if(has_first_name_error == false) {
+
+        var first_name = $(this).val();
+        first_name = first_name.replace(/^\s+/g, '');
+        if (first_name.length == 0) {
+            has_first_name_error = true;
+            $('input[name="ClientExt[first_name]"]').blur();
+            alert('Заполните Имя');
+        } else {
+            var arr = first_name.split(" ");
+            if (arr.length < 2) {
+                alert('Заполните Имя');
+                $('input[name="ClientExt[first_name]"]').blur();
+                has_first_name_error = true;
+            }
+        }
+    }else {
+        has_first_name_error = false;
+    }
+
+    //toggleSubmitBut2(); // Имя - вообще не обязательное поле
+
+    return true;
+});
+
+
 
 $(document).ready(function() {
     toggleSubmitBut1();
@@ -1856,14 +1900,14 @@ function toggleSubmitBut2() {
         phone = phone.substr(0, 13) + phone.substr(14);
     }
     var last_name = $.trim($('input[name="ClientExt[last_name]"]').val());
-    var first_name = $.trim($('input[name="ClientExt[first_name]"]').val());
+    // var first_name = $.trim($('input[name="ClientExt[first_name]"]').val());
     var email = $.trim($('input[name="ClientExt[email]"]').val());
     // var gender = $.trim($('input[name="ClientExt[gen]"]').val());
     var places_count = $('input[name="ClientExt[places_count]"]').val();
 
     // console.log('phone='+phone+' fio='+fio+' email='+email+' gender='+gender+' places_count='+places_count);
 
-    if(phone.length >= 15 && last_name != "" && first_name != "" && email != "" && places_count > 0) {
+    if(phone.length >= 15 && last_name != "" && email != "" && places_count > 0) {
         $('#submit-create-order-step-2').removeClass('reservation-calc__button--disabled');
     }else {
         if($('#submit-create-order-step-2').hasClass('.reservation-calc__button--disabled') == false) {
@@ -1897,10 +1941,10 @@ $(document).on('click', '#submit-create-order-step-2', function() {
     }
 
     var first_name = $.trim($('input[name="ClientExt[first_name]"]').val());
-    if(first_name == "") {
-        alert('Заполните имя');
-        return false;
-    }
+    // if(first_name == "") {
+    //     alert('Заполните имя');
+    //     return false;
+    // }
 
     var email = $.trim($('input[name="ClientExt[email]"]').val());
     if(email == "") {

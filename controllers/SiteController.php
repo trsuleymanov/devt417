@@ -227,12 +227,12 @@ class SiteController extends Controller
 
         }else {
             if(Yii::$app->user->identity != null) {
-                $model->user_id = Yii::$app->user->identity->id;
-                $model->phone = Yii::$app->user->identity->phone;
-                $model->email = Yii::$app->user->identity->email;
+                $model->user_id = $user->id;
+                $model->phone = $user->phone;
+                $model->email = $user->email;
                 // $model->fio = Yii::$app->user->identity->fio;
-                $model->last_name = Yii::$app->user->identity->last_name;
-                $model->first_name = Yii::$app->user->identity->first_name;
+                $model->last_name = $user->last_name;
+                $model->first_name = $user->first_name;
             }
 
             $client_ext_childs = [];
