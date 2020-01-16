@@ -5,7 +5,8 @@
 }
 
 .sw-element .select2-selection__arrow {
-    -moz-border-bottom-colors: none;
+    display: none;
+/*    -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
@@ -13,13 +14,13 @@
     border-image: none;
     border-style: solid;
     border-width: 2px 2px 2px 2px;
-    /*height: 28px;*/
+    height: 28px;
     height: 100%;
     position: absolute;
     right: 0;
     top: 0;
     width: 16px;
-    background-color: #D6D2D0;
+    background-color: #D6D2D0;*/
 }
 
 .sw-element .select2-selection__arrow b {
