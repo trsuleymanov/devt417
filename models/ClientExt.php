@@ -55,7 +55,7 @@ class ClientExt extends \yii\db\ActiveRecord
                 'transport_model', 'transport_color', 'email'], 'string', 'max' => 50],
             [['status', 'transport_car_reg', 'phone'], 'string', 'max' => 30],
             [['last_name'], 'string', 'min' => 2, 'max' => 30, 'skipOnEmpty' => false],
-            [['first_name'], 'string', 'min' => 2, 'max' => 60, 'skipOnEmpty' => false],
+            [['first_name'], 'string', 'min' => 2, 'max' => 60, 'skipOnEmpty' => true],
 
 
             //[['fio'], 'string', 'max' => 100],
@@ -90,8 +90,15 @@ class ClientExt extends \yii\db\ActiveRecord
             // проверяю что у текущего телефона нет дублей
             $phone = Helper::convertWebToDBMobile($this->$attribute);
             $user = User::find()->where(['phone' => $phone])->one();
+
+
+
             if($user != null) {
-                $this->addError($attribute, 'Пользователь с таким номером уже зарегистрирован, авторизуйтесь пожалуйста');
+                if(Yii::$app->user->identity == null) {
+                    $this->addError($attribute, 'Пользователь с таким номером уже зарегистрирован, авторизуйтесь пожалуйста');
+                }elseif($user->id != Yii::$app->user->identity->getId()) {
+                    $this->addError($attribute, 'Пользователь с таким номером уже зарегистрирован, авторизуйтесь пожалуйста');
+                }
             }
 
             return true;
