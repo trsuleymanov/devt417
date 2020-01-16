@@ -1,6 +1,6 @@
 <?php
 
-use app\widgets\SelectWidget;
+use app\widgets\PointSelectWidget;
 use yii\web\JsExpression;
 
 // популярные яндекс-точки отправления
@@ -71,7 +71,7 @@ if(count($super_yandex_points) > 0) { ?>
         <div id="search-from-block" city-extended-external-use="0" class="reservation-drop__search-input-wrap">
             <?php
             // поиск по точкам города
-            echo SelectWidget::widget([
+            echo PointSelectWidget::widget([
                 'name' => 'search_yandex_point_from_id',
                 'initValueText' => ($model->yandex_point_from_id > 0 ? $model->yandexPointFrom->name : ''),
                 'options' => [

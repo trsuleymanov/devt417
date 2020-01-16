@@ -1,6 +1,6 @@
 <?php
 
-use app\widgets\SelectWidget;
+use app\widgets\PointSelectWidget;
 use yii\web\JsExpression;
 
 // популярные яндекс-точки высадки
@@ -23,7 +23,7 @@ use yii\web\JsExpression;
         </div>*/ ?>
         <?php
         // поиск по точкам города
-        echo SelectWidget::widget([
+        echo PointSelectWidget::widget([
             'name' => 'search_yandex_point_to_id',
             'initValueText' => ($model->yandex_point_from_id > 0 ? $model->yandexPointFrom->name : ''),
             'options' => [
