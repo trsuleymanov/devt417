@@ -2136,7 +2136,7 @@ $(document).on('click', "#city-to-block .reservation-step-line-change2", functio
         map_to.setCenter(coordinates, point_focusing_scale, {duration: 500});
 
         var yandex_point_to_name = placemark.properties.get('point_name');
-        pointSelectWidgetInsertValue($('input[name="search_yandex_point_to_id"]').parents('.sw-element'), yandex_point_to_id, yandex_point_to_name);
+        pointSelectWidgetInsertValue($('input[name="search_yandex_point_to_id"]').parents('.psw-element'), yandex_point_to_id, yandex_point_to_name);
     });
 });
 
