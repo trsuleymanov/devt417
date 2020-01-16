@@ -29,12 +29,14 @@ class NewAppAsset extends AssetBundle
         'css/styles.css',
         'css/main_new.css',
         'css/select-widget.css',
+        'css/point-select-widget.css',
     ];
     public $js = [
         //'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
         //'https://api-maps.yandex.ru/2.1/?lang=ru_RU',
         //'js/main_page/main_page.js',
         'js/select-widget.js',
+        'js/point-select-widget.js',
         'js/libs.js',
         'js/imask.js',
         'js/editable-text-widget.js',
