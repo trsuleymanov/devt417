@@ -18,7 +18,7 @@ class CurrentRegSearch extends CurrentReg
     public function rules()
     {
         return [
-            [['id', 'count_sended_sms', 'sms_code', 'sended_sms_code_at'], 'integer'],
+            [['id', 'count_sended_sms', 'sms_code', 'sended_sms_code_at', 'registration_code_created_at'], 'integer'],
             [['email', 'fio', 'mobile_phone', /*'password',*/ 'registration_code', 'created_at', 'updated_at', 'input_mobile_at'], 'safe'],
         ];
     }
@@ -63,6 +63,7 @@ class CurrentRegSearch extends CurrentReg
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'registration_code_created_at' => $this->registration_code_created_at,
 //            'created_at' => $this->created_at,
 //            'updated_at' => $this->updated_at,
         ]);

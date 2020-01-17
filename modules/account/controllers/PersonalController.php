@@ -2,6 +2,7 @@
 namespace app\modules\account\controllers;
 
 use app\components\Helper;
+use app\models\CurrentReg;
 use app\models\InputPhoneForm;
 use app\models\User;
 use Yii;
@@ -144,10 +145,24 @@ class PersonalController extends Controller
                 $user->scenario = 'check_email';
                 if($user->validate() == true) {
 
-                    $user->setField('email', $user->email);
-                    $user->setField('sync_date', null);
+//                    $user->setField('email', $user->email);
+//                    $user->setField('sync_date', null);
 
-                    return ['output' => $user->email, 'message' => 'Эл. почта записана'];
+                    $current_reg = CurrentReg::find()->where(['mobile_phone' => $user->phone])->one();
+                    if($current_reg == null) {
+                        throw new ForbiddenHttpException('Регистрация не найдена');
+                    }
+
+                    $current_reg->setField('email', $user->email);
+
+                    $current_reg->generateRegistrationCode();
+                    $current_reg->sendRegistrationCode();
+                    if(!$current_reg->save(false)) {
+                        throw new ForbiddenHttpException('Не удалось сохранить регистрацию');
+                    }
+
+                    return ['output' => $user->email, 'message' => 'Вам на почту '.$user->email.' была отправлена ссылка для подтвердения почты. После подтверждения почта будет изменена на новую.'];
+
                 }else {
                     throw new ForbiddenHttpException(implode('. ', $user->getErrors('email')));
                 }

@@ -41,7 +41,8 @@ class CurrentReg extends \yii\db\ActiveRecord
         return [
             [['email', 'fio', 'mobile_phone', 'password'], 'required'],
             [['email', 'fio'], 'filter', 'filter' => 'trim'],
-            [['created_at', 'updated_at', 'sended_sms_code_at', 'count_sended_sms', 'is_confirmed_mobile_phone', 'input_mobile_at'], 'integer'],
+            [['created_at', 'updated_at', 'sended_sms_code_at', 'count_sended_sms', 'is_confirmed_mobile_phone',
+                'input_mobile_at', 'registration_code_created_at'], 'integer'],
             [['email'], 'string', 'max' => 50],
             [['fio'], 'string', 'max' => 100],
             ['access_code', 'string', 'min' => 32, 'max' => 32],
@@ -69,6 +70,7 @@ class CurrentReg extends \yii\db\ActiveRecord
             'password' => 'Пароль',
             //'confirm_password' => 'Пароль - Повторите ввод пароля',
             'registration_code' => 'Код идентификации пользователя',
+            'registration_code_created_at' => 'Время создания регистрационного кода',
             'sms_code' => 'Код подтверждения телефона пользователя',
             'check_code' => 'Код подтверждения телефона пользователя',
             'sended_sms_code_at' => 'Время отправки кода',
@@ -101,6 +103,7 @@ class CurrentReg extends \yii\db\ActiveRecord
             //'fio',
             'password',
             'registration_code',
+            'registration_code_created_at'
             //'confirm_password'
         ];
 
@@ -141,6 +144,7 @@ class CurrentReg extends \yii\db\ActiveRecord
     public function generateRegistrationCode() {
 
         $this->registration_code = md5($this->fio . 'sixwoal#$_Djd937' . $this->mobile_phone . $this->email);
+        $this->registration_code_created_at = time();
 
         return true;
     }
