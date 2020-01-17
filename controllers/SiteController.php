@@ -452,7 +452,7 @@ class SiteController extends Controller
 
         Yii::$app->response->format = 'json';
 
-        $settings = Setting::find()->where(['id' => 1])->one();
+        //$settings = Setting::find()->where(['id' => 1])->one();
 
         $model = new InputPhoneForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {

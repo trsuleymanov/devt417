@@ -360,7 +360,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         ]));
         $message->send();
 
-        // return true;
+        return true;
     }
 
     public function sendTempPassword($password) {
