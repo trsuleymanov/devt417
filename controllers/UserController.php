@@ -23,18 +23,20 @@ class UserController extends Controller
             throw new ForbiddenHttpException('Регистрационный код не найден');
         }
 
+        if(time() - $current_reg->registration_code_created_at > 300) { // прошло 5 минут от начале регистрации
+            throw new ForbiddenHttpException('Время для подтверждения почты 5 минут - истекло. Пожалуйста...');
+        }
+
         $user = User::find()->where(['phone' => $current_reg->mobile_phone])->one();
+
+        // при смене почты в профиле, новая почта записывается вначале в $current_reg, затем после подтверждения
+        // меняется почта у пользователя
+        $user->setField('email', $current_reg->email);
+        $user->setField('sync_date', null);
+
         $user->setField('email_is_confirmed', true);
+
         Yii::$app->user->login($user, 0);
-
-//        if(!$current_reg->createUser()) {
-//            throw new ErrorException('Не удалось создать пользователя');
-//        }
-
-//        if(!$current_reg->delete()) {
-//            throw new ErrorException('Не удалось удалить регистрационную запись');
-//        }
-
 
 
         return $this->render('сonfirm-registration-success');

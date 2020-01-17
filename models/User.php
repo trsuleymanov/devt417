@@ -305,7 +305,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public function generateRestoreCode() {
 
-        $this->restore_code = md5($this->email . '.lsshal&3HJ' . $this->last_name.' '.$this->first_code . time());
+        $this->restore_code = md5($this->email . '.lsshal&3HJ' . $this->last_name.' '.$this->first_name . time());
 
         return true;
     }
