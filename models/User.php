@@ -311,43 +311,54 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
 
-    public function sendConfirmEmail() {
-
-        $current_reg = CurrentReg::find()->where(['email' => $this->email])->one();
-        if($current_reg == null) {
-            throw new ErrorException('Регистрация не найдена');
-        }
-
-        $message = Yii::$app->mailer->compose();
-        $message->setFrom(\Yii::$app->params['callbackEmail']);
-        $message->setTo($this->email);
-        $message->setSubject('Подтверждение регистрации на сайте '.Yii::$app->params['siteUrl']);
-        $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [
-            'registration_url' =>  Yii::$app->params['siteUrl'].'/user/confirm-registration/?registration_code='.$current_reg->registration_code,
-            'site' => Yii::$app->params['siteUrl'],
-            // 'img' => $message->embed(Yii::$app->params['siteUrl'].'/images/417.gif'),
-            'email' => $this->email,
-            'phone' => $this->phone,
-        ]));
-        return $message->send();
-
-        //return true;
-    }
+//    public function sendConfirmEmail() {
+//
+//        $current_reg = CurrentReg::find()->where(['email' => $this->email])->one();
+//        if($current_reg == null) {
+//            throw new ErrorException('Регистрация не найдена');
+//        }
+//
+//        $message = Yii::$app->mailer->compose();
+//        $message->setFrom(\Yii::$app->params['callbackEmail']);
+//        $message->setTo($this->email);
+//        $message->setSubject('Подтверждение регистрации на сайте '.Yii::$app->params['siteUrl']);
+//        $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [
+//            'registration_url' =>  Yii::$app->params['siteUrl'].'/user/confirm-registration/?registration_code='.$current_reg->registration_code,
+//            'site' => Yii::$app->params['siteUrl'],
+//            // 'img' => $message->embed(Yii::$app->params['siteUrl'].'/images/417.gif'),
+//            'email' => $this->email,
+//            'phone' => $this->phone,
+//        ]));
+//        return $message->send();
+//
+//        //return true;
+//    }
 
     public function sendRestoreCode() {
 
         $this->generateRestoreCode();
         $this->setField('restore_code', $this->restore_code);
 
-        return Yii::$app->mailer->compose('restore_code', [
+//        return Yii::$app->mailer->compose('restore_code', [
+//            'restore_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/restore-access/?restore_code='.$this->restore_code,
+//            'site' => $_SERVER['HTTP_HOST']
+//        ])
+//            ->setFrom(\Yii::$app->params['callbackEmail'])
+//            ->setBcc(\Yii::$app->params['fromEmail'])
+//            ->setTo($this->email)
+//            ->setSubject('Код восстановления доступа')
+//            ->send();
+
+
+        $message = Yii::$app->mailer->compose();
+        $message->setFrom(\Yii::$app->params['callbackEmail']);
+        $message->setTo($this->email);
+        $message->setSubject('Код восстановления доступа');
+        $message->setHtmlBody(Yii::$app->mailer->render('restore_code', [
             'restore_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/restore-access/?restore_code='.$this->restore_code,
             'site' => $_SERVER['HTTP_HOST']
-        ])
-            ->setFrom(\Yii::$app->params['callbackEmail'])
-            ->setBcc(\Yii::$app->params['fromEmail'])
-            ->setTo($this->email)
-            ->setSubject('Код восстановления доступа')
-            ->send();
+        ]));
+        $message->send();
 
         // return true;
     }

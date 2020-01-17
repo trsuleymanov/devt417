@@ -176,7 +176,7 @@ class CurrentReg extends \yii\db\ActiveRecord
         $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [
             'registration_url' =>  Yii::$app->params['siteUrl'].'/user/confirm-registration/?registration_code='.$this->registration_code,
             'site' => Yii::$app->params['siteUrl'],
-            'img' => $message->embed(Yii::$app->params['siteUrl'].'/images/417.gif'),
+            // 'img' => $message->embed(Yii::$app->params['siteUrl'].'/images/417.gif'),
             'email' => $this->email,
             'phone' => $this->mobile_phone,
         ]));

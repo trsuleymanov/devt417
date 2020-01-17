@@ -23,9 +23,10 @@ class UserController extends Controller
             throw new ForbiddenHttpException('Регистрационный код не найден');
         }
 
-        if(time() - $current_reg->registration_code_created_at > 300) { // прошло 5 минут от начале регистрации
-            throw new ForbiddenHttpException('Время для подтверждения почты 5 минут - истекло. Пожалуйста...');
-        }
+        // пока проверка на "истечение времени действия ссылки" - не нужна
+//        if(time() - $current_reg->registration_code_created_at > 300) { // прошло 5 минут от начале регистрации
+//            throw new ForbiddenHttpException('Время для подтверждения почты 5 минут - истекло. Пожалуйста...');
+//        }
 
         $user = User::find()->where(['phone' => $current_reg->mobile_phone])->one();
 
