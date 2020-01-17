@@ -575,7 +575,6 @@ header .container {
 }
 
 li.nav__item.reservation-menu__item a {
-  padding-left: 5.208%;
   width: 100%;
   -moz-transform: matrix( 0.99976855248321,0,0,0.99882941158893,0,0);
   -webkit-transform: matrix( 0.99976855248321,0,0,0.99882941158893,0,0);
@@ -584,9 +583,17 @@ li.nav__item.reservation-menu__item a {
   color: rgb(81, 81, 81);
 }
 li.nav__item.reservation-menu__item a.active {
-  border-left: 4px solid #ffae00;
-  padding-left: 4.166%;
-  background-color: #fffaed;
+  position: relative;
+}
+li.nav__item.reservation-menu__item a.active:before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -4vw;
+  display: block;
+  content: '';
+  width: 4px;
+  background-color: #ffae00;
 }
 li.nav__item.reservation-menu__item:last-child {
   margin-top: 34px;

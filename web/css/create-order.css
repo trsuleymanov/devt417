@@ -88,9 +88,14 @@
 }
 
 .reservation-step-line-time {
-  margin-top: 7px;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 500;
+  white-space: nowrap;
+}
+
+.reservation-step-line-date {
+  font-size: 22px;
+  font-weight: 300;
   white-space: nowrap;
 }
 
@@ -101,12 +106,6 @@
 .reservation-step-line-dest {
   font-size: 18px;
   font-weight: 300;
-}
-
-.reservation-step-line-date {
-  font-size: 22px;
-  font-weight: 300;
-  white-space: nowrap;
 }
 
 .reservation-step-line-selecte{

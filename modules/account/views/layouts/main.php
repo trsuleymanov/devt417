@@ -13,11 +13,16 @@ $cookie = Yii::$app->getRequest()->getCookies();
 $current_route = $this->context->route;
 
 $user = Yii::$app->user->identity;
+
+if( $current_route == 'account/order/history' ):
+    $addClass = 'personal-page';
+else:
+
+endif;
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="ru-RU">
-
 <head>
     <meta charset="utf-8">
     <title>Главная страница</title>
@@ -41,7 +46,7 @@ $user = Yii::$app->user->identity;
     <?php $this->head() ?>
 </head>
 
-<body class="index-page user">
+<body class="<?=$addClass;?>">
 <?php $this->beginBody() ?>
 <div class="wrapper">
     <header>

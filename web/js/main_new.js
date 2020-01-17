@@ -5,13 +5,17 @@
 
     svg4everybody({});
 
-    grecaptcha.ready(function() {
-      grecaptcha.execute('6Lewg8wUAAAAABhM-tLlmiRNYSLdf17N87agjkmR', {action: 'homepage'}).then(function(token) {
-        $('button:disabled').each(function(){
-          $(this).attr('disabled', false);
+    if( $('body').is('.index-page') ){
+
+      grecaptcha.ready(function() {
+        grecaptcha.execute('6Lewg8wUAAAAABhM-tLlmiRNYSLdf17N87agjkmR', {action: 'homepage'}).then(function(token) {
+          $('button:disabled').each(function(){
+            $(this).attr('disabled', false);
+          });
         });
       });
-    });
+
+    }
 
 
     if($('#inputphoneform-mobile_phone').hasClass('use_imask')) {
@@ -331,150 +335,79 @@
 
   $(document).on('click', '*', function (event) {
 
-    if($(this).parents('.personal__block').length == 0) {
-      event.stopPropagation();
-    }
+    event.stopPropagation();
 
-    if( $('.header__login').hasClass('click_fix') && !$(this).closest('.for_enter_wrap').length ){
+    // кнопка Войти
+    if( $(this).is('.header__login') ){
+
+      if( $(this).is('guest') ){
+
+        $(this).toggleClass('click_fix');
+        if( is_mobile() ){
+
+          // все прописано в верстке
+
+        } else {
+
+          $('#modal_enter_phone').toggle();
+
+        }
+
+      } else {
+
+        event.preventDefault();
+        $('.for_enter_wrap').toggle(100);
+
+      }
+
+    } else if( $('.header__login').is('.click_fix') && !$(this).closest('.for_enter_wrap').length ){
 
       $('.header__login').removeClass('click_fix');
       $('.for_enter_wrap').hide();
 
     }
 
-    if( $('#peoples').hasClass('slide_down') && !$(this).closest('.welcome__label__peoples').length ) {
+    // выбор города
+    if( $(this).is('.city_select') ){
+
+      $(this)
+        .toggleClass('fix_down')
+        .find('.select_city_wrap').slideDown(100);;
+
+    } else if ($('.city_select').hasClass('fix_down') && !$(this).closest('.city_select').length ) {
+
+      $('.select_city_wrap').slideUp(100).removeClass('fix_down');
+
+    }
+
+    // кнопка Пассажиры
+    if( $(this).is('#peoples') ){
+
+      $(this).toggleClass('slide_down');
+      if( is_mobile() ){
+
+        $('#peoples-mobile').iziModal('open');
+
+      } else {
+
+        $('.select').slideToggle(100);
+
+      }
+
+    } else if( $('#peoples').hasClass('slide_down') && !$(this).closest('.welcome__label__peoples').length ) {
 
       $('#peoples').removeClass('slide_down');
       $('.select').slideUp(100);
-      // $(".reservation-popup-calc").removeClass("d-b");
 
     }
 
-    if ($('.city_select').hasClass('fix_down') && !$(this).closest('.city_select').length ) {
-
-      $('.select_city_wrap').slideUp(100).removeClass('fix_down');
-    }
-
-  });
-
-  $(document).on('click', '.city_select', function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    $('.header__login').removeClass('click_fix');
-    $('.for_enter_wrap').slideUp(100);
-    $('.select_city_wrap').hide();
-    $('.welcome__form').find('.fix_down').removeClass('fix_down');
-    $(this).toggleClass('fix_down');
-
-    if ($(this).hasClass('fix_down')) {
-      $('#peoples').removeClass('slide_down').next('.select').slideUp(1);
-      //$('#peoples').removeClass('slide_down');
-      //$(".reservation-popup-calc").removeClass("d-b");
-
-      $(this).find('.select_city_wrap').slideDown(100);
-    } else {
-      $('.select_city').removeClass('fix_down');
-    }
   });
 
   $(document).on('click', '.reservation-popup-calc', function() {
     return false;
   });
 
-  $(document).on('click', '#peoples', function (event) {
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    $(this).toggleClass('slide_down');
-
-    if( is_mobile() ){
-      $('#peoples-mobile').iziModal('open');
-    } else {
-      $('.select').slideToggle(100);
-    }
-
-  });
-  $(document).on('click', '.select', function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  });
-
-  $('.date_enter').on('click', function () {
-    $('#peoples').removeClass('slide_down');
-    $('.select').slideUp(100);
-    // $(".reservation-popup-calc").removeClass("d-b");
-
-    $('.city_select').removeClass('rotate_ping').find('.select_city_wrap').slideUp(1);
-    $('.for_enter_wrap').slideUp(100);
-  });
-
-
-  $(document).on('click', '.guest .header__login', function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    var to_show = false;
-    if($('#modal_enter_phone').is(':visible') === true) {
-      to_show = false;
-    }else {
-      to_show = true;
-    }
-
-    clearAndHideRegForms();
-
-    if(to_show == true) {
-      $(this).addClass('click_fix');
-      $('#modal_enter_phone').fadeIn(100);
-    }else {
-      $(this).removeClass('click_fix');
-      $('#modal_enter_phone').fadeOut(100);
-    }
-
-    // $(this).toggleClass('click_fix');
-    // $('#modal_enter_phone').fadeToggle(100);
-
-    $('#peoples').removeClass('slide_down').next('.select').slideUp(100);
-
-    // $('#peoples').removeClass('slide_down');
-    // $(".reservation-popup-calc").removeClass("d-b");
-
-    $('.city_select').removeClass('rotate_ping').find('.select_city_wrap').slideUp(100);
-  });
-
-  $(document).on('click', '.user .header__login', function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    var to_show = false;
-    if($('.for_enter_wrap').is(':visible') === true) {
-      to_show = false;
-    }else {
-      to_show = true;
-    }
-
-    if(to_show == true) {
-      $(this).addClass('click_fix');
-      $('.for_enter_wrap').fadeIn(100);
-    }else {
-      $(this).removeClass('click_fix');
-      $('.for_enter_wrap').fadeOut(100);
-    }
-
-  });
-  // $(document).on('click', 'header .test', function (event) {
-  //   event.preventDefault();
-  //   $('.modal_enter').hide();
-  //   $('.modal_registration').fadeIn(100);
-  // });
-  // $(document).on('click', 'header .test-next', function (event) {
-  //   event.preventDefault();
-  //   $('.modal_registration').fadeOut(100);
-  // });
 })(jQuery);
-
-
 
 $(document).on('click', '.select_city__item', function (event) {
   event.preventDefault();
@@ -507,7 +440,6 @@ $(document).on('click', '.select_city__item', function (event) {
 
 $(document).on('click', '.btn_reverse', function() {
 
-  console.log('btn_reverse');
   var city_from_id = $('*[name="ClientExt[city_from_id]"]').val();
   if(city_from_id == 1) {
     $('*[name="ClientExt[city_from_id]"]').val(2);

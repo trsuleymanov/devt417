@@ -21,6 +21,12 @@ if(Yii::$app->user->isGuest):
 else:
     $addClass = 'user';
 endif;
+
+if( $current_route == 'site/index' ):
+    $addClass .= ' index-page';
+else:
+
+endif;
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -46,7 +52,7 @@ endif;
         window.client_ext_id = '<?= (isset($client_ext) && $client_ext != null ? $client_ext->id : 0); ?>';
     </script>
 </head>
-<body class="index-page <?=$addClass?>">
+<body class="<?=$addClass?>">
 <?php $this->beginBody() ?>
 <div class="wrapper">
     <?php /*
@@ -65,12 +71,6 @@ endif;
                         <li class="nav__item"><a class="nav__link text_16" href="/#information">правовая информация</a></li>
                         <li class="nav__item"><a class="nav__link text_16" href="/">417417.ru</a></li>
                     </ul>
-                    <a class="header__login text_14" href="#">
-                        <svg class="icon icon-user header__icon">
-                            <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#user"></use>
-                        </svg>
-                        Войти
-                    </a>
                 </div>
                 <div class="header__enter">
                 <?php if(Yii::$app->user->isGuest) { ?>
@@ -435,9 +435,9 @@ endif;
         <div id="enter_password-mobile"></div>
         <div id="confirm_phone-mobile"></div>
         <div id="restorepassword-mobile"></div>
+        <div id="registration-mobile"></div>
     </div>
-    <div id="entersmscode-mobile" class="mobile_menu"></div>
-    <div id="registration-mobile" class="mobile_menu"></div>
+    <!-- <div id="entersmscode-mobile" class="mobile_menu"></div> -->
     <!--include ../modules/menuGlobal-->
 
     <? if( !isset($_COOKIE["use-cookie"]) || $_COOKIE["use-cookie"] != 'true'): ?>

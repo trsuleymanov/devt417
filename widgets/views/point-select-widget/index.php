@@ -45,7 +45,7 @@ $this->registerJs($js, \yii\web\View::POS_END);
 
 ?>
 
-<div class="form-control psw-element"
+<div class="reservation-drop__select-select psw-element"
      attribute-name = "<?= $name ?>" <?= (isset($options['disabled']) ? 'disabled="'.$options['disabled'].'" ' : '') ?>
      ajax_url = "<?= $ajax['url'] ?>"
      psw_is_open = "false"
@@ -73,14 +73,11 @@ $this->registerJs($js, \yii\web\View::POS_END);
             ?>
         </button>
     </span>
-    <span class="select2-selection__arrow" role="presentation">
-        <b></b>
-    </span>
     <?= Html::hiddenInput($name, $value, $options) ?>
 </div>
 <div class="psw-outer-block" attribute-name="<?= $name ?>" style="display: none;">
     <div class="psw-inner-block">
-        <input type="text" class="psw-search form-control">
+        <input type="text" class="psw-search">
         <div class="psw-select-block" style="display: none;">
             <!-- сюда можно засунуть preload-рисунок или что-то подобное -->
         </div>
