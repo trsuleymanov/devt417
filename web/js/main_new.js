@@ -446,9 +446,9 @@ function showError(error) {
     event.stopPropagation();
 
     // кнопка Войти
-    if( $(this).is('.header__login') ) {
+    if( $(this).is('.header__login') ){
 
-      if ($('body').is('.guest')) {
+      if( $('body').is('.guest') ){
 
         $(this).toggleClass('click_fix');
         $('#modal_enter_phone').toggle();
@@ -460,9 +460,8 @@ function showError(error) {
         $('.for_enter_wrap').toggle(100);
 
       }
-    }
 
-    if( $('.header__login').hasClass('click_fix') && !$(this).closest('.for_enter_wrap').length ){
+    } else if( $('.header__login').is('.click_fix') && !$(this).closest('.for_enter_wrap').length ){
 
       $('.header__login').removeClass('click_fix');
       $('.for_enter_wrap').hide();
@@ -473,8 +472,8 @@ function showError(error) {
     if( $(this).is('.city_select') ){
 
       $(this)
-        .toggleClass('fix_down')
-        .find('.select_city_wrap').slideDown(100);
+          .toggleClass('fix_down')
+          .find('.select_city_wrap').slideDown(100);
 
     } else if ($('.city_select').hasClass('fix_down') && !$(this).closest('.city_select').length ) {
 
