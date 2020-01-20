@@ -171,7 +171,8 @@ header .container {
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
 }
 
-.complete__order .order__close {
+.complete__order .order__close,
+.order-detail__topline-close {
   padding: 5px;
   position: absolute;
   top: 10px;
@@ -179,6 +180,10 @@ header .container {
   display: flex;
   width: 21px;
   height: 21px;
+}
+
+.order-detail__topline-close image {
+  pointer-events: none;
 }
 
 .complete__order .order__close svg {
@@ -366,25 +371,34 @@ header .container {
   text-decoration: underline;
 }
 
-.active__order .order__actions {
+.order__actions,
+.order-detail__actions {
   margin-top: 10px;
   display: flex;
   justify-content: flex-end;
 }
 
-.active__order .order__actions a {
+.order__actions a,
+.order-detail__actions a {
   font-weight: 700;
 }
 
-.active__order .order__actions a:hover {
+.order__actions a:hover,
+.order-detail__actions a:hover {
   text-decoration: underline;
 }
 
-.active__order .order__actions__edit {
+.order__actions__edit,
+.order__actions__edit:hover,
+.order-detail__actions__edit,
+.order-detail__actions__edit:hover {
   color: #ffb100;
 }
 
-.active__order .order__actions__cancel {
+.order__actions__cancel,
+.order__actions__cancel:hover,
+.order-detail__actions__cancel,
+.order-detail__actions__cancel:hover {
   margin-left: 20px;
   color: #999;
 }
@@ -575,7 +589,6 @@ header .container {
 }
 
 li.nav__item.reservation-menu__item a {
-  padding-left: 5.208%;
   width: 100%;
   -moz-transform: matrix( 0.99976855248321,0,0,0.99882941158893,0,0);
   -webkit-transform: matrix( 0.99976855248321,0,0,0.99882941158893,0,0);
@@ -584,9 +597,17 @@ li.nav__item.reservation-menu__item a {
   color: rgb(81, 81, 81);
 }
 li.nav__item.reservation-menu__item a.active {
-  border-left: 4px solid #ffae00;
-  padding-left: 4.166%;
-  background-color: #fffaed;
+  position: relative;
+}
+li.nav__item.reservation-menu__item a.active:before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -4vw;
+  display: block;
+  content: '';
+  width: 4px;
+  background-color: #ffae00;
 }
 li.nav__item.reservation-menu__item:last-child {
   margin-top: 34px;
@@ -594,4 +615,37 @@ li.nav__item.reservation-menu__item:last-child {
 }
 li.nav__item.reservation-menu__item:last-child a{
   color: #ffb100;
+}
+.order-detail {
+  top: 0;
+}
+.order-detail__topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26px 0;
+  padding-right: 30px;
+  padding-left: 30px;
+  border-bottom: 1px solid #ccc;
+  z-index: 700;
+}
+.order-detail__topline-title {
+  font-size: 20px;
+  font-weight: 300;
+}
+.order-detail .reservation-step {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  width: 100%;
+  box-shadow: none;
+}
+.order-detail .reservation-step-info {
+  padding-top: 0;
+}
+.order-detail .reservation-step-info:before {
+  display: none;
+}
+.order-detail .reservation-prices {
+  margin: 0 -15px;
+  width: 100%;
 }

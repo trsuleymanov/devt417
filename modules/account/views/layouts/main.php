@@ -13,11 +13,16 @@ $cookie = Yii::$app->getRequest()->getCookies();
 $current_route = $this->context->route;
 
 $user = Yii::$app->user->identity;
+
+if( $current_route == 'account/order/history' ):
+    $addClass = 'personal-page';
+else:
+
+endif;
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="ru-RU">
-
 <head>
     <meta charset="utf-8">
     <title>Главная страница</title>
@@ -41,7 +46,7 @@ $user = Yii::$app->user->identity;
     <?php $this->head() ?>
 </head>
 
-<body class="index-page user">
+<body class="<?=$addClass;?>">
 <?php $this->beginBody() ?>
 <div class="wrapper">
     <header>
@@ -243,42 +248,6 @@ $user = Yii::$app->user->identity;
         </div>
     </footer>
 
-    <div class="iziModal" id="modal2">
-        <div class="modal_global">
-            <picture>
-                <source class="modal_global__img" srcset="/images_new/content/mersedes2.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes2.jpg" alt="img">
-            </picture>
-            <button class="close" type="button" name="close" data-izimodal-close>
-                <svg class="icon icon-close close__svg">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                </svg>
-            </button>
-        </div>
-    </div>
-    <div class="iziModal" id="modal3">
-        <div class="modal_global">
-            <picture>
-                <source class="modal_global__img" srcset="/images_new/content/mersedes3.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes3.jpg" alt="img">
-            </picture>
-            <button class="close" type="button" name="close" data-izimodal-close>
-                <svg class="icon icon-close close__svg">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                </svg>
-            </button>
-        </div>
-    </div>
-    <div class="iziModal" id="modal4">
-        <div class="modal_global">
-            <picture>
-                <source class="modal_global__img" srcset="/images_new/content/mersedes4.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes4.jpg" alt="img">
-            </picture>
-            <button class="close" type="button" name="close" data-izimodal-close>
-                <svg class="icon icon-close close__svg">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                </svg>
-            </button>
-        </div>
-    </div>
     <div class="mobile_menu" id="menu">
         <div class="modal_global">
             <div class="modal_global__name"><span class="text_22" >Меню личного кабинета</span>

@@ -33,7 +33,7 @@ Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
                 <svg class="icon icon-user header__icon">
                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#user"></use>
                 </svg>Войти</a>
-            <button class="close modal-close" type="button">
+            <button class="close" type="button" name="close" data-izimodal-close>
                 <svg class="icon icon-close close__svg">
                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
                 </svg>

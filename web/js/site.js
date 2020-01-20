@@ -8,7 +8,6 @@ function is_mobile() {
 
 }
 
-
 function clearAndHideRegForms() {
 
     $('#modal_enter_password').html();
@@ -51,6 +50,556 @@ function clearAndHideMobileRegForms() {
     // $('.mobile_menu').hide();
 }
 
+/* Форма входа */
+$(document).on('click', '#submit-login-phone', function() {
+
+    var phone = $('#inputphone-form').find('input[name="InputPhoneForm[mobile_phone]"]').val();
+    sendMobileForm(phone, 0);
+
+    return false;
+});
+$(document).on('click', '#submit-login-phone-mobile', function() {
+
+    var phone = $('#inputphone-form-mobile').find('input[name="InputPhoneForm[mobile_phone2]"]').val();
+    sendMobileForm(phone, 1);
+
+    return false;
+});
+
+function sendMobileForm(phone, is_mobile) {
+
+    $.ajax({
+        url: '/site/ajax-get-login-form?client_ext_id='+ window.client_ext_id +'&is_mobile=' + is_mobile,
+        type: 'post',
+        data: {
+            'InputPhoneForm[mobile_phone]': phone
+        },
+        success: function (response) {
+
+            if(response.success == true) {
+
+                if(response.next_step == "confirm_phone") {
+
+                    // alert('registration');
+                    openConfirmPhoneForm(response.user_phone, is_mobile);
+
+                } else if(response.next_step == "registration") {
+
+                    // alert('registration');
+                    openEmailAndPasswordForm(response.access_code);
+
+                } else if(response.next_step == "insert_password") {
+
+                    // alert('insert_password');
+                    openInsertPassword(response.user_phone, is_mobile);
+
+                }
+
+            } else {
+
+                if(is_mobile() == "1") {
+                    for (var field in response.inputphoneform_errors) {
+                        var field_errors = response.inputphoneform_errors[field];
+                        $('#inputphone-form-mobile').yiiActiveForm('updateAttribute', 'inputphoneform-mobile_phone2', field_errors);
+                    }
+                }else {
+                    for (var field in response.inputphoneform_errors) {
+                        var field_errors = response.inputphoneform_errors[field];
+                        $('#inputphone-form').yiiActiveForm('updateAttribute', 'inputphoneform-' + field, field_errors);
+                    }
+                }
+            }
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+}
+
+/* Регистрация - подтверждение телефона */
+function openConfirmPhoneForm(user_phone) {
+
+    $.ajax({
+        url: '/site/ajax-get-confirm-phone-form?user_phone='+ user_phone +'&is_mobile='+ is_mobile(),
+        type: 'post',
+        data: {},
+        success: function (response) {
+
+            if(response.success == true) {
+
+                if( is_mobile() ) {
+
+                    clearAndHideMobileRegForms();
+                    $('#confirm_phone-mobile').iziModal({
+                        width: '100%',
+                        top: 0,
+                        loop: false,
+                        overlayColor: 'rgba(0,0,0,.9)',
+                        zindex: 9999,
+                        onOpening: function(modal){
+                            modal.startLoading();
+                            $('#confirm_phone-mobile .iziModal-content').html(response.html)
+                            modal.stopLoading();
+                        }
+                    });
+                    $('#confirm_phone-mobile').iziModal('open');
+
+                } else {
+
+                    clearAndHideRegForms();
+                    $('#modal_confirm_phone').html(response.html).fadeIn(100);
+
+                }
+
+                $(document).on('click', '#confirm_phone_link', function(event){
+
+                    $.ajax({
+                        url: '/user/ajax-get-call-auth?number='+ response.number +'&reg_number='+ response.reg_number +'&reg_time_limit='+ response.reg_time_limit,
+                        type: 'post',
+                        data: {},
+                        dataType: 'json',
+                        success: function () {
+
+                            if( is_mobile() ) {
+
+                                $('#confirm_phone-mobile .modal_global__btn').html('<p class = "text_16">Ожидание звонка: <span id = "modal_confirm_timer">'+ response.reg_time_limit +'</span></p>');
+
+                            } else {
+
+                                $('#modal_confirm_actions').html('<p>Ожидание звонка: <span id = "modal_confirm_timer">'+ response.reg_time_limit +'</span></p>');
+
+                            }
+
+                            var limit = response.reg_time_limit;
+                            var interval = setInterval(function(){
+
+                                if( limit ){
+
+                                    limit -= 1;
+                                    $('#modal_confirm_timer').text(limit);
+
+                                } else {
+
+                                    clearInterval(interval);
+
+                                    if( is_mobile() ) {
+
+                                        $('#confirm_phone-mobile .modal_global__enter').html('<div class="modal_global__content" style="padding: 20px;"><p class = "text_16">Указанный вами телефон не подтвержден</p></div>');
+
+                                    } else {
+
+                                        $('#modal_confirm_phone').html('<div class = "for_enter">Указанный вами телефон не подтвержден</div>');
+
+                                    }
+
+                                }
+
+                                if(limit % 10 == 1){
+
+                                    $.ajax({
+                                        url: '/user/ajax-get-auth-result?number='+ response.number +'&user_phone='+ user_phone,
+                                        type: 'post',
+                                        data: {},
+                                        success: function (response) {
+
+                                            console.log(response);
+                                            if( response.success && response.auth ){
+
+                                                clearInterval(interval);
+                                                openEmailAndPasswordForm(response.access_code);
+
+                                            }
+
+                                        }
+                                    });
+
+                                }
+
+                            }, 1000);
+
+                        }
+                    });
+
+                });
+
+            }else {
+                alert('Ошибка');
+            }
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            } else {
+                handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+
+}
+
+/* Регистрация - почта и пароль */
+$(document).on('click', '#send-email-password-button', function() {
+
+    var access_code = $(this).attr('access_code');
+    var email = $('input[name="CurrentReg[email]"]').val();
+    var password = $('input[name="CurrentReg[password]"]').val();
+
+    sendEmailPasswordForm(access_code, email, password, 0);
+
+    return false;
+});
+$(document).on('click', '#send-email-password-button-mobile', function() {
+
+    var access_code = $(this).attr('access_code');
+    var email = $('input[name="CurrentReg[email]"]').val();
+    var password = $('input[name="CurrentReg[password]"]').val();
+
+    sendEmailPasswordForm(access_code, email, password, 1);
+
+    return false;
+});
+
+function sendEmailPasswordForm(access_code, email, password) {
+
+    $.ajax({
+        url: '/site/ajax-get-input-email-password-form?c=' + access_code + '&client_ext_id=' + window.client_ext_id + '&is_mobile='+ is_mobile(),
+        type: 'post',
+        data: {
+            "CurrentReg[email]": email,
+            "CurrentReg[password]": password
+        },
+        success: function (response) {
+
+            if(response.success == true) {
+                if($('#order-client-form').length > 0) {
+                    location.reload();
+                }else {
+                    location.href = '/account/order/history';
+                }
+            }else {
+                for (var field in response.errors) {
+                    var field_errors = response.errors[field];
+                    $('#inputphone-form').yiiActiveForm('updateAttribute', 'registration-step-3-' + field, field_errors);
+                }
+            }
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+}
+
+function openEmailAndPasswordForm(access_code) {
+
+    $.ajax({
+        url: '/site/ajax-get-input-email-password-form?c='+access_code + '&client_ext_id='+ window.client_ext_id +'&is_mobile=' + is_mobile(),
+        type: 'post',
+        data: {},
+        success: function (response) {
+
+            if( is_mobile() ) {
+
+                clearAndHideMobileRegForms();
+                $('#registration-mobile').iziModal({
+                    width: '100%',
+                    top: 0,
+                    loop: false,
+                    overlayColor: 'rgba(0,0,0,.9)',
+                    zindex: 9999,
+                    onOpening: function(modal){
+                        modal.startLoading();
+                        $('#registration-mobile .iziModal-content').html(response.html)
+                        modal.stopLoading();
+                    }
+                });
+                $('#registration-mobile').iziModal('open');
+
+            } else {
+
+                clearAndHideRegForms();
+                $('#modal_registration').html(response.html).fadeIn(100);
+
+            }
+
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+}
+
+/* Авторизация - ввод пароля */
+$(document).on('click', '#input-password-submit', function() {
+
+    var phone = $('input[name="User[phone]"]').val();
+    var password = $('input[name="User[password]"]').val();
+    var rememberMe = ($('input[name="User[rememberMe]"]').is(':checked') ? 1 : 0);
+
+    $.ajax({
+        url: '/site/ajax-get-insert-password-form?phone=' + phone + '&is_mobile=' + is_mobile(),
+        type: 'post',
+        data: {
+            "User[password]": password,
+            "User[rememberMe]": rememberMe
+        },
+        success: function (response) {
+
+            if(response.success == true) {
+
+                if($('#order-client-form').length > 0 || $('.reservation-form').length > 0) {
+                    location.reload();
+                }else {
+                    location.href = '/account/order/history';
+                }
+
+            }else {
+                for (var field in response.errors) {
+                    var field_errors = response.errors[field];
+                    $('#input-password-form').yiiActiveForm('updateAttribute', 'user-' + field, field_errors);
+                }
+            }
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+
+});
+
+function openInsertPassword(user_phone) {
+
+    $.ajax({
+        url: '/site/ajax-get-insert-password-form?phone=' + user_phone + '&is_mobile=' + is_mobile(),
+        type: 'post',
+        data: {},
+        success: function (response) {
+            console.log(response);
+            if(response.success == true) {
+
+                if( is_mobile() ) {
+
+                    $('#enter_password-mobile').iziModal({
+                        width: '100%',
+                        top: 0,
+                        loop: false,
+                        overlayColor: 'rgba(0,0,0,.9)',
+                        zindex: 9999,
+                        onOpening: function(modal){
+                            modal.startLoading();
+                            $('#enter_password-mobile .iziModal-content').html(response.html)
+                            modal.stopLoading();
+                        }
+                    });
+                    $('#enter_password-mobile').iziModal('open');
+
+                } else {
+
+                    clearAndHideRegForms();
+                    $('#modal_enter_password').html(response.html).fadeIn(100);
+                    $('#user-password').focus();
+
+                }
+
+            }else {
+
+                //alert('Ошибка');
+
+            }
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+}
+
+/* Авторизация - восстановление пароля */
+$(document).on('click', '#open-restore-password-form', function() {
+
+    var phone = $('input[name="User[phone]"]').val();
+    getRestorePasswordForm(phone);
+
+    return false;
+});
+$(document).on('click', '#close-restore-password-form', function() {
+
+    if( is_mobile() ){
+
+        $('#restorepassword-mobile').iziModal('close');
+
+    } else {
+
+        $('#modal_restorepassword').hide();
+
+    }
+
+    return false;
+});
+
+$(document).on('submit', '#restore-password-form', function(event) {
+
+    var formData = $('#restore-password-form').serialize();
+
+    $.ajax({
+        url: $('#restore-password-form').attr('action'),
+        type: 'post',
+        data: formData,
+        beforeSend: function () {
+            //allow_send_order = false;
+        },
+        success: function (data) {
+
+            if (data.success == true) {
+                //location.reload();
+                alert('Для восстановления доступа пройдите по ссылке в письме отправленном на вашу почту.');
+                $('#default-modal').find('.close').click();
+
+            } else {
+                for (var field in data.restorepassword_errors) {
+                    var field_errors = data.restorepassword_errors[field];
+                    $('#restore-password-form').yiiActiveForm('updateAttribute', 'restorepasswordform-' + field, field_errors);
+                }
+            }
+        },
+        error: function (data, textStatus, jqXHR) {
+
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                alert('Ошибка');
+            }
+        }
+    });
+
+
+    return false;
+});
+
+function getRestorePasswordForm(phone) {
+
+    $.ajax({
+        url: '/site/ajax-get-restore-password-form?phone=' + phone + '&is_mobile=' + is_mobile(),
+        type: 'post',
+        data: {},
+        success: function (response) {
+
+            if( is_mobile() ) {
+
+                clearAndHideMobileRegForms();
+                $('#restorepassword-mobile').iziModal({
+                    width: '100%',
+                    top: 0,
+                    loop: false,
+                    overlayColor: 'rgba(0,0,0,.9)',
+                    zindex: 9999,
+                    onOpening: function(modal){
+                        modal.startLoading();
+                        $('#restorepassword-mobile .iziModal-content').html(response.html)
+                        modal.stopLoading();
+                    }
+                });
+                $('#restorepassword-mobile').iziModal('open');
+
+            } else {
+
+                clearAndHideRegForms();
+                $('#modal_restorepassword').html(response.html).fadeIn(100);
+
+            }
+
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+}
 
 // скрипт https://github.com/pratik916/jQuery-Hide-Show-Event для отслеживания событий отображения/скрытия элемента
 "use strict";
@@ -124,6 +673,14 @@ $(document).on('click', '.sw-element[attribute-name="ClientExt[yandex_point_from
 
 
 $(document).ready(function() {
+
+    var menu = $('.mobile_menu').iziModal({
+        width: '100%',
+        top: 0,
+        loop: false,
+        overlayColor: 'rgba(0,0,0,.9)',
+        zindex: 9999
+    });
 
     // $.datepicker.setDefaults($.datepicker.regional["ru"]);
     // $('#date').datepicker({
@@ -468,619 +1025,182 @@ $(document).on('submit', '#login-form', function(event) {
 });
 */
 
-
-function openConfirmPhoneForm(user_phone, is_mobile) {
-
-    $.ajax({
-        url: '/site/ajax-get-confirm-phone-form?user_phone='+ user_phone +'&is_mobile='+ is_mobile,
-        type: 'post',
-        data: {},
-        success: function (response) {
-
-            if(response.success == true) {
-
-                // $('#default-modal').find('.modal-body').html(response.html);
-                // $('#default-modal').find('.modal-dialog').width('650px');
-                // $('#default-modal .modal-title').html('Регистрация');
-                // $('#default-modal').modal('show');
-
-            //     //$('.for_enter_wrap').hide();
-                if(is_mobile == 0) {
-
-                    clearAndHideRegForms();
-                    $('#modal_confirm_phone').html(response.html).fadeIn(100);
-
-                }else {
-
-                    clearAndHideMobileRegForms();
-                    $('#confirm_phone-mobile').iziModal({
-                        width: '100%',
-                        top: 0,
-                        loop: false,
-                        overlayColor: 'rgba(0,0,0,.9)',
-                        zindex: 9999,
-                        onOpening: function(modal){
-                            modal.startLoading();
-                            $('#confirm_phone-mobile .iziModal-content').html(response.html)
-                            modal.stopLoading();
-                        }
-                    });
-                    $('#confirm_phone-mobile').iziModal('open');
-
-                }
-
-                $(document).on('click', '#confirm_phone_link', function(event){
-
-                    $.ajax({
-                        url: '/user/ajax-get-call-auth?number='+ response.number +'&reg_number='+ response.reg_number +'&reg_time_limit='+ response.reg_time_limit,
-                        type: 'post',
-                        data: {},
-                        dataType: 'json',
-                        success: function () {
-
-                            if(is_mobile == 0) {
-
-                                $('#modal_confirm_actions').html('<p>Ожидание звонка: <span id = "modal_confirm_timer">'+ response.reg_time_limit +'</span></p>');
-
-                            } else {
-
-                                $('#confirm_phone-mobile .modal_global__btn').html('<p class = "text_16">Ожидание звонка: <span id = "modal_confirm_timer">'+ response.reg_time_limit +'</span></p>');
-
-                            }
-
-                            var limit = response.reg_time_limit;
-                            var interval = setInterval(function(){
-
-                                if( limit ){
-
-                                    limit -= 1;
-                                    $('#modal_confirm_timer').text(limit);
-
-                                } else {
-
-                                    clearInterval(interval);
-
-                                    if(is_mobile == 0) {
-
-                                        $('#modal_confirm_phone').html('<div class = "for_enter">Указанный вами телефон не подтвержден</div>')
-
-                                    } else {
-
-                                        $('#confirm_phone-mobile .modal_global__enter').html('<div class="modal_global__content" style="padding: 20px;"><p class = "text_16">Указанный вами телефон не подтвержден</p></div>');
-
-                                    }
-
-                                }
-
-                                if(limit % 10 == 1){
-
-                                    $.ajax({
-                                        url: '/user/ajax-get-auth-result?number='+ response.number +'&user_phone='+ user_phone,
-                                        type: 'post',
-                                        data: {},
-                                        success: function (response) {
-
-                                            console.log(response);
-                                            if( response.success && response.auth ){
-
-                                                clearInterval(interval);
-                                                openEmailAndPasswordForm(response.access_code, is_mobile);
-
-                                            }
-
-                                        }
-                                    });
-
-                                }
-
-                            }, 1000);
-
-                        }
-                    });
-
-                });
-
-            }else {
-                alert('Ошибка');
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-
-}
-
-
-
-function openInputCodeForm(access_code, is_mobile) {
-
-    $.ajax({
-        url: '/site/ajax-get-input-code-form?c='+access_code + '&client_ext_id='+ window.client_ext_id +'&is_mobile=' + is_mobile,
-        type: 'post',
-        data: {},
-        success: function (response) {
-            if(response.success == true) {
-
-                // $('#default-modal').find('.modal-body').html(response.html);
-                // $('#default-modal').find('.modal-dialog').width('650px');
-                // $('#default-modal .modal-title').html('Регистрация');
-                // $('#default-modal').modal('show');
-
-                //$('.for_enter_wrap').hide();
-                if(is_mobile == 0) {
-                    clearAndHideRegForms();
-                    $('#modal_entersmscode').html(response.html).fadeIn(100);
-                }else {
-                    clearAndHideMobileRegForms();
-                    $('#entersmscode-mobile').html(response.html).fadeIn(100);
-                }
-
-            }else {
-                //alert('Ошибка');
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-}
-
-function openInsertPassword(user_phone, is_mobile) {
-
-    $.ajax({
-        url: '/site/ajax-get-insert-password-form?phone=' + user_phone + '&is_mobile=' + is_mobile,
-        type: 'post',
-        data: {},
-        success: function (response) {
-            console.log(response);
-            if(response.success == true) {
-
-                if(is_mobile == 0) {
-
-                    clearAndHideRegForms();
-                    $('#modal_enter_password').html(response.html).fadeIn(100);
-
-                } else {
-
-                    // clearAndHideMobileRegForms();
-                    $('#enter_password-mobile').iziModal({
-                        width: '100%',
-                        top: 0,
-                        loop: false,
-                        overlayColor: 'rgba(0,0,0,.9)',
-                        zindex: 9999,
-                        onOpening: function(modal){
-                            modal.startLoading();
-                            $('#enter_password-mobile .iziModal-content').html(response.html)
-                            modal.stopLoading();
-                        }
-                    });
-                    $('#enter_password-mobile').iziModal('open');
-                    // $('#enter_password-mobile').iziModal('startLoading');
-                    // $('#enter_password-mobile').iziModal('setContent', response.html);
-                    // $('#enter_password-mobile').iziModal('stopLoading');
-
-                }
-
-            }else {
-
-                //alert('Ошибка');
-
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-}
-
-
-function openEmailAndPasswordForm(access_code, is_mobile) {
-
-    $.ajax({
-        url: '/site/ajax-get-input-email-password-form?c='+access_code + '&client_ext_id='+ window.client_ext_id +'&is_mobile=' + is_mobile,
-        type: 'post',
-        data: {},
-        success: function (response) {
-
-            //$('#default-modal').find('.modal-body').html(response.html);
-            // $('#default-modal').find('.modal-dialog').width('650px');
-            //$('#default-modal .modal-title').html('Заполните электронную почту и установите пароль для входа');
-            // $('#default-modal').modal('show');
-
-            //$('.for_enter_wrap').hide();
-
-            if(is_mobile == 0) {
-                clearAndHideRegForms();
-                $('#modal_registration').html(response.html).fadeIn(100);
-            }else {
-                clearAndHideMobileRegForms();
-                $('#registration-mobile').html(response.html).fadeIn(100);
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-}
-
-
-function sendMobileForm(phone, is_mobile) {
-
-    $.ajax({
-        url: '/site/ajax-get-login-form?client_ext_id='+ window.client_ext_id +'&is_mobile=' + is_mobile,
-        type: 'post',
-        data: {
-            'InputPhoneForm[mobile_phone]': phone
-        },
-        success: function (response) {
-
-            if(response.success == true) {
-
-                if(response.next_step == "confirm_phone") {
-
-                    // alert('registration');
-                    openConfirmPhoneForm(response.user_phone, is_mobile);
-
-                } else if(response.next_step == "registration") {
-
-                    // alert('registration');
-                    openEmailAndPasswordForm(response.access_code, is_mobile);
-
-                } else if(response.next_step == "insert_password") {
-
-                    // alert('insert_password');
-                    openInsertPassword(response.user_phone, is_mobile);
-
-                }
-
-            } else {
-
-                if(is_mobile == "1") {
-                    for (var field in response.inputphoneform_errors) {
-                        var field_errors = response.inputphoneform_errors[field];
-                        $('#inputphone-form-mobile').yiiActiveForm('updateAttribute', 'inputphoneform-mobile_phone2', field_errors);
-                    }
-                }else {
-                    for (var field in response.inputphoneform_errors) {
-                        var field_errors = response.inputphoneform_errors[field];
-                        $('#inputphone-form').yiiActiveForm('updateAttribute', 'inputphoneform-' + field, field_errors);
-                    }
-                }
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-}
-
-$(document).on('click', '#submit-login-phone-mobile', function() {
-
-    var phone = $('#inputphone-form-mobile').find('input[name="InputPhoneForm[mobile_phone2]"]').val();
-    sendMobileForm(phone, 1);
-
-    return false;
-});
-$(document).on('click', '#submit-login-phone', function() {
-
-    var phone = $('#inputphone-form').find('input[name="InputPhoneForm[mobile_phone]"]').val();
-    sendMobileForm(phone, 0);
-
-    return false;
-});
-
-// отправка пароля в форме входа
-$(document).on('click', '#input-password-submit', function() {
-
-    var phone = $('input[name="User[phone]"]').val();
-    var password = $('input[name="User[password]"]').val();
-    var rememberMe = ($('input[name="User[rememberMe]"]').is(':checked') ? 1 : 0);
-
-    $.ajax({
-        url: '/site/ajax-get-insert-password-form?phone=' + phone,
-        type: 'post',
-        data: {
-            "User[password]": password,
-            "User[rememberMe]": rememberMe
-        },
-        success: function (response) {
-
-            if(response.success == true) {
-
-                if($('#order-client-form').length > 0 || $('.reservation-form').length > 0) {
-                    location.reload();
-                }else {
-                    location.href = '/account/order/history';
-                }
-
-            }else {
-                for (var field in response.errors) {
-                    var field_errors = response.errors[field];
-                    $('#input-password-form').yiiActiveForm('updateAttribute', 'user-' + field, field_errors);
-                }
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-
-    $('#enter_password-mobile')
-
-});
-
-function resendCode(access_code, is_mobile) {
-
-    $.ajax({
-        url: '/site/ajax-resend-code?c=' + access_code + '&is_mobile=' + is_mobile,
-        type: 'post',
-        data: {},
-        success: function (response) {
-
-            if(response.success == true) {
-                $('.field-currentreg-check_code').show();
-                alert('Смс с кодом отправлено');
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-}
-
-// + Запрос повторной отправки кода в смс
-$(document).on('click', '#resend-code-button', function() {
-
-    var access_code = $(this).attr('access_code');
-
-    $('#error').text('');
-    $('input[name="CurrentReg[check_code]"]').val('');
-    $('.field-currentreg-check_code').show();
-    $('#check-code-button').show();
-    $('#resend-code-button').hide();
-
-    resendCode(access_code, 0);
-
-    return false;
-});
-$(document).on('click', '#resend-code-button-mobile', function() {
-
-    var access_code = $(this).attr('access_code');
-
-    $('#error').text('');
-    $('input[name="CurrentReg[check_code]"]').val('');
-    $('.field-currentreg-check_code').show();
-    $('#check-code-button').show();
-    $('#resend-code-button-mobile').hide();
-
-    resendCode(access_code, 1);
-
-    return false;
-});
-
-
-function checkCode(access_code, sms_code, is_mobile) {
-
-    $.ajax({
-        url: '/site/ajax-check-code?c=' + access_code + '&sms_code=' + sms_code + '&is_mobile=' + is_mobile,
-        type: 'post',
-        data: {},
-        success: function (response) {
-
-            if(response.success == true) {
-
-                openEmailAndPasswordForm(access_code, is_mobile);  // открываем форму заполнения email и пароля для входа
-
-            }else {
-                //$('#registration-step-2').yiiActiveForm('updateAttribute', 'currentreg-check_code', [response.error]);
-                $('input[name="CurrentReg[check_code]"]').val('');
-                $('.field-currentreg-check_code').hide();
-                $('#check-code-button').hide();
-
-                if(response.available_sms_count == "0") {
-                    // alert('Код не верен. Доступные сегодняшние смс закончились.');
-                    $('#resend-code-button').hide();
-                    $('#error').text('Код не верен. Доступные сегодняшние смс закончились.');
-
-                }else {
-                    // alert('Код не верен. Запросите новое смс с кодом');
-                    $('#resend-code-button').show();
-                    $('#error').text('Код не верен. Запросите новое смс с кодом');
-                }
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-}
-
-// отправка формы с введенном кодом - доработать !
-$(document).on('click', '#check-code-button', function() {
-
-    var access_code = $(this).attr('access_code');
-    var sms_code = $('input[name="CurrentReg[check_code]"]').val();
-
-    checkCode(access_code, sms_code, 0);
-
-    return false;
-});
-
-// отправка формы с введенном кодом - доработать !
-$(document).on('click', '#check-code-button-mobile', function() {
-
-    var access_code = $(this).attr('access_code');
-    var sms_code = $('input[name="CurrentReg[check_code]"]').val();
-
-    checkCode(access_code, sms_code, 1);
-
-    return false;
-});
-
-
-
-function sendEmailPasswordForm(access_code, email, password, is_mobile) {
-
-    $.ajax({
-        url: '/site/ajax-get-input-email-password-form?c=' + access_code + '&client_ext_id=' + window.client_ext_id + '&is_mobile='+ is_mobile,
-        type: 'post',
-        data: {
-            "CurrentReg[email]": email,
-            "CurrentReg[password]": password
-        },
-        success: function (response) {
-
-            if(response.success == true) {
-                if($('#order-client-form').length > 0) {
-                    location.reload();
-                }else {
-                    location.href = '/account/order/history';
-                }
-            }else {
-                for (var field in response.errors) {
-                    var field_errors = response.errors[field];
-                    $('#inputphone-form').yiiActiveForm('updateAttribute', 'registration-step-3-' + field, field_errors);
-                }
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-}
-
-// установка email и пароля пользователя - доработать !
-$(document).on('click', '#send-email-password-button', function() {
-
-    var access_code = $(this).attr('access_code');
-    var email = $('input[name="CurrentReg[email]"]').val();
-    var password = $('input[name="CurrentReg[password]"]').val();
-
-    sendEmailPasswordForm(access_code, email, password, 0);
-
-    return false;
-});
-$(document).on('click', '#send-email-password-button-mobile', function() {
-
-    var access_code = $(this).attr('access_code');
-    var email = $('input[name="CurrentReg[email]"]').val();
-    var password = $('input[name="CurrentReg[password]"]').val();
-
-    sendEmailPasswordForm(access_code, email, password, 1);
-
-    return false;
-});
-
+// function openInputCodeForm(access_code, is_mobile) {
+
+//     $.ajax({
+//         url: '/site/ajax-get-input-code-form?c='+access_code + '&client_ext_id='+ window.client_ext_id +'&is_mobile=' + is_mobile,
+//         type: 'post',
+//         data: {},
+//         success: function (response) {
+//             if(response.success == true) {
+
+//                 if(is_mobile == 0) {
+
+//                     clearAndHideRegForms();
+//                     $('#modal_entersmscode').html(response.html).fadeIn(100);
+
+//                 } else {
+
+//                     clearAndHideMobileRegForms();
+//                     $('#entersmscode-mobile').html(response.html).fadeIn(100);
+
+//                 }
+
+//             } else {
+
+//                 alert('Ошибка');
+
+//             }
+//         },
+//         error: function (data, textStatus, jqXHR) {
+//             if (textStatus == 'error' && data != undefined) {
+//                 if (void 0 !== data.responseJSON) {
+//                     if (data.responseJSON.message.length > 0) {
+//                         alert(data.responseJSON.message);
+//                     }
+//                 } else {
+//                     if (data.responseText.length > 0) {
+//                         alert(data.responseText);
+//                     }
+//                 }
+//             }else {
+//                 handlingAjaxError(data, textStatus, jqXHR);
+//             }
+//         }
+//     });
+// }
+
+// function resendCode(access_code, is_mobile) {
+
+//     $.ajax({
+//         url: '/site/ajax-resend-code?c=' + access_code + '&is_mobile=' + is_mobile,
+//         type: 'post',
+//         data: {},
+//         success: function (response) {
+
+//             if(response.success == true) {
+//                 $('.field-currentreg-check_code').show();
+//                 alert('Смс с кодом отправлено');
+//             }
+//         },
+//         error: function (data, textStatus, jqXHR) {
+//             if (textStatus == 'error' && data != undefined) {
+//                 if (void 0 !== data.responseJSON) {
+//                     if (data.responseJSON.message.length > 0) {
+//                         alert(data.responseJSON.message);
+//                     }
+//                 } else {
+//                     if (data.responseText.length > 0) {
+//                         alert(data.responseText);
+//                     }
+//                 }
+//             }else {
+//                 handlingAjaxError(data, textStatus, jqXHR);
+//             }
+//         }
+//     });
+// }
+
+// // + Запрос повторной отправки кода в смс
+// $(document).on('click', '#resend-code-button', function() {
+
+//     var access_code = $(this).attr('access_code');
+
+//     $('#error').text('');
+//     $('input[name="CurrentReg[check_code]"]').val('');
+//     $('.field-currentreg-check_code').show();
+//     $('#check-code-button').show();
+//     $('#resend-code-button').hide();
+
+//     resendCode(access_code, 0);
+
+//     return false;
+// });
+// $(document).on('click', '#resend-code-button-mobile', function() {
+
+//     var access_code = $(this).attr('access_code');
+
+//     $('#error').text('');
+//     $('input[name="CurrentReg[check_code]"]').val('');
+//     $('.field-currentreg-check_code').show();
+//     $('#check-code-button').show();
+//     $('#resend-code-button-mobile').hide();
+
+//     resendCode(access_code, 1);
+
+//     return false;
+// });
+
+
+// function checkCode(access_code, sms_code, is_mobile) {
+
+//     $.ajax({
+//         url: '/site/ajax-check-code?c=' + access_code + '&sms_code=' + sms_code + '&is_mobile=' + is_mobile,
+//         type: 'post',
+//         data: {},
+//         success: function (response) {
+
+//             if(response.success == true) {
+
+//                 openEmailAndPasswordForm(access_code);  // открываем форму заполнения email и пароля для входа
+
+//             }else {
+//                 //$('#registration-step-2').yiiActiveForm('updateAttribute', 'currentreg-check_code', [response.error]);
+//                 $('input[name="CurrentReg[check_code]"]').val('');
+//                 $('.field-currentreg-check_code').hide();
+//                 $('#check-code-button').hide();
+
+//                 if(response.available_sms_count == "0") {
+//                     // alert('Код не верен. Доступные сегодняшние смс закончились.');
+//                     $('#resend-code-button').hide();
+//                     $('#error').text('Код не верен. Доступные сегодняшние смс закончились.');
+
+//                 }else {
+//                     // alert('Код не верен. Запросите новое смс с кодом');
+//                     $('#resend-code-button').show();
+//                     $('#error').text('Код не верен. Запросите новое смс с кодом');
+//                 }
+//             }
+//         },
+//         error: function (data, textStatus, jqXHR) {
+//             if (textStatus == 'error' && data != undefined) {
+//                 if (void 0 !== data.responseJSON) {
+//                     if (data.responseJSON.message.length > 0) {
+//                         alert(data.responseJSON.message);
+//                     }
+//                 } else {
+//                     if (data.responseText.length > 0) {
+//                         alert(data.responseText);
+//                     }
+//                 }
+//             }else {
+//                 handlingAjaxError(data, textStatus, jqXHR);
+//             }
+//         }
+//     });
+// }
+
+// // отправка формы с введенном кодом - доработать !
+// $(document).on('click', '#check-code-button', function() {
+
+//     var access_code = $(this).attr('access_code');
+//     var sms_code = $('input[name="CurrentReg[check_code]"]').val();
+
+//     checkCode(access_code, sms_code, 0);
+
+//     return false;
+// });
+
+// // отправка формы с введенном кодом - доработать !
+// $(document).on('click', '#check-code-button-mobile', function() {
+
+//     var access_code = $(this).attr('access_code');
+//     var sms_code = $('input[name="CurrentReg[check_code]"]').val();
+
+//     checkCode(access_code, sms_code, 1);
+
+//     return false;
+// });
 
 // Регистрация - открытие формы
 /*
@@ -1525,128 +1645,6 @@ $(document).on('submit', '#registration-form', function(event) {
 });
 */
 
-
-// Восстановление пароля
-function getRestorePasswordForm(phone) {
-
-    $.ajax({
-        url: '/site/ajax-get-restore-password-form?phone=' + phone + '&is_mobile=' + is_mobile(),
-        type: 'post',
-        data: {},
-        success: function (response) {
-
-            if( is_mobile() ) {
-
-                clearAndHideMobileRegForms();
-                $('#restorepassword-mobile').iziModal({
-                    width: '100%',
-                    top: 0,
-                    loop: false,
-                    overlayColor: 'rgba(0,0,0,.9)',
-                    zindex: 9999,
-                    onOpening: function(modal){
-                        modal.startLoading();
-                        $('#restorepassword-mobile .iziModal-content').html(response.html)
-                        modal.stopLoading();
-                    }
-                });
-                $('#restorepassword-mobile').iziModal('open');
-
-            } else {
-
-                clearAndHideRegForms();
-                $('#modal_restorepassword').html(response.html).fadeIn(100);
-
-            }
-
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-}
-$(document).on('click', '#open-restore-password-form', function() {
-
-    var phone = $('input[name="User[phone]"]').val();
-    getRestorePasswordForm(phone);
-
-    return false;
-});
-$(document).on('click', '#close-restore-password-form', function() {
-
-    if( is_mobile() ){
-
-        $('#restorepassword-mobile').iziModal('close');
-
-    } else {
-
-        $('#modal_restorepassword').hide();
-
-    }
-
-    return false;
-});
-
-// Восстановление пароля - отправка данных - доработать !
-$(document).on('submit', '#restore-password-form', function(event) {
-
-    var formData = $('#restore-password-form').serialize();
-
-    $.ajax({
-        url: $('#restore-password-form').attr('action'),
-        type: 'post',
-        data: formData,
-        beforeSend: function () {
-            //allow_send_order = false;
-        },
-        success: function (data) {
-
-            if (data.success == true) {
-                //location.reload();
-                alert('Для восстановления доступа пройдите по ссылке в письме отправленном на вашу почту.');
-                $('#default-modal').find('.close').click();
-
-            } else {
-                for (var field in data.restorepassword_errors) {
-                    var field_errors = data.restorepassword_errors[field];
-                    $('#restore-password-form').yiiActiveForm('updateAttribute', 'restorepasswordform-' + field, field_errors);
-                }
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                alert('Ошибка');
-            }
-        }
-    });
-
-
-    return false;
-});
-
 // Изменение пароля - открытие формы
 $(document).on('click', '#open-change-password-form', function() {
 
@@ -1732,7 +1730,6 @@ $(document).on('submit', '#change-password-form', function(event) {
 
     return false;
 });
-
 
 // расчет и установка значения итоговой цены заказа по данным на форме
 function calcTotalPrice() {

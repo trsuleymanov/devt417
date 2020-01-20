@@ -21,6 +21,12 @@ if(Yii::$app->user->isGuest):
 else:
     $addClass = 'user';
 endif;
+
+if( $current_route == 'site/index' ):
+    $addClass .= ' index-page';
+else:
+
+endif;
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -46,7 +52,7 @@ endif;
         window.client_ext_id = '<?= (isset($client_ext) && $client_ext != null ? $client_ext->id : 0); ?>';
     </script>
 </head>
-<body class="index-page <?=$addClass?>">
+<body class="<?=$addClass?>">
 <?php $this->beginBody() ?>
 <div class="wrapper">
     <?php /*
@@ -65,12 +71,6 @@ endif;
                         <li class="nav__item"><a class="nav__link text_16" href="/#information">правовая информация</a></li>
                         <li class="nav__item"><a class="nav__link text_16" href="/">417417.ru</a></li>
                     </ul>
-                    <a class="header__login text_14" href="#">
-                        <svg class="icon icon-user header__icon">
-                            <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#user"></use>
-                        </svg>
-                        Войти
-                    </a>
                 </div>
                 <div class="header__enter">
                 <?php if(Yii::$app->user->isGuest) { ?>
@@ -230,74 +230,74 @@ endif;
         </div>
     </footer>
     <?php if($current_route == 'site/index') { ?>
-    <!-- <ul class="social_box">
-        <li class="social_box__item"><a class="social_box__link" href="#">
-                <svg class="icon icon-facebook social_box__icon">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#facebook"></use>
-                </svg></a></li>
-        <li class="social_box__item"><a class="social_box__link" href="#">
-                <svg class="icon icon-twitter social_box__icon">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#twitter"></use>
-                </svg></a></li>
-        <li class="social_box__item"><a class="social_box__link" href="#">
-                <svg class="icon icon-instagram social_box__icon">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#instagram"></use>
-                </svg></a></li>
-        <li class="social_box__item"><a class="social_box__link" href="#">
-                <svg class="icon icon-youtube social_box__icon">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#youtube"></use>
-                </svg></a></li>
-    </ul> -->
+        <!-- <ul class="social_box">
+            <li class="social_box__item"><a class="social_box__link" href="#">
+                    <svg class="icon icon-facebook social_box__icon">
+                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#facebook"></use>
+                    </svg></a></li>
+            <li class="social_box__item"><a class="social_box__link" href="#">
+                    <svg class="icon icon-twitter social_box__icon">
+                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#twitter"></use>
+                    </svg></a></li>
+            <li class="social_box__item"><a class="social_box__link" href="#">
+                    <svg class="icon icon-instagram social_box__icon">
+                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#instagram"></use>
+                    </svg></a></li>
+            <li class="social_box__item"><a class="social_box__link" href="#">
+                    <svg class="icon icon-youtube social_box__icon">
+                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#youtube"></use>
+                    </svg></a></li>
+        </ul> -->
+        <div id="modal-video"></div>
+        <div class="iziModal" id="modal1">
+            <div class="modal_global">
+                <picture>
+                    <source class="modal_global__img" srcset="/images_new/content/mersedes1.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes1.jpg" alt="img">
+                </picture>
+                <button class="close" type="button" name="close" data-izimodal-close>
+                    <svg class="icon icon-close close__svg">
+                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="iziModal" id="modal2">
+            <div class="modal_global">
+                <picture>
+                    <source class="modal_global__img" srcset="/images_new/content/mersedes2.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes2.jpg" alt="img">
+                </picture>
+                <button class="close" type="button" name="close" data-izimodal-close>
+                    <svg class="icon icon-close close__svg">
+                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="iziModal" id="modal3">
+            <div class="modal_global">
+                <picture>
+                    <source class="modal_global__img" srcset="/images_new/content/mersedes3.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes3.jpg" alt="img">
+                </picture>
+                <button class="close" type="button" name="close" data-izimodal-close>
+                    <svg class="icon icon-close close__svg">
+                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="iziModal" id="modal4">
+            <div class="modal_global">
+                <picture>
+                    <source class="modal_global__img" srcset="/images_new/content/mersedes4.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes4.jpg" alt="img">
+                </picture>
+                <button class="close" type="button" name="close" data-izimodal-close>
+                    <svg class="icon icon-close close__svg">
+                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
+                    </svg>
+                </button>
+            </div>
+        </div>
     <?php } ?>
-    <div id="modal-video"></div>
-    <div class="iziModal" id="modal1">
-        <div class="modal_global">
-            <picture>
-                <source class="modal_global__img" srcset="/images_new/content/mersedes1.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes1.jpg" alt="img">
-            </picture>
-            <button class="close" type="button" name="close" data-izimodal-close>
-                <svg class="icon icon-close close__svg">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                </svg>
-            </button>
-        </div>
-    </div>
-    <div class="iziModal" id="modal2">
-        <div class="modal_global">
-            <picture>
-                <source class="modal_global__img" srcset="/images_new/content/mersedes2.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes2.jpg" alt="img">
-            </picture>
-            <button class="close" type="button" name="close" data-izimodal-close>
-                <svg class="icon icon-close close__svg">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                </svg>
-            </button>
-        </div>
-    </div>
-    <div class="iziModal" id="modal3">
-        <div class="modal_global">
-            <picture>
-                <source class="modal_global__img" srcset="/images_new/content/mersedes3.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes3.jpg" alt="img">
-            </picture>
-            <button class="close" type="button" name="close" data-izimodal-close>
-                <svg class="icon icon-close close__svg">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                </svg>
-            </button>
-        </div>
-    </div>
-    <div class="iziModal" id="modal4">
-        <div class="modal_global">
-            <picture>
-                <source class="modal_global__img" srcset="/images_new/content/mersedes4.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes4.jpg" alt="img">
-            </picture>
-            <button class="close" type="button" name="close" data-izimodal-close>
-                <svg class="icon icon-close close__svg">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                </svg>
-            </button>
-        </div>
-    </div>
     <div id="menu" class="mobile_menu">
         <div class="modal_global">
             <div class="modal_global__name"><span class="text_22">Главное меню</span>
@@ -435,9 +435,9 @@ endif;
         <div id="enter_password-mobile"></div>
         <div id="confirm_phone-mobile"></div>
         <div id="restorepassword-mobile"></div>
+        <div id="registration-mobile"></div>
     </div>
-    <div id="entersmscode-mobile" class="mobile_menu"></div>
-    <div id="registration-mobile" class="mobile_menu"></div>
+    <!-- <div id="entersmscode-mobile" class="mobile_menu"></div> -->
     <!--include ../modules/menuGlobal-->
 
     <? if( !isset($_COOKIE["use-cookie"]) || $_COOKIE["use-cookie"] != 'true'): ?>

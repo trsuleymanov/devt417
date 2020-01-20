@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
 
 $this->title = 'Заполните электронную почту и установите пароль для входа на сайт';
 $this->params['breadcrumbs'][] = $this->title;
@@ -18,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ]); ?>
 
         <div class="modal_global__name">
-            <button class="prev modal-prev" prev-modal="entersmscode-mobile" reg_code="<?= $reg_code ?>" client_ext_id="<?= ($client_ext != null ? $client_ext->id : 0) ?>">
+            <button class="prev modal-prev" type="button" data-izimodal-open="#enter-mobile">
                 <svg class="icon icon-right-arrow close__svg">
                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#right-arrow"></use>
                 </svg>

@@ -616,7 +616,7 @@ class SiteController extends Controller
     }
 
     // открывается форма ввода пароля при входе на сайте
-    public function actionAjaxGetInsertPasswordForm($phone, $is_mobile = 0) {
+    public function actionAjaxGetInsertPasswordForm($phone, $is_mobile) {
 
         Yii::$app->response->format = 'json';
 
@@ -647,29 +647,33 @@ class SiteController extends Controller
                 ];
             }
 
-        }else {
+        } else {
 
             $model->rememberMe = true;
 
-            if($is_mobile == 0) {
-                return [
-                    'success' => true,
-                    'html' => $this->renderAjax('step2-input-password', [
-                        'model' => $model,
-                    ])
-                ];
-            } else {
+            if($is_mobile == 'true') {
+
                 return [
                     'success' => true,
                     'html' => $this->renderAjax('step2-input-password-mobile', [
                         'model' => $model,
                     ])
                 ];
+
+            } else {
+
+                return [
+                    'success' => true,
+                    'html' => $this->renderAjax('step2-input-password', [
+                        'model' => $model,
+                    ])
+                ];
+
             }
         }
     }
 
-    public function actionAjaxGetConfirmPhoneForm($user_phone, $is_mobile = 0) {
+    public function actionAjaxGetConfirmPhoneForm($user_phone, $is_mobile) {
 
         Yii::$app->response->format = 'json';
 
@@ -679,18 +683,8 @@ class SiteController extends Controller
         $reg_number_pretty = '+7 (967) 466-00-00';
         $reg_time_limit = 60;
 
-        if($is_mobile == 0) {
-            return [
-                'success' => true,
-                'html' => $this->renderAjax('step3-confirm-phone', [
-                    'reg_number' => $reg_number,
-                    'reg_number_pretty' => $reg_number_pretty
-                ]),
-                'number' => $number,
-                'reg_number' => $reg_number,
-                'reg_time_limit' => $reg_time_limit
-            ];
-        } else {
+        if($is_mobile == 'true') {
+
             return [
                 'success' => true,
                 'html' => $this->renderAjax('step3-confirm-phone-mobile', [
@@ -701,6 +695,20 @@ class SiteController extends Controller
                 'reg_number' => $reg_number,
                 'reg_time_limit' => $reg_time_limit
             ];
+
+        } else {
+
+            return [
+                'success' => true,
+                'html' => $this->renderAjax('step3-confirm-phone', [
+                    'reg_number' => $reg_number,
+                    'reg_number_pretty' => $reg_number_pretty
+                ]),
+                'number' => $number,
+                'reg_number' => $reg_number,
+                'reg_time_limit' => $reg_time_limit
+            ];
+
         }
 
     }
@@ -762,7 +770,7 @@ class SiteController extends Controller
 
 
     // возвращается форма для ввода электронной почты и пароля при регистрации
-    public function actionAjaxGetInputEmailPasswordForm($c, $client_ext_id, $is_mobile = 0) {
+    public function actionAjaxGetInputEmailPasswordForm($c, $client_ext_id, $is_mobile) {
 
         Yii::$app->response->format = 'json';
 
@@ -848,15 +856,8 @@ class SiteController extends Controller
                 $model->email = $client_ext->email;
             }
 
-            if($is_mobile == 0) {
-                return [
-                    'success' => true,
-                    'html' => $this->renderAjax('step4-input-email-password', [
-                        'model' => $model,
-                        'client_ext' => $client_ext
-                    ])
-                ];
-            }else {
+            if($is_mobile == 'true') {
+
                 return [
                     'success' => true,
                     'html' => $this->renderAjax('step4-input-email-password-mobile', [
@@ -865,6 +866,17 @@ class SiteController extends Controller
                         'reg_code' => $c
                     ])
                 ];
+
+            } else {
+
+                return [
+                    'success' => true,
+                    'html' => $this->renderAjax('step4-input-email-password', [
+                        'model' => $model,
+                        'client_ext' => $client_ext
+                    ])
+                ];
+
             }
         }
     }
