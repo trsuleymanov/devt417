@@ -1,5 +1,7 @@
 <?php
 
+use app\models\ClientExtChild;
+
 $this->registerJsFile('https://www.google.com/recaptcha/api.js?render=6Lewg8wUAAAAABhM-tLlmiRNYSLdf17N87agjkmR', ['depends'=>'app\assets\NewAppAsset']);
 // $this->registerJsFile('/js/libs.js', ['depends'=>'app\assets\NewAppAsset']);
 // $this->registerJsFile('/js/main_new.js', ['depends'=>'app\assets\NewAppAsset']);
@@ -7,7 +9,7 @@ $this->registerJsFile('https://www.google.com/recaptcha/api.js?render=6Lewg8wUAA
 //$this->registerCssFile('css/create-order.css', ['depends'=>'app\assets\NewAppAsset']);
 
 ?>
-<div class="welcome_wrap" id="new-order" new-date="10.12.2019">
+<div class="welcome_wrap" id="new-order">
     <div class="container">
         <div class="welcome">
             <div class="welcome__form">
@@ -86,6 +88,29 @@ $this->registerJsFile('https://www.google.com/recaptcha/api.js?render=6Lewg8wUAA
                                     <button class="num_package__btn btn_prev text_24" type="button" name="minus">-</button>
                                     <input name="ClientExt[child_count]" class="num_package__counter text_18" type="text" value="0" readonly>
                                     <button class="num_package__btn btn_next text_24" type="button" name="plus">+</button>
+                                </div>
+                            </div>
+
+                            <div id="children_wrap_etalon" style="display: none;">
+                                <div class="children">
+                                    <div class="children__placeholder">
+                                        <button class="children__title text_14" type="button" name="age" value="">
+                                            <span>Выберите возраст ребенка</span>
+                                            <svg class="icon icon-right-arrow children__icon"><use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#right-arrow"></use></svg>
+                                        </button>
+                                        <div class="children__list">
+                                            <?php foreach (ClientExtChild::getAges() as $age_key => $age_value) { ?>
+                                                <button class="children__item text_16" type="button" name="select" value="<?= $age_key ?>"><?= $age_value ?></button>
+                                                <?php if($age_key < count(ClientExtChild::getAges()) - 1) { ?>
+                                                    <br>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                    <div class="children__checkbox">
+                                        <button class="children__btn check_active" type="button" name="self_baby_chair"></button>
+                                        <span class="text_14">Свое детское кресло</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

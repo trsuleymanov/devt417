@@ -15,6 +15,10 @@ var point_focusing_scale = 17; // масштаб фокусировки выбр
 var all_points_show_scale = 12;
 var time_to_close_map = 3000;
 
+
+// var ClientExtChilds = []; // уже инициализированы в main_new.js
+// var places_count = 0;
+
 // возвращается объект карты - placemark (т.е. точка)
 function getPlacemarkById(map_name, point_id) {
 
@@ -657,10 +661,6 @@ function openSelectPointFromModal(response_function) {
     });
 }
 
-// $(document).on('click', '.reservation-drop--1', function() {
-//     alert('sf');
-// });
-
 
 function openSelectPointToModal(response_function) {
 
@@ -890,11 +890,14 @@ function updatePrice1() {
     var access_code = $('#order-client-form').attr('client-ext-code');
     var trip_id = $('input[name="ClientExt[trip_id]"]').val();
     var yandex_point_from_id = $('input[name="ClientExt[yandex_point_from_id]"]').val();
-    var places_count = $('input[name="ClientExt[places_count]"]').val();
+    //var places_count = $('input[name="ClientExt[places_count]"]').val();
+    // существует глобальная переменная places_count
 
     var yandex_point_to_id = $('input[name="ClientExt[yandex_point_to_id]"]').val();
-    var student_count = $('input[name="ClientExt[student_count]"]').val();
-    var child_count = $('input[name="ClientExt[child_count]"]').val();
+    //var student_count = $('input[name="ClientExt[student_count]"]').val();
+    var student_count = 0;
+    //var child_count = $('input[name="ClientExt[child_count]"]').val();
+    var child_count = ClientExtChilds.length;
     var is_not_places = 0;
 
     // actionAjaxGetPrice($c, $trip_id, $yandex_point_from_id, $yandex_point_to_id = 0, $places_count, $student_count = 0, $child_count = 0, $is_not_places = 0)
@@ -942,7 +945,9 @@ function toggleSubmitBut1() {
     var yandex_point_to_id = $('input[name="ClientExt[yandex_point_to_id]"]').val();
     //var bag_count = $('input[name="ClientExt[bag_count]"]').val();
     //var suitcase_count = $('input[name="ClientExt[suitcase_count]"]').val();
-    var places_count = $('input[name="ClientExt[places_count]"]').val();
+    //var places_count = $('input[name="ClientExt[places_count]"]').val();
+    // существует глобальная переменная places_count
+
     //console.log('trip_id='+trip_id+' yandex_point_from_id='+yandex_point_from_id+' yandex_point_to_id='+yandex_point_to_id+' places_count='+places_count);
 
     if(trip_id != '' && yandex_point_from_id != '' && yandex_point_to_id != '' && places_count > 0) {
@@ -955,6 +960,9 @@ function toggleSubmitBut1() {
 }
 
 
+$(document).ready(function() {
+    initPlacesData();
+});
 
 
 // +
@@ -1477,9 +1485,9 @@ $(".reservation-popup__counter-plus").click(function (event) {
 
     var field_type = $(this).attr('field-type');
     if(field_type == 'student') {
-        $('input[name="ClientExt[student_count]"]').val(counter);
+        // $('input[name="ClientExt[student_count]"]').val(counter);
     }else if(field_type == 'child') {
-        $('input[name="ClientExt[child_count]"]').val(counter);
+        // $('input[name="ClientExt[child_count]"]').val(counter);
     }else if(field_type == 'adult') {
     }else if(field_type == 'suitcase') {
         $('input[name="ClientExt[suitcase_count]"]').val(counter);
@@ -1488,10 +1496,19 @@ $(".reservation-popup__counter-plus").click(function (event) {
     }
 
     if(field_type == 'student' || field_type == 'child' || field_type == 'adult') {
-        var calcCounter = parseInt($('input[name="ClientExt[places_count]"]').val());
-        calcCounter++;
-        $(".reservation-calc__counter-num").text(calcCounter);
-        $('input[name="ClientExt[places_count]"]').val(calcCounter);
+
+        places_count++;
+        if(field_type == 'child') {
+
+            renderChildrenHtml();
+            var ClientExtChild = {
+                age: '',
+                self_baby_chair: true
+            };
+            ClientExtChilds[ClientExtChilds.length] = ClientExtChild;
+        }
+
+        $(".reservation-calc__counter-num").text(places_count);
 
         updatePrice1();
     }
@@ -1509,22 +1526,26 @@ $(".reservation-popup__counter-minus").click(function (event) {
 
         var field_type = $(this).attr('field-type');
         if(field_type == 'student') {
-            $('input[name="ClientExt[student_count]"]').val(counter);
+            // $('input[name="ClientExt[student_count]"]').val(counter);
         }else if(field_type == 'child') {
-            $('input[name="ClientExt[child_count]"]').val(counter);
+            // $('input[name="ClientExt[child_count]"]').val(counter);
         }else if(field_type == 'adult') {
+
         }else if(field_type == 'suitcase') {
             $('input[name="ClientExt[suitcase_count]"]').val(counter);
         }else if(field_type == 'bag') {
             $('input[name="ClientExt[bag_count]"]').val(counter);
         }
 
-        if(field_type == 'student' || field_type == 'child' || field_type == 'adult') {
-            var calcCounter = parseInt($('input[name="ClientExt[places_count]"]').val());
-            calcCounter--;
-            $(".reservation-calc__counter-num").text(calcCounter);
-            $('input[name="ClientExt[places_count]"]').val(calcCounter);
 
+        if(field_type == 'student' || field_type == 'child' || field_type == 'adult') {
+
+            places_count--;
+            if(field_type == 'child') {
+                $(this).parents('.children_append').find('.children_wrap').last().remove();
+                ClientExtChilds.pop();
+            }
+            $(".reservation-calc__counter-num").text(places_count);
             updatePrice1();
         }
     }
@@ -1578,11 +1599,14 @@ $(document).on('click', '#submit-create-order-step-1', function() {
         bag_count: $('input[name="ClientExt[bag_count]"]').val(),
         suitcase_count: $('input[name="ClientExt[suitcase_count]"]').val(),
 
-        places_count: parseInt($('input[name="ClientExt[places_count]"]').val()),
-        child_count: $('input[name="ClientExt[child_count]"]').val(),
-        student_count: $('input[name="ClientExt[student_count]"]').val()
+        // places_count: parseInt($('input[name="ClientExt[places_count]"]').val()),
+        // child_count: $('input[name="ClientExt[child_count]"]').val(),
+        // student_count: $('input[name="ClientExt[student_count]"]').val()
+        places_count: places_count,
+        child_count: ClientExtChilds.length
     };
 
+    /*
     var ClientExtChilds = [];
     $('*[name="age"]').each(function() { // self_baby_chair
 
@@ -1606,23 +1630,27 @@ $(document).on('click', '#submit-create-order-step-1', function() {
         }
 
         ClientExtChilds[ClientExtChilds.length] = ClientExtChild;
-    });
+    });*/
+
+    for(var i in ClientExtChilds) {
+        if(ClientExtChilds[i].age == "") {
+            alert('Для ребенка не выбран возраст');
+            return false;
+        }
+    }
 
     var post = {
         ClientExt: ClientExt,
         ClientExtChild: ClientExtChilds
     };
-    // console.log('post:'); console.log(post);
 
     var access_code = $('#order-client-form').attr('client-ext-code');
+
 
     $.ajax({
         url: '/site/create-order?c=' + access_code,
         type: 'post',
-        data: {
-            ClientExt: ClientExt,
-            ClientExtChild: ClientExtChilds
-        },
+        data: post,
         success: function (response) {
 
             // console.log(response);
@@ -1776,15 +1804,7 @@ $(document).on('blur', 'input[name="ClientExt[first_name]"]', function(e) {
         first_name = first_name.replace(/^\s+/g, '');
         if (first_name.length == 0) {
             has_first_name_error = true;
-            $('input[name="ClientExt[first_name]"]').blur();
             alert('Заполните Имя');
-        } else {
-            var arr = first_name.split(" ");
-            if (arr.length < 2) {
-                alert('Заполните Имя');
-                $('input[name="ClientExt[first_name]"]').blur();
-                has_first_name_error = true;
-            }
         }
     }else {
         has_first_name_error = false;
@@ -1903,7 +1923,9 @@ function toggleSubmitBut2() {
     // var first_name = $.trim($('input[name="ClientExt[first_name]"]').val());
     var email = $.trim($('input[name="ClientExt[email]"]').val());
     // var gender = $.trim($('input[name="ClientExt[gen]"]').val());
-    var places_count = $('input[name="ClientExt[places_count]"]').val();
+
+    //var places_count = $('input[name="ClientExt[places_count]"]').val();
+    // существует глобальная переменная places_count
 
     // console.log('phone='+phone+' fio='+fio+' email='+email+' gender='+gender+' places_count='+places_count);
 
@@ -1966,35 +1988,43 @@ $(document).on('click', '#submit-create-order-step-2', function() {
         first_name: first_name,
         email: email,
 
-        places_count: parseInt($('input[name="ClientExt[places_count]"]').val()),
-        child_count: $('input[name="ClientExt[child_count]"]').val(),
-        student_count: $('input[name="ClientExt[student_count]"]').val()
+        // places_count: parseInt($('input[name="ClientExt[places_count]"]').val()),
+        places_count: places_count,
+        child_count: ClientExtChilds.length,
+        // student_count: $('input[name="ClientExt[student_count]"]').val()
     };
 
-    var ClientExtChilds = [];
-    $('*[name="age"]').each(function() { // self_baby_chair
+    // var ClientExtChilds = [];
+    // $('*[name="age"]').each(function() { // self_baby_chair
+    //
+    //     var age = $(this).find('.children_complete').text();
+    //
+    //     if(age == 'Меньше года') {
+    //         age = '<1';
+    //     }else if(age == 'От 1 до 2 лет') {
+    //         age = '1-2';
+    //     }else if(age == 'От 3 до 6 лет') {
+    //         age = '3-6';
+    //     }else if(age == 'От 7 до 10 лет') {
+    //         age = '7-10';
+    //     }
+    //
+    //     var self_baby_chair = $(this).parents('.children_wrap').find('button[name="self_baby_chair"]').hasClass('check_active');
+    //
+    //     var ClientExtChild = {
+    //         age: age,
+    //         self_baby_chair: self_baby_chair
+    //     }
+    //
+    //     ClientExtChilds[ClientExtChilds.length] = ClientExtChild;
+    // });
 
-        var age = $(this).find('.children_complete').text();
-
-        if(age == 'Меньше года') {
-            age = '<1';
-        }else if(age == 'От 1 до 2 лет') {
-            age = '1-2';
-        }else if(age == 'От 3 до 6 лет') {
-            age = '3-6';
-        }else if(age == 'От 7 до 10 лет') {
-            age = '7-10';
+    for(var i in ClientExtChilds) {
+        if(ClientExtChilds[i].age == "") {
+            alert('Для ребенка не выбран возраст');
+            return false;
         }
-
-        var self_baby_chair = $(this).parents('.children_wrap').find('button[name="self_baby_chair"]').hasClass('check_active');
-
-        var ClientExtChild = {
-            age: age,
-            self_baby_chair: self_baby_chair
-        }
-
-        ClientExtChilds[ClientExtChilds.length] = ClientExtChild;
-    });
+    }
 
     var post = {
         ClientExt: ClientExt,
@@ -2006,10 +2036,7 @@ $(document).on('click', '#submit-create-order-step-2', function() {
     $.ajax({
         url: '/site/create-order-step2?c=' + access_code,
         type: 'post',
-        data: {
-            ClientExt: ClientExt,
-            ClientExtChild: ClientExtChilds
-        },
+        data: post,
         success: function (response) {
 
             if (response.success === true) {

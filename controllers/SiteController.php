@@ -90,9 +90,7 @@ class SiteController extends Controller
                     foreach ($post['ClientExtChild'] as $postClientExtChild) {
                         $clientext_child = new ClientExtChild();
                         $clientext_child->clientext_id = $model->id;
-                        if (in_array($postClientExtChild['age'], ['<1', '1-2', '3-6', '7-10'])) {
-                            $clientext_child->age = $postClientExtChild['age'];
-                        }
+                        $clientext_child->age = $postClientExtChild['age'];
                         $clientext_child->self_baby_chair = ($postClientExtChild['self_baby_chair'] == "true" ? true : false);
                         if (!$clientext_child->save(false)) {
                             throw new ForbiddenHttpException('Не удалось сохранить данные о ребенке');
@@ -110,7 +108,6 @@ class SiteController extends Controller
                 }
                 $model->setField('direction_id', $model->direction_id);
 
-                //return $this->redirect('/site/create-order?c='.$model->access_code); // возникают проблемы в js с обработкой
                 return [
                     'success' => true,
                     'redirect_url' => '/site/create-order?c=' . $model->access_code
@@ -158,9 +155,24 @@ class SiteController extends Controller
 
             if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
 
-                //echo "post:<pre>"; print_r(Yii::$app->request->post()); echo "</pre>";
-                //return $this->redirect('/site/check-order?c='.$model->access_code);
-                //return $this->redirect('/site/create-order-step2?c='.$model->access_code);
+                $clientext_childs = ClientExtChild::find()->where(['clientext_id' => $model->id])->all();
+                if(count($clientext_childs) > 0) {
+                    foreach ($clientext_childs as $clientext_child) {
+                        $clientext_child->delete();
+                    }
+                }
+
+                if (isset($post['ClientExtChild'])) {
+                    foreach ($post['ClientExtChild'] as $postClientExtChild) {
+                        $clientext_child = new ClientExtChild();
+                        $clientext_child->clientext_id = $model->id;
+                        $clientext_child->age = $postClientExtChild['age'];
+                        $clientext_child->self_baby_chair = ($postClientExtChild['self_baby_chair'] == "true" ? true : false);
+                        if (!$clientext_child->save(false)) {
+                            throw new ForbiddenHttpException('Не удалось сохранить данные о ребенке');
+                        }
+                    }
+                }
 
                 Yii::$app->response->format = 'json';
                 return [
@@ -210,6 +222,25 @@ class SiteController extends Controller
         if(count($post) > 0) {
 
             if ($model->load($post) && $model->validate() && $model->save()) {
+
+                $clientext_childs = ClientExtChild::find()->where(['clientext_id' => $model->id])->all();
+                if(count($clientext_childs) > 0) {
+                    foreach ($clientext_childs as $clientext_child) {
+                        $clientext_child->delete();
+                    }
+                }
+
+                if (isset($post['ClientExtChild'])) {
+                    foreach ($post['ClientExtChild'] as $postClientExtChild) {
+                        $clientext_child = new ClientExtChild();
+                        $clientext_child->clientext_id = $model->id;
+                        $clientext_child->age = $postClientExtChild['age'];
+                        $clientext_child->self_baby_chair = ($postClientExtChild['self_baby_chair'] == "true" ? true : false);
+                        if (!$clientext_child->save(false)) {
+                            throw new ForbiddenHttpException('Не удалось сохранить данные о ребенке');
+                        }
+                    }
+                }
 
                 Yii::$app->response->format = 'json';
                 return [

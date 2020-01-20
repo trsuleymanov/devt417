@@ -1,5 +1,6 @@
 <?php
 
+use app\models\ClientExtChild;
 use yii\web\JsExpression;
 use app\widgets\SelectWidget;
 use yii\widgets\ActiveForm;
@@ -32,7 +33,6 @@ $form = ActiveForm::begin([
 ]);
 ?>
 <input name="ClientExt[trip_id]" type="hidden" value="<?= $model->trip_id ?>" />
-
 <div class="reservation-top">
     <div class="container">
         <div class="reservation-title-main">
@@ -582,41 +582,64 @@ $form = ActiveForm::begin([
                     <input name="ClientExt[child_count]" type="hidden" value="<?= $model->child_count ?>">
                     <div class="reservation-popup__item-text">Ребенок</div>
                     <div class="reservation-popup__counter reservation-popup__counter-child">
-                        <div class="reservation-popup__counter-minus btn_prev" field-type="child">-</div>
+                        <div class="reservation-popup__counter-minus" field-type="child">-</div>
                         <div class="reservation-popup__counter-num"><?= $model->child_count ?></div>
-                        <div class="reservation-popup__counter-plus btn_next" field-type="child">+</div>
+                        <div class="reservation-popup__counter-plus" field-type="child">+</div>
                     </div>
                 </div>
+
+                <div id="children_wrap_etalon" style="display: none;">
+                    <div class="children">
+                        <div class="children__placeholder">
+                            <button class="children__title text_14" type="button" name="age" value="">
+                                <span>Выберите возраст ребенка</span>
+                                <svg class="icon icon-right-arrow children__icon"><use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#right-arrow"></use></svg>
+                            </button>
+                            <div class="children__list">
+                                <?php foreach (ClientExtChild::getAges() as $age_key => $age_value) { ?>
+                                    <button class="children__item text_16" type="button" name="select" value="<?= $age_key ?>"><?= $age_value ?></button>
+                                    <?php if($age_key < count(ClientExtChild::getAges()) - 1) { ?>
+                                        <br>
+                                    <?php } ?>
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <div class="children__checkbox">
+                            <button class="children__btn check_active" type="button" name="self_baby_chair"></button>
+                            <span class="text_14">Свое детское кресло</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <?php /*
                 <div class="reservation-popup__child-item">
                     <div class="reservation-popup__input-wrap input-arrow reservation-popup__input-child-wrap">
                         <input type="text" class="reservation-item__input reservation-popup__input reservation-popup__input-child" placeholder="Выберите возраст ребенка на момент поездки">
                     </div>
                     <div class="reservation-popup reservation-popup-child">
                         <ul class="reservation-popup__list">
-                            <li class="reservation-popup__item-small">Меньше года</li>
-                            <li class="reservation-popup__item-small">От 1 до 2 лет</li>
-                            <li class="reservation-popup__item-small">От 3 до 6 лет</li>
-                            <li class="reservation-popup__item-small">От 7 до 10 лет</li>
+                            <?php foreach (ClientExtChild::getAges() as $age_key => $age_value) { ?>
+                                <li class="reservation-popup__item-small" value="<?= $age_key ?>"><?= $age_value ?></li>
+                            <?php } ?>
                         </ul>
                     </div>
-                </div>
+                </div> */ ?>
                 <?php if(count($client_ext_childs) > 0) {
                     foreach ($client_ext_childs as $client_ext_child) { ?>
                         <div class="children_wrap">
                             <div class="children">
                                 <div class="children__placeholder">
                                     <button class="children__title text_14" type="button" name="age" value="">
-                                        <!--<span>Выберите возраст ребенка</span>-->
-                                        <span class="children_complete"><?= $client_ext_child->getAgeName() ?></span>
+                                        <span class="children_complete" value="<?= $client_ext_child->age ?>"><?= $client_ext_child->getAgeName() ?></span>
                                         <svg class="icon icon-right-arrow children__icon">
                                             <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#right-arrow"></use>
                                         </svg>
                                     </button>
                                     <div class="children__list">
-                                        <button class="children__item text_16" type="button" name="select">Меньше года</button><br>
-                                        <button class="children__item text_16" type="button" name="select">От 1 до 2 лет</button><br>
-                                        <button class="children__item text_16" type="button" name="select">От 3 до 6 лет</button><br>
-                                        <button class="children__item text_16" type="button" name="select">От 7 до 10 лет</button>
+                                        <?php foreach (ClientExtChild::getAges() as $age_key => $age_value) { ?>
+                                            <button class="children__item text_16" type="button" name="select" value="<?= $age_key ?>"><?= $age_value ?></button><br>
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <div class="children__checkbox">
@@ -628,6 +651,7 @@ $form = ActiveForm::begin([
                     <?php }
                 } ?>
             </li>
+            <?php /*
             <li class="reservation-popup__item-big">
                 <div class="reservation-popup__item-wrap">
                     <input name="ClientExt[student_count]" type="hidden" value="<?= $model->student_count ?>">
@@ -638,7 +662,7 @@ $form = ActiveForm::begin([
                         <div class="reservation-popup__counter-plus" field-type="student">+</div>
                     </div>
                 </div>
-            </li>
+            </li>*/ ?>
     </div>
     <div class="reservation-calc__wrap">
         <div class="reservation-calc__line">

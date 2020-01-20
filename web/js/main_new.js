@@ -1,5 +1,43 @@
 "use strict";
 
+var ClientExtChilds = [];
+var places_count = 0;
+// var child_count = 0;
+
+// заполняем: ClientExtChilds и places_count по содержимому в html
+function initPlacesData() {
+
+  $('#order-client-form .reservation-popup__item-big').each(function() {
+    var text = $(this).find('.reservation-popup__counter-num').text();
+    if(text.length > 0) {
+      places_count += parseInt(text);
+    }
+  });
+
+  $('#order-client-form .children_wrap').each(function() {
+    ClientExtChilds[ClientExtChilds.length] = {
+      age: $(this).find('.children_complete').attr('value'),
+      self_baby_chair: $(this).find('.children__btn').hasClass('check_active')
+    };
+  });
+
+  // console.log('places_count='+places_count+' ClientExtChilds:'); console.log(ClientExtChilds);
+}
+
+function renderChildrenHtml() {
+
+  var html = "<div class='children_wrap'>" + $('#children_wrap_etalon').html() + "</div>";
+  $('.children_append').append(html);
+}
+
+function showError(error) {
+
+  $('#new-order .error').text(error).show();
+  setTimeout(function(){
+    $('#new-order .error').text('').hide();
+  }, 3000);
+}
+
 (function ($) {
   $(document).ready(function () {
 
@@ -12,6 +50,8 @@
         });
       });
     });
+
+    initPlacesData(); // заполняем: ClientExtChilds и places_count по содержимому в html
 
 
     if($('#inputphoneform-mobile_phone').hasClass('use_imask')) {
@@ -159,7 +199,7 @@
   //   alert('ch');
   // });
 
-  var datepicker_is_visible = false;
+  // var datepicker_is_visible = false;
   // $(document).on('click', '#picker-time', function() {
   //   console.log('datepicker_is_visible=' + datepicker_is_visible);
   // });
@@ -186,34 +226,48 @@
   });
 
 
-  var counter = 0;
-  var peoples = $('#peoples input');
+
+
+
+  // var counter = 0;
+  var $peoples_input = $('#peoples input');
+
+  function updatePeoplesText() {
+
+    if (places_count < 2 || places_count > 4) {
+      $peoples_input.val(places_count + ' человек');
+    } else {
+      $peoples_input.val(places_count + ' человека');
+    }
+  }
+
 
   $('.btn_next').on('click', function (e) {
     e.preventDefault();
-    counter++;
+    places_count++;
     $(this).prev().val(parseInt($(this).prev().val()) + 1);
+
+    updatePeoplesText();
   });
 
   $('.btn_prev').on('click', function (e) {
-
     e.preventDefault();
-
     if ($(this).next().val() > 0) {
-      counter--;
+      places_count--;
       $(this).next().val(parseInt($(this).next().val()) - 1);
+      updatePeoplesText();
     } else {
       return false;
     }
   });
 
-  $('.num_package__btn').on('click', function () {
-    if (counter < 2 || counter > 4) {
-      peoples.val(counter + ' человек');
-    } else {
-      peoples.val(counter + ' человека');
-    }
-  });
+  // $('.num_package__btn').on('click', function () { // и так есть дублирующий класс .btn_next
+  //   if (places_count < 2 || places_count > 4) {
+  //     $peoples_input.val(places_count + ' человек');
+  //   } else {
+  //     $peoples_input.val(places_count + ' человека');
+  //   }
+  // });
 
   // пассажиры: взрослый, ребенок, студент +
   /*
@@ -284,22 +338,57 @@
 
 
   $('.children_append .btn_next').on('click', function () {
-    renderChildren();
+    renderChildrenHtml();
+
+    var ClientExtChild = {
+      age: '',
+      self_baby_chair: true
+    };
+    ClientExtChilds[ClientExtChilds.length] = ClientExtChild;
   });
+
   $('.children_append .btn_prev').on('click', function () {
     $(this).parents('.children_append').find('.children_wrap').last().remove();
+
+    ClientExtChilds.pop();
   });
+
   $(document).on('click', '.children__title', function (event) {
     event.preventDefault();
     $(this).toggleClass('active_select');
     $(this).next().stop(true).slideToggle(200);
   });
+
+
   $(document).on('click', '.children__item', function (event) {
+
     event.preventDefault();
-    $(this).parents('.children').find('.children__title span ').text($(this).text()).addClass('children_complete');
+
+    var $elem = $(this).parents('.children').find('.children__title span');
+
+    var age = $(this).attr('value');
+    if(age == '<1') {
+      var $children__btn = $(this).parents('.children').find('.children__btn');
+      if($children__btn.hasClass('check_active') == false) {
+        $children__btn.addClass('check_active');
+      }
+    }
+
+    $elem
+        .text($(this).text())
+        .attr('value', age)
+        .addClass('children_complete');
+
     $(this).parents('.children__list').slideUp(300);
     $(this).parents('.children').find('.active_select').removeClass('active_select');
+
+    var $children_wrap = $(this).parents('.children_wrap');
+    var $children_append = $children_wrap.parents('.children_append');
+    var index = $children_append.find('.children_wrap').index($children_wrap);
+    ClientExtChilds[index].age = age;
   });
+
+  //
   var age;
   $(window).on('resize load orientationchange', function () {
     if ($(window).outerWidth() > 992) {
@@ -315,17 +404,36 @@
     }
   });
 
-  function renderChildren() {
-    $('.children_append').append("<div class=\"children_wrap\">\n      <div class=\"children\">\n        <div class=\"children__placeholder\">\n          <button class=\"children__title text_14\" type=\"button\" name=\"age\" value=\"\"><span>".concat(age, "</span>\n            <svg class=\"icon icon-right-arrow children__icon\">\n              <use xlink:href=\"/images_new/svg-sprites/symbol/sprite.svg#right-arrow\"></use>\n            </svg>\n          </button>\n          <div class=\"children__list\">\n            <button class=\"children__item text_16\" type=\"button\" name=\"select\">\u041C\u0435\u043D\u044C\u0448\u0435 \u0433\u043E\u0434\u0430</button><br>\n            <button class=\"children__item text_16\" type=\"button\" name=\"select\">\u041E\u0442 1 \u0434\u043E 2 \u043B\u0435\u0442</button><br>\n            <button class=\"children__item text_16\" type=\"button\" name=\"select\">\u041E\u0442 3 \u0434\u043E 6 \u043B\u0435\u0442</button><br>\n            <button class=\"children__item text_16\" type=\"button\" name=\"select\">\u041E\u0442 7 \u0434\u043E 10 \u043B\u0435\u0442</button>\n          </div>\n        </div>\n        <div class=\"children__checkbox\">\n          <button class=\"children__btn\" type=\"button\" name=\"self_baby_chair\"></button>\n          <input type=\"checkbox\" name=\"self_baby_chair\" hidden><span class=\"text_14\">\n            \u0421\u0432\u043E\u0435 \u0434\u0435\u0442\u0441\u043A\u043E\u0435\n            \u043A\u0440\u0435\u0441\u043B\u043E</span>\n        </div>\n      </div>\n    </div>"));
-  }
+
 
   $(document).on('click', '.children__btn', function (event) {
+
     event.preventDefault();
-    $(this).toggleClass('check_active');
-    if($(this).hasClass('check_active')) {
-      $('input[name="User[rememberMe]"]').val(1);
+
+
+    var age = $(this).parents('.children').find('.children__title span').attr('value');
+    if(age == '<1') {
+      var error = 'Младенца в люльке можно перевести только в своем кресле';
+
+      if($(this).parents('#new-order').length > 0 && !is_mobile()) {
+        showError(error);
+      }else {
+        alert(error);
+      }
+
     }else {
-      $('input[name="User[rememberMe]"]').val(0);
+
+      var $children_wrap = $(this).parents('.children_wrap');
+      var $children_append = $children_wrap.parents('.children_append');
+      var index = $children_append.find('.children_wrap').index($children_wrap);
+
+      if($(this).hasClass('check_active')) {
+        $(this).removeClass('check_active');
+        ClientExtChilds[index].self_baby_chair = false;
+      }else {
+        $(this).addClass('check_active');
+        ClientExtChilds[index].self_baby_chair = true;
+      }
     }
   });
 
@@ -345,9 +453,8 @@
     if( $('#peoples').hasClass('slide_down') && !$(this).closest('.welcome__label__peoples').length ) {
 
       $('#peoples').removeClass('slide_down');
-      $('.select').slideUp(100);
+      $('#peoples').next('.select').slideUp(100);
       // $(".reservation-popup-calc").removeClass("d-b");
-
     }
 
     if ($('.city_select').hasClass('fix_down') && !$(this).closest('.city_select').length ) {
@@ -527,11 +634,6 @@ $(document).on('click', '.btn_reverse', function() {
 
 
 function clearFormError() {
-  // $('#city_from_id_error').text('');
-  // $('#city_to_id_error').text('');
-  // $('#data_error').text('');
-  // $('#time_error').text('');
-  // $('#places_count_error').text('');
 
   if($('#new-order .error').is(':visible')) {
     $('#new-order .error').text('').hide();
@@ -544,6 +646,9 @@ $(document).on('click', 'body', function() {
 });
 
 
+
+
+
 $(document).on('click', '#submit-order-form', function() {
 
   var ClientExt = {
@@ -551,35 +656,39 @@ $(document).on('click', '#submit-order-form', function() {
     city_to_id: $('input[name="ClientExt[city_to_id]"]').val(),
     data: $('input[name="ClientExt[data]"]').val(),
     time: $('input[name="ClientExt[time]"]').val(),
-    places_count: parseInt($('input[name="ClientExt[places_count]"]').val()),
-    child_count: $('input[name="ClientExt[child_count]"]').val(),
-    // student_count: $('input[name="ClientExt[student_count]"]').val()
+    //places_count: parseInt($('input[name="ClientExt[places_count]"]').val()),
+    //child_count: $('input[name="ClientExt[child_count]"]').val(),
+    places_count: places_count,
+    child_count: ClientExtChilds.length
   };
 
-  var ClientExtChilds = [];
-  $('*[name="age"]').each(function() { // self_baby_chair
+  // var ClientExtChilds = [];
 
-    var age = $(this).find('.children_complete').text();
+  /*
+  $('#peoples').next('.select').find('.children_wrap').each(function() {
+    var age = $(this).find('.children__title span').attr('value');
+    var self_baby_chair = $(this).find('button[name="self_baby_chair"]').hasClass('check_active');
 
-    if(age == 'Меньше года') {
-      age = '<1';
-    }else if(age == 'От 1 до 2 лет') {
-      age = '1-2';
-    }else if(age == 'От 3 до 6 лет') {
-      age = '3-6';
-    }else if(age == 'От 7 до 10 лет') {
-      age = '7-10';
+    if(age == undefined) {
+      showError('Для ребенка не выбран возвраст');
+      return false;
     }
-
-    var self_baby_chair = $(this).parents('.children_wrap').find('button[name="self_baby_chair"]').hasClass('check_active');
 
     var ClientExtChild = {
       age: age,
       self_baby_chair: self_baby_chair
-    }
+    };
 
     ClientExtChilds[ClientExtChilds.length] = ClientExtChild;
   });
+  */
+
+  for(var i in ClientExtChilds) {
+    if( ClientExtChilds[i].age == "") {
+      showError('Для ребенка не выбран возраст');
+      return false;
+    }
+  }
 
   var post = {
     ClientExt: ClientExt,
@@ -588,20 +697,20 @@ $(document).on('click', '#submit-order-form', function() {
 
   if( ClientExt['city_from_id'] == '' || ClientExt['city_to_id'] == '' || ClientExt['data'] == '' || ClientExt['time'] == '' ){
 
-    $('#new-order .error').text('Для заказа поездки заполните все поля').show();
-    setTimeout(function(){
-      $('#new-order .error').text('').hide();
-    }, 3000);
+    // $('#new-order .error').text('Для заказа поездки заполните все поля').show();
+    // setTimeout(function(){
+    //   $('#new-order .error').text('').hide();
+    // }, 3000);
+    showError('Для заказа поездки заполните все поля');
 
   } else {
+
+    //console.log('post:'); console.log(post);
 
     $.ajax({
       url: '/site/index',
       type: 'post',
-      data: {
-        ClientExt: ClientExt,
-        ClientExtChild: ClientExtChilds
-      },
+      data: post,
       success: function (response) {
 
         if (response.success === true) {
@@ -619,10 +728,7 @@ $(document).on('click', '#submit-order-form', function() {
           }
 
           var str_errors = errors.join(' ');
-          $('#new-order .error').text(str_errors).show();
-          setTimeout(function(){
-            $('#new-order .error').text('').hide();
-          }, 3000);
+          showError(str_errors);
 
          }
       },
@@ -638,6 +744,7 @@ $(document).on('click', '#submit-order-form', function() {
             }
           }
         }else {
+          alert('error');
           //handlingAjaxError(data, textStatus, jqXHR);
         }
       }

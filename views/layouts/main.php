@@ -373,7 +373,7 @@ endif;
                     </div>
                 </div>
                 <div class="modal_global__bottom">
-                    <button id="close-peoples-mobile" class="modal_global__submit text_16 test" type="button" disabled>Продолжить</button>
+                    <button id="close-peoples-mobile" data-izimodal-close="" class="modal_global__submit text_16" type="button" disabled>Продолжить</button>
                 </div>
             </div>
         </div> 
