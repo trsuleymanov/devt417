@@ -75,6 +75,7 @@
 .reservation-step-line-row2 span{
   border: 2px solid #ffb91b;
 }
+
 .reservation-step-line-content{
   width: 100%;
 }
@@ -160,9 +161,9 @@
 
 .reservation-step-hatch{
   position: absolute;
-  height: calc(100% - 125px);
   width: 1px;
   top: 40px;
+  bottom: 40px;
   left: 36px;
   background: repeating-linear-gradient(to bottom, transparent 1px, transparent 7px,#bdbdbd 0, #bdbdbd 14px);
 }
@@ -319,7 +320,6 @@
   display: none;
   padding-left: 25px;
   margin-top: 25px;
-
 }
 
 .d-b {
@@ -740,7 +740,8 @@
   border-radius: 10px 10px 0 0;
 }
 
-.reservation-drop {
+.reservation-drop,
+.order-detail {
   display: none;
   position: absolute;
    top: -87px;
@@ -1425,7 +1426,8 @@
   .reservation-calc__button {
     margin-top: 32px;
   }
-  .reservation-drop {
+  .reservation-drop,
+  .order-detail {
     top: 0;
     overflow-y: auto;
     width: 100%;

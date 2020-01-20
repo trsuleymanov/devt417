@@ -68,7 +68,7 @@ if(count($super_yandex_points) > 0) { ?>
 
     <div class="reservation-drop__search">
         <div class="reservation-drop__search-text">Выберите из списка точку посадки, наиболее удобную для вас</div>
-        <div id="search-from-block" city-extended-external-use="0" class="reservation-drop__search-input-wrap">
+        <div id="search-from-block" city-extended-external-use="0" class="reservation-drop__select-select-wrap input-arrow">
             <?php
             // поиск по точкам города
             echo PointSelectWidget::widget([

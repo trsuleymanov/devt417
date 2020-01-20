@@ -340,18 +340,11 @@
     // кнопка Войти
     if( $(this).is('.header__login') ){
 
-      if( $(this).is('guest') ){
+      if( $('body').is('.guest') ){
 
         $(this).toggleClass('click_fix');
-        if( is_mobile() ){
-
-          // все прописано в верстке
-
-        } else {
-
-          $('#modal_enter_phone').toggle();
-
-        }
+        $('#modal_enter_phone').toggle();
+        $('#inputphoneform-mobile_phone').focus();
 
       } else {
 

@@ -12029,35 +12029,34 @@ return jQuery;
 
 		$.fn[PLUGIN_NAME] = function(option, args) {
 
+			// if( !$(this).length && typeof option == "object"){
 
-			if( !$(this).length && typeof option == "object"){
-
-				var newEL = {
-					$el: document.createElement("div"),
-					id: this.selector.split('#'),
-					class: this.selector.split('.')
-				};
+			// 	var newEL = {
+			// 		$el: document.createElement("div"),
+			// 		id: this.selector.split('#'),
+			// 		class: this.selector.split('.')
+			// 	};
 					
-				if(newEL.id.length > 1){
-					try{
-						newEL.$el = document.createElement(id[0]);
-					} catch(exc){ }
+			// 	if(newEL.id.length > 1){
+			// 		try{
+			// 			newEL.$el = document.createElement(id[0]);
+			// 		} catch(exc){ }
 
-					newEL.$el.id = this.selector.split('#')[1].trim();
+			// 		newEL.$el.id = this.selector.split('#')[1].trim();
 
-				} else if(newEL.class.length > 1){
-					try{
-						newEL.$el = document.createElement(newEL.class[0]);
-					} catch(exc){ }
+			// 	} else if(newEL.class.length > 1){
+			// 		try{
+			// 			newEL.$el = document.createElement(newEL.class[0]);
+			// 		} catch(exc){ }
 
-					for (var x=1; x<newEL.class.length; x++) {
-						newEL.$el.classList.add(newEL.class[x].trim());
-					}
-				}
-				document.body.appendChild(newEL.$el);
+			// 		for (var x=1; x<newEL.class.length; x++) {
+			// 			newEL.$el.classList.add(newEL.class[x].trim());
+			// 		}
+			// 	}
+			// 	document.body.appendChild(newEL.$el);
 
-				this.push($(this.selector));
-			}
+			// 	this.push($(this.selector));
+			// }
 			var objs = this;
 
 			for (var i=0; i<objs.length; i++) {

@@ -452,6 +452,7 @@ function openInsertPassword(user_phone) {
 
                     clearAndHideRegForms();
                     $('#modal_enter_password').html(response.html).fadeIn(100);
+                    $('#user-password').focus();
 
                 }
 
@@ -672,6 +673,14 @@ $(document).on('click', '.sw-element[attribute-name="ClientExt[yandex_point_from
 
 
 $(document).ready(function() {
+
+    var menu = $('.mobile_menu').iziModal({
+        width: '100%',
+        top: 0,
+        loop: false,
+        overlayColor: 'rgba(0,0,0,.9)',
+        zindex: 9999
+    });
 
     // $.datepicker.setDefaults($.datepicker.regional["ru"]);
     // $('#date').datepicker({

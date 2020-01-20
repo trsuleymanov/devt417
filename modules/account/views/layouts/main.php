@@ -248,42 +248,6 @@ endif;
         </div>
     </footer>
 
-    <div class="iziModal" id="modal2">
-        <div class="modal_global">
-            <picture>
-                <source class="modal_global__img" srcset="/images_new/content/mersedes2.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes2.jpg" alt="img">
-            </picture>
-            <button class="close" type="button" name="close" data-izimodal-close>
-                <svg class="icon icon-close close__svg">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                </svg>
-            </button>
-        </div>
-    </div>
-    <div class="iziModal" id="modal3">
-        <div class="modal_global">
-            <picture>
-                <source class="modal_global__img" srcset="/images_new/content/mersedes3.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes3.jpg" alt="img">
-            </picture>
-            <button class="close" type="button" name="close" data-izimodal-close>
-                <svg class="icon icon-close close__svg">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                </svg>
-            </button>
-        </div>
-    </div>
-    <div class="iziModal" id="modal4">
-        <div class="modal_global">
-            <picture>
-                <source class="modal_global__img" srcset="/images_new/content/mersedes4.webp" type="image/webp"><img class="modal_global__img" src="/images_new/content/mersedes4.jpg" alt="img">
-            </picture>
-            <button class="close" type="button" name="close" data-izimodal-close>
-                <svg class="icon icon-close close__svg">
-                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                </svg>
-            </button>
-        </div>
-    </div>
     <div class="mobile_menu" id="menu">
         <div class="modal_global">
             <div class="modal_global__name"><span class="text_22" >Меню личного кабинета</span>

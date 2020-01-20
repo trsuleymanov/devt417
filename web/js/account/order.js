@@ -1,4 +1,3 @@
-
 $(document).on('click', '#order-list-page .cancel-order', function() {
 
     var order_id = $(this).attr('order-id');
