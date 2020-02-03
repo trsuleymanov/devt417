@@ -36,7 +36,7 @@ class ClientExtSearch extends ClientExt
                 'price', 'paid_summ',
                 'accrual_cash_back', 'penalty_cash_back', 'used_cash_back',
                 'discount'], 'number'],
-            [['time_air_train_arrival', 'but_checkout', 'is_not_places', //'gen',
+            [['time_air_train_arrival', 'time_air_train_departure', 'but_checkout', 'is_not_places', //'gen',
                 'payment_source'], 'safe'],
         ];
     }
@@ -98,6 +98,7 @@ class ClientExtSearch extends ClientExt
             'yandex_point_to_lat' => $this->yandex_point_to_lat,
             'yandex_point_to_long' => $this->yandex_point_to_long,
             'time_air_train_arrival' => $this->time_air_train_arrival,
+            'time_air_train_departure' => $this->time_air_train_departure,
             'places_count' => $this->places_count,
             'student_count' => $this->student_count,
             'child_count' => $this->child_count,

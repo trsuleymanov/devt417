@@ -109,7 +109,11 @@ $form = ActiveForm::begin([
                                 <?= $model->cityFrom->name ?>
                             </div>
                             <div class="reservation-step-line-undertitle">
-                                <input name="ClientExt[yandex_point_from_id]" type="hidden" value="<?= ($model->yandexPointFrom != null ? $model->yandexPointFrom->id : '') ?>" />
+                                <?php if($model->yandexPointFrom != null) { ?>
+                                    <input name="ClientExt[yandex_point_from_id]" critical-point="<?= $model->yandexPointFrom->critical_point ?>" alias="<?= $model->yandexPointFrom->alias ?>"  type="hidden" value="<?= $model->yandexPointFrom->id ?>" />
+                                <? }else { ?>
+                                    <input name="ClientExt[yandex_point_from_id]"  type="hidden" value="" />
+                                <? } ?>
                                 Выберите наиболее удобное место посадки в автобус
                             </div>
                         </div>
@@ -399,7 +403,13 @@ $form = ActiveForm::begin([
 <!--
 <form action="" class="reservation-form reservation-form--step1">
 -->
-<div class="reservation-form reservation-form--step1">
+
+<?php
+if(($model->yandexPointFrom != null && $model->yandexPointFrom->critical_point == 1) || ($model->yandexPointTo != null && $model->yandexPointTo->critical_point == 1)) { ?>
+    <div id="dop-data" class="reservation-form reservation-form--step1">
+<? }else { ?>
+    <div id="dop-data" style="display: none;" class="reservation-form reservation-form--step1">
+<? } ?>
     <div class="container">
         <div class="reservation-step reservation-step--second">
             <ul class="reservation-tabs">
@@ -408,18 +418,32 @@ $form = ActiveForm::begin([
             </ul>
             <div class="reservation-content">
                 <ul class="reservation-list">
-                    <li class="reservation-item">
+
+                    <? if($model->yandexPointFrom != null && $model->yandexPointFrom->critical_point == 1) { ?>
+                        <li id="time-air-train-arrival-block" class="reservation-item">
+                    <? }else { ?>
+                        <li id="time-air-train-arrival-block" class="reservation-item" style="display: none;">
+                    <? } ?>
                         <div class="reservation-item__checkbox-wrap">
                             <?php if(!empty($model->time_air_train_arrival)) { ?>
                                 <input type="checkbox" id="reservation-item__checkbox-1" class="reservation-item__checkbox" checked >
                             <?php }else { ?>
                                 <input type="checkbox" id="reservation-item__checkbox-1" class="reservation-item__checkbox" >
                             <?php } ?>
-                            <label for="reservation-item__checkbox-1" class="reservation-item__checkbox-label">Прибытие поезда</label>
+                            <label id="time-air-train-arrival-text" for="reservation-item__checkbox-1" class="reservation-item__checkbox-label">
+                                <?  if($model->yandexPointFrom != null) { ?>
+                                    <? if($model->yandexPointFrom->alias == 'airoport') { ?>
+                                        Время прилета самолета
+                                    <? }else { ?>
+                                        Прибытие поезда
+                                    <? } ?>
+                                <? } ?>
+                            </label>
                         </div>
+                        <?php /*
                         <div class="reservation-popup reservation-popup-time">
                             <div class="reservation-popup__text">Время прибытия поезда</div>
-                        </div>
+                        </div>*/ ?>
                         <?php
                         echo $form->field($model, 'time_air_train_arrival', [
                                 'options' => [
@@ -458,14 +482,77 @@ $form = ActiveForm::begin([
                             ->label(false);
                         ?>
                     </li>
+
+
+                    <? if($model->yandexPointTo != null && $model->yandexPointTo->critical_point == 1) { ?>
+                        <li id="time-air-train-departure-block" class="reservation-item">
+                    <? }else { ?>
+                        <li id="time-air-train-departure-block" class="reservation-item" style="display: none;">
+                    <? } ?>
+                        <div class="reservation-item__checkbox-wrap">
+                            <?php if(!empty($model->time_air_train_departure)) { ?>
+                                <input type="checkbox" id="reservation-item__checkbox-2" class="reservation-item__checkbox" checked >
+                            <?php }else { ?>
+                                <input type="checkbox" id="reservation-item__checkbox-2" class="reservation-item__checkbox" >
+                            <?php } ?>
+                            <label id="time-air-train-departure-text" for="reservation-item__checkbox-2" class="reservation-item__checkbox-label">
+                                <?  if($model->yandexPointTo != null) { ?>
+                                    <? if($model->yandexPointTo->alias == 'airoport') { ?>
+                                        Начало регистрации вылета
+                                    <? }else { ?>
+                                        Отправление поезда
+                                    <? } ?>
+                                <? } ?>
+                            </label>
+                        </div>
+                        <?php
+                        echo $form->field($model, 'time_air_train_departure', [
+                                'options' => [
+                                    'class' => 'reservation-item__input reservation-item__input-time',
+                                    'style' => 'padding-top: 8px; padding-bottom: 9px;'
+                                ],
+                                'template' => '{input}'
+                            ]
+                        )
+                            ->widget(\yii\widgets\MaskedInput::className(),
+                                [
+                                    'mask' => 'h:m',
+                                    'definitions' => [
+                                        'h' => [
+                                            'cardinality' => 2,
+                                            'prevalidator' => [
+                                                ['validator' => '^([0-2])$', 'cardinality' => 1],
+                                                ['validator' => '^([0-9]|0[0-9]|1[0-9]|2[0-3])$', 'cardinality' => 2],
+                                            ],
+                                            'validator' => '^([0-9]|0[0-9]|1[0-9]|2[0-3])$'
+                                        ],
+                                        'm' => [
+                                            'cardinality' => 2,
+                                            'prevalidator' => [
+                                                ['validator' => '^(0|[0-5])$', 'cardinality' => 1],
+                                                ['validator' => '^([0-5]?\d)$', 'cardinality' => 2],
+                                            ]
+                                        ]
+                                    ],
+                                    'options' => [
+                                        'class' => 'form-control_ form-masked-input_ ',
+                                        'style' => 'border: none; ',
+                                        'disabled' => empty($model->time_air_train_departure)
+                                    ]
+                                ])
+                            ->label(false);
+                        ?>
+                    </li>
+
+
                     <li class="reservation-item reservation-item-luggage">
                         <div class="reservation-item__checkbox-wrap">
                             <?php if($model->suitcase_count > 0 || $model->bag_count > 0) { ?>
-                                <input type="checkbox" name="" id="reservation-item__checkbox-2" class="reservation-item__checkbox" checked>
+                                <input type="checkbox" name="" id="reservation-item__checkbox-3" class="reservation-item__checkbox" checked>
                             <?php }else { ?>
-                                <input type="checkbox" name="" id="reservation-item__checkbox-2" class="reservation-item__checkbox">
+                                <input type="checkbox" name="" id="reservation-item__checkbox-3" class="reservation-item__checkbox">
                             <?php } ?>
-                            <label for="reservation-item__checkbox-2" class="reservation-item__checkbox-label">Багаж</label>
+                            <label for="reservation-item__checkbox-3" class="reservation-item__checkbox-label">Багаж</label>
                         </div>
                         <div class="reservation-popup reservation-popup-luggage">
                             <ul class="reservation-popup__list">
@@ -497,8 +584,8 @@ $form = ActiveForm::begin([
                     </li>
                     <li class = "reservation-item reservation-item_wishes">
                         <div class="reservation-item__checkbox-wrap">
-                            <input type="checkbox" name="" id="reservation-item__checkbox-3" class="reservation-item__checkbox">
-                            <label for="reservation-item__checkbox-3" class="reservation-item__checkbox-label">Дополнительные пожелания</label>
+                            <input type="checkbox" name="" id="reservation-item__checkbox-4" class="reservation-item__checkbox">
+                            <label for="reservation-item__checkbox-4" class="reservation-item__checkbox-label">Дополнительные пожелания</label>
                         </div>
                         <div class = "reservation-item__textarea">
                             <textarea disabled="true"></textarea>

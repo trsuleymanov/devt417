@@ -92,6 +92,12 @@ function createPlacemark(map_name, params) {
     if(params['point_description'] == undefined) {
         params['point_description'] = '';
     }
+    if(params['critical_point'] == undefined) {
+        params['critical_point'] = 0;
+    }
+    if(params['alias'] == undefined) {
+        params['alias'] = '';
+    }
     if(params['type_map'] != 'from' && params['type_map'] != 'to') {
         alert('Тип карты не определен');
         return false;
@@ -104,7 +110,6 @@ function createPlacemark(map_name, params) {
         alert('отстутсвуют координаты точки');
         return false;
     }
-
 
 
     var placemark = new ymaps.Placemark([params['point_lat'], params['point_long']], {
@@ -125,6 +130,8 @@ function createPlacemark(map_name, params) {
         point_id: params['point_id'],
         point_name: params['point_name'],
         point_description: params['point_description'],
+        critical_point: params['critical_point'],
+        alias: params['alias'],
         is_selected: false,
         is_highlighted: false,
         type_map: params['type_map']
@@ -474,6 +481,8 @@ function loadMap(map_name, map_id, is_from, return_function) {
                         var create_placemark_params = {
                             point_name: yandex_point.name,
                             point_description: yandex_point.description,
+                            critical_point: yandex_point.critical_point,
+                            alias: yandex_point.alias,
                             point_id: yandex_point.id,
                             point_lat: yandex_point.lat,
                             point_long: yandex_point.long,
@@ -554,6 +563,8 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
                         'yandex-point-lon="' + response.yandex_point_long +'" ' +
                         'yandex-point-name="' + response.yandex_point_name + '"' +
                         'yandex-point-description="' + response.yandex_point_description + '"' +
+                        'yandex-point-critical-point="' + response.yandex_point_critical_point + '"' +
+                        'yandex-point-alias="' + response.yandex_point_alias + '"' +
                         '>' + (response.client_ext_data != trip_obj.data ? trip_obj.data + ' ' : '') + trip_obj.departure_time + '</li>';
                 }
 
@@ -706,9 +717,13 @@ function openSelectPointToModal(response_function) {
 }
 
 
-function setPointTo(yandex_point_to_id, yandex_point_to_name) {
+function setPointTo(yandex_point_to_id, yandex_point_to_name, yandex_point_critical_point, yandex_point_alias) {
 
-    $('input[name="ClientExt[yandex_point_to_id]"]').val(yandex_point_to_id);
+    $('input[name="ClientExt[yandex_point_to_id]"]')
+        .val(yandex_point_to_id)
+        .attr('critical-point', yandex_point_critical_point)
+        .attr('alias', yandex_point_alias)
+    ;
     $('.reservation-step-line-dest-address').html(yandex_point_to_name);
 
     // в форме заказа внешний вид пункта назначения становиться установленным, а не пустым
@@ -717,6 +732,8 @@ function setPointTo(yandex_point_to_id, yandex_point_to_name) {
     $(".reservation-step-line-selecte--2").addClass("d-n");
 
     toggleSubmitBut1(); // в форме заказа внешний вид кнопки "Продолжить" обновляем
+
+    toggleDopBlock(); // блок "Доп. данные / Условия бронирования" отображается/скрывается и поля в нем отдельно отображаются/скрываются
 }
 
 
@@ -787,11 +804,16 @@ function showMapFromAndOpenTripTimes(yandex_point_from_id) {
 
 // устанавливается на странице для точки посадки значение, также устанавливаются
 //  напротив городов - время отправки и приблизительное время прибытие, и устанавливается рассчетное время в пути
-function setPointFromWithTripTimes(point_from_id, point_from_name, point_from_description, trip_id, departure_time, departure_date, arrival_time, arrival_date) {
+function setPointFromWithTripTimes(point_from_id, point_from_name, point_from_description, point_critical_point, point_alias, trip_id, departure_time, departure_date, arrival_time, arrival_date) {
+
+    //alert('point_critical_point='+point_critical_point+' point_alias='+point_alias);
+
 
     $('input[name="ClientExt[trip_id]"]').val(trip_id);
-    $('input[name="ClientExt[yandex_point_from_id]"]').val(point_from_id);
-
+    $('input[name="ClientExt[yandex_point_from_id]"]')
+        .val(point_from_id)
+        .attr('critical-point', point_critical_point)
+        .attr('alias', point_alias);
 
     if(point_from_description != '') {
         point_from_name += ', ' + point_from_description;
@@ -823,6 +845,8 @@ function setPointFromWithTripTimes(point_from_id, point_from_name, point_from_de
 
     toggleSubmitBut1(); // в форме заказа внешний вид кнопки "Продолжить" обновляем
     updatePrice1();
+
+    toggleDopBlock(); // блок "Доп. данные / Условия бронирования" отображается/скрывается и поля в нем отдельно отображаются/скрываются
 }
 
 
@@ -960,6 +984,50 @@ function toggleSubmitBut1() {
 }
 
 
+function toggleDopBlock() {
+
+    var critical_point_from = $('input[name="ClientExt[yandex_point_from_id]"]').attr('critical-point');
+    var alias_from = $('input[name="ClientExt[yandex_point_from_id]"]').attr('alias');
+
+    var critical_point_to = $('input[name="ClientExt[yandex_point_to_id]"]').attr('critical-point');
+    var alias_to = $('input[name="ClientExt[yandex_point_to_id]"]').attr('alias');
+
+    if(critical_point_from == 1 || critical_point_to == 1) {
+        $('#dop-data').show();
+
+        if(critical_point_from == 1) {
+            $('#time-air-train-arrival-block').show();
+
+            if(alias_from == 'airport') {
+                $('#time-air-train-arrival-text').text('Время прилета самолета');
+            }else {
+                $('#time-air-train-arrival-text').text('Прибытие поезда');
+            }
+
+
+        }else {
+            $('#time-air-train-arrival-block').hide();
+        }
+
+        if(critical_point_to == 1) {
+
+            $('#time-air-train-departure-block').show();
+
+            if(alias_to == 'airport') {
+                $('#time-air-train-departure-text').text('Начало регистрации вылета');
+            }else {
+                $('#time-air-train-departure-text').text('Отправление поезда');
+            }
+        }else {
+            $('#time-air-train-departure-block').hide();
+        }
+
+    }else {
+        $('#dop-data').hide();
+    }
+}
+
+
 $(document).ready(function() {
     initPlacesData();
 });
@@ -1033,10 +1101,13 @@ $(document).on('click', '#ya-map-to .btn-select-placemark', function() {
     }, 500);
 
     var yandex_point_to_name = placemark.properties.get('point_name');
+    var yandex_point_to_critical_point = placemark.properties.get('critical_point');
+    var yandex_point_to_alias = placemark.properties.get('alias');
+
 
     // через time_to_close_map секунд закрываем карту (закрываем форму)
     setTimeout(function() {
-        setPointTo(yandex_point_to_id, yandex_point_to_name);
+        setPointTo(yandex_point_to_id, yandex_point_to_name, yandex_point_to_critical_point, yandex_point_to_alias);
         closeFormTo();
 
     }, time_to_close_map);
@@ -1057,11 +1128,13 @@ $(document).on('click', '#ya-map-to-static .btn-select-placemark', function() {
     }, 500);
 
     var yandex_point_to_name = placemark.properties.get('point_name');
+    var yandex_point_to_critical_point = placemark.properties.get('critical_point');
+    var yandex_point_to_alias = placemark.properties.get('alias');
 
     // через time_to_close_map секунд закрываем карту (сворачиваем карту)
     setTimeout(function() {
 
-        setPointTo(yandex_point_to_id, yandex_point_to_name)
+        setPointTo(yandex_point_to_id, yandex_point_to_name, yandex_point_to_critical_point, yandex_point_to_alias);
         closeMap('map_to_static');
 
     }, time_to_close_map);
@@ -1101,11 +1174,13 @@ $(document).on('click', '.select-point-to', function() {
     }, 500);
 
     var yandex_point_to_name = placemark.properties.get('point_name');
+    var yandex_point_to_critical_point = placemark.properties.get('critical_point');
+    var yandex_point_to_alias = placemark.properties.get('alias');
 
     // через time_to_close_map секунд закрываем карту
     setTimeout(function() {
 
-        setPointTo(yandex_point_to_id, yandex_point_to_name)
+        setPointTo(yandex_point_to_id, yandex_point_to_name, yandex_point_to_critical_point, yandex_point_to_alias);
         closeFormTo();
 
     }, time_to_close_map);
@@ -1231,6 +1306,8 @@ $(document).on('click', '.reservation-drop__time-item', function() {
     var yandex_point_id = $(this).attr('yandex-point-id');
     var yandex_point_name = $(this).attr('yandex-point-name');
     var yandex_point_description = $(this).attr('yandex-point-description');
+    var yandex_point_critical_point = $(this).attr('yandex-point-critical-point');
+    var yandex_point_alias = $(this).attr('yandex-point-alias');
     var trip_id = $(this).attr('trip-id');
 
     var departure_time = $(this).attr('data-departure-time');
@@ -1239,7 +1316,7 @@ $(document).on('click', '.reservation-drop__time-item', function() {
     var arrival_date = $(this).attr('data-arrival-date');
 
     setPointFromWithTripTimes(
-        yandex_point_id, yandex_point_name, yandex_point_description,
+        yandex_point_id, yandex_point_name, yandex_point_description, yandex_point_critical_point, yandex_point_alias,
         trip_id,
         departure_time, departure_date, arrival_time, arrival_date
     );
@@ -1399,11 +1476,13 @@ $(document).on('click', '#search-to-block li', function() {
     }, 500);
 
     var yandex_point_to_name = placemark.properties.get('point_name');
+    var yandex_point_to_critical_point = placemark.properties.get('critical_point');
+    var yandex_point_to_alias = placemark.properties.get('alias');
 
     // через time_to_close_map секунд закрываем карту
     setTimeout(function() {
 
-        setPointTo(yandex_point_to_id, yandex_point_to_name);
+        setPointTo(yandex_point_to_id, yandex_point_to_name, yandex_point_to_critical_point, yandex_point_to_alias);
         closeFormTo();
 
     }, time_to_close_map);
@@ -1411,19 +1490,33 @@ $(document).on('click', '#search-to-block li', function() {
 
 
 
-
+// Прибытие поезда / Время прилета самолета
 $(document).on('click', '#reservation-item__checkbox-1', function() {
 
     var reservation_item_checked = $(this).is(':checked');
     if(reservation_item_checked == true) {
         $('#clientext-time_air_train_arrival').removeAttr('disabled').focus();
     }else {
+        $('#clientext-time_air_train_arrival').val('');
         $('#clientext-time_air_train_arrival').attr('disabled', true);
     }
 });
 
-
+// Отправление поезда / Начало регистрации вылета
 $(document).on('click', '#reservation-item__checkbox-2', function() {
+
+    var reservation_item_checked = $(this).is(':checked');
+    if(reservation_item_checked == true) {
+        $('#clientext-time_air_train_departure').removeAttr('disabled').focus();
+    }else {
+        $('#clientext-time_air_train_departure').val('');
+        $('#clientext-time_air_train_departure').attr('disabled', true);
+    }
+});
+
+
+// Багаж
+$(document).on('click', '#reservation-item__checkbox-3', function() {
 
     var reservation_item_checked = $(this).is(':checked');
     if(reservation_item_checked == true) {
@@ -1442,7 +1535,8 @@ $(document).on('click', '#reservation-item__checkbox-2', function() {
     }
 });
 
-$(document).on('click', '#reservation-item__checkbox-3', function() {
+// Дополнительные пожелания
+$(document).on('click', '#reservation-item__checkbox-4', function() {
 
     var reservation_item_checked = $(this).is(':checked');
     if(reservation_item_checked == true) {
@@ -1451,6 +1545,7 @@ $(document).on('click', '#reservation-item__checkbox-3', function() {
         $('.reservation-item_wishes textarea').attr('disabled', true);
     }
 });
+
 
 $(document).on('click', '.reservation-item__input-luggage', function(event) {
     $(".reservation-popup-luggage").addClass("d-b");
@@ -1557,7 +1652,7 @@ $(".reservation-popup__counter-minus").click(function (event) {
 
 
 // кол-во мест (студентов, детей и т.п.)  .reservation-calc
-var calcCounter = $(".reservation-calc__counter-num").text();
+//var calcCounter = $(".reservation-calc__counter-num").text();
 
 $(".reservation-calc__counter-plus, .reservation-calc__counter-minus").click(function (event) {
     var counter = $(event.currentTarget).parent().children(".reservation-calc__counter-num").text();
@@ -1567,6 +1662,11 @@ $(".reservation-calc__counter-plus, .reservation-calc__counter-minus").click(fun
     $(".reservation-popup-calc").addClass("d-b");
     addOverlay($(".reservation-popup-calc"));
 });
+
+
+// #time-air-train-arrival-text, #time-air-train-arrival-text
+
+// нужно для выбранных точек знать: critical_point, alias
 
 
 
@@ -1595,42 +1695,16 @@ $(document).on('click', '#submit-create-order-step-1', function() {
         yandex_point_to_id: $('input[name="ClientExt[yandex_point_to_id]"]').val(),
 
         time_air_train_arrival: $('input[name="ClientExt[time_air_train_arrival]"]').val(),
+        time_air_train_departure: $('input[name="ClientExt[time_air_train_departure]"]').val(),
 
         bag_count: $('input[name="ClientExt[bag_count]"]').val(),
         suitcase_count: $('input[name="ClientExt[suitcase_count]"]').val(),
-
         // places_count: parseInt($('input[name="ClientExt[places_count]"]').val()),
         // child_count: $('input[name="ClientExt[child_count]"]').val(),
         // student_count: $('input[name="ClientExt[student_count]"]').val()
         places_count: places_count,
         child_count: ClientExtChilds.length
     };
-
-    /*
-    var ClientExtChilds = [];
-    $('*[name="age"]').each(function() { // self_baby_chair
-
-        var age = $(this).find('.children_complete').text();
-
-        if(age == 'Меньше года') {
-            age = '<1';
-        }else if(age == 'От 1 до 2 лет') {
-            age = '1-2';
-        }else if(age == 'От 3 до 6 лет') {
-            age = '3-6';
-        }else if(age == 'От 7 до 10 лет') {
-            age = '7-10';
-        }
-
-        var self_baby_chair = $(this).parents('.children_wrap').find('button[name="self_baby_chair"]').hasClass('check_active');
-
-        var ClientExtChild = {
-            age: age,
-            self_baby_chair: self_baby_chair
-        }
-
-        ClientExtChilds[ClientExtChilds.length] = ClientExtChild;
-    });*/
 
     for(var i in ClientExtChilds) {
         if(ClientExtChilds[i].age == "") {
@@ -1994,30 +2068,6 @@ $(document).on('click', '#submit-create-order-step-2', function() {
         // student_count: $('input[name="ClientExt[student_count]"]').val()
     };
 
-    // var ClientExtChilds = [];
-    // $('*[name="age"]').each(function() { // self_baby_chair
-    //
-    //     var age = $(this).find('.children_complete').text();
-    //
-    //     if(age == 'Меньше года') {
-    //         age = '<1';
-    //     }else if(age == 'От 1 до 2 лет') {
-    //         age = '1-2';
-    //     }else if(age == 'От 3 до 6 лет') {
-    //         age = '3-6';
-    //     }else if(age == 'От 7 до 10 лет') {
-    //         age = '7-10';
-    //     }
-    //
-    //     var self_baby_chair = $(this).parents('.children_wrap').find('button[name="self_baby_chair"]').hasClass('check_active');
-    //
-    //     var ClientExtChild = {
-    //         age: age,
-    //         self_baby_chair: self_baby_chair
-    //     }
-    //
-    //     ClientExtChilds[ClientExtChilds.length] = ClientExtChild;
-    // });
 
     for(var i in ClientExtChilds) {
         if(ClientExtChilds[i].age == "") {

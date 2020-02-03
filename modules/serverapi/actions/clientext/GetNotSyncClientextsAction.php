@@ -108,6 +108,7 @@ class GetNotSyncClientextsAction extends \yii\rest\Action
                     'yandex_point_to_long' => $client_ext->yandex_point_to_long,
 
                     'time_air_train_arrival' => $client_ext->time_air_train_arrival,
+                    'time_air_train_departure' => $client_ext->time_air_train_departure,
 
                     //'fio' => $client_ext->fio,
                     'fio' => $fio,
