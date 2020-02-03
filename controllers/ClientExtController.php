@@ -138,6 +138,8 @@ class ClientExtController extends Controller
             'yandex_point_description' => !empty($yandex_point_from->description) ? $yandex_point_from->description : '',
             'yandex_point_lat' => $yandex_point_from->lat,
             'yandex_point_long' => $yandex_point_from->long,
+            'yandex_point_critical_point' => $yandex_point_from->critical_point,
+            'yandex_point_alias' => $yandex_point_from->alias,
         ];
     }
 

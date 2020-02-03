@@ -61,7 +61,7 @@ class ClientExt extends \yii\db\ActiveRecord
             //[['fio'], 'string', 'max' => 100],
             ['access_code', 'string', 'min' => 32, 'max' => 32],
             [['time'], 'string', 'min' => 5, 'max' => 7],
-            [['time_air_train_arrival'], 'string', 'max' => 5],
+            [['time_air_train_arrival', 'time_air_train_departure'], 'string', 'max' => 5],
             ['phone', 'checkPhone', 'skipOnEmpty' => false],
             [['friend_code'], 'checkFriendCode'],
             [['places_count'], 'checkPlacesCount'],
@@ -195,6 +195,7 @@ class ClientExt extends \yii\db\ActiveRecord
             'yandex_point_from_id',
             'yandex_point_to_id',
             'time_air_train_arrival',
+            'time_air_train_departure',
             'suitcase_count', 'bag_count',
             'places_count', 'student_count', 'child_count', // +
             // 'price', // +
@@ -261,6 +262,7 @@ class ClientExt extends \yii\db\ActiveRecord
             'yandex_point_to_lat' => 'Широта яндекс-точки куда',
             'yandex_point_to_long' => 'Долгота яндекс-точки куда',
             'time_air_train_arrival' => 'Время прибытия поезда / посадки самолета',
+            'time_air_train_departure' => 'Время отпр. поезда / рег-ция авиарейса',
 
             'places_count' => 'Количество мест всего',
             'student_count' => 'Количество мест студентов',

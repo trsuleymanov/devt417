@@ -274,6 +274,9 @@ class MainServerController extends Controller
                     $client_ext->yandex_point_to_lat = $order['yandex_point_to_lat'];
                     $client_ext->yandex_point_to_long = $order['yandex_point_to_long'];
 
+                    $client_ext->time_air_train_arrival = $order['time_air_train_arrival'];
+                    $client_ext->time_air_train_departure = $order['time_air_train_departure'];
+
                     $client_ext->price = $order['price'];
                     $client_ext->paid_summ = $order['paid_summ'];
                     $client_ext->is_paid = $order['is_paid'];
