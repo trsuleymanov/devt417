@@ -148,8 +148,7 @@ header {
   color: #333;
   transition: all 0.3s ease-in-out;
 }
-.header__login:hover > *,
-.modal_global__login:hover > svg {
+.header__login:hover > * {
   transform: scale(1.1);
 }
 .header__login:hover,
@@ -720,10 +719,9 @@ footer {
   background-color: transparent;
   border: none;
 }
-.modal_global__login:hover > .icon-right-arrow {
-  -webkit-transform: translateY(-50%) rotate(90deg);
-      -ms-transform: translateY(-50%) rotate(90deg);
-          transform: translateY(-50%) rotate(90deg);
+.modal_global__logout:hover,
+.modal_global__link:hover {
+  color: #ffb100;
 }
 .modal_global__login .icon-right-arrow {
   position: absolute;
@@ -732,6 +730,11 @@ footer {
   -webkit-transform: translateY(-50%) rotate(90deg);
       -ms-transform: translateY(-50%) rotate(90deg);
           transform: translateY(-50%) rotate(90deg);
+}
+.modal_global__login.opened > .icon-right-arrow {
+  -webkit-transform: translateY(-50%) rotate(-90deg);
+      -ms-transform: translateY(-50%) rotate(-90deg);
+          transform: translateY(-50%) rotate(-90deg);
 }
 .modal_global__enter {
   display: -webkit-box;
@@ -783,6 +786,9 @@ footer {
 }
 .modal_global__submit {
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 53.333333333333336vw;
   height: 9.866666666666667vw;
   font-weight: 500;
@@ -815,6 +821,21 @@ footer {
   padding: 1.333333333333333vw 0;
   border-bottom: 1px solid #dfdfdf;
 }
+.modal_global__support {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dfdfdf;
+}
+
+.modal_global__support a {
+  margin: 4.266666666666667vw 0;
+}
+
+.modal_global__support a:hover {
+  color: #ffb100;
+}
+
 .close,
 .prev {
   width: 25px;

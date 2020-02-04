@@ -66,104 +66,14 @@ Yii::$app->assetManager->bundles['yii\web\JqueryAsset'] = false;
                 -->
                 <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Введите пароль', 'autocomplete' => "off", 'class' => 'modal_global__input', ])->label(false) ?>
 
-                <?= $form->field($model, 'rememberMe')->checkbox(['template' => '{input}<label for = "user-rememberme" class = "modal_global__checkbox">Запомнить меня</label>']); ?>
+                <?= $form->field($model, 'rememberMe')->checkbox(['template' => '{input}<label for = "user-rememberme" class = "modal_global__checkbox text_20">Запомнить меня</label>']); ?>
 
             </div>
             <div class="modal_global__btn">
-                <button id="input-password-submit" class="modal_global__submit text_16 test" type="button" name="submit">Продолжить</button>
+                <button id="input-password-submit" class="modal_global__submit text_20 test" type="button" name="submit">Продолжить</button>
             </div>
         </div>
     </div>
-
-<?php /*
-    <div class="for_enter fix_height">
-        <!--
-        <input class="for_enter__input" type="tel" name="phone" placeholder="+7 (000) 000 - 00 - 00" autocomplete="off">
-        -->
-        <?= $form->field($model, 'phone')->textInput(['autofocus' => true, 'disabled' => true])->label(false); ?>
-        <!--
-        <input class="for_enter__input" type="email" name="email" placeholder="Введите Email" autocomplete="off">
-        -->
-        <?php
-
-        $length = strlen($model->email) - 3;
-        $stars = '';
-        for($i = 0; $i < $length; $i++) {
-            $stars .= '*';
-        }
-        $model->email = substr($model->email, 0, 3).$stars;
-        echo $form->field($model, 'email')->textInput(['autofocus' => true, 'disabled' => true])->label(false);
-        ?>
-
-        <!--
-        <input class="for_enter__input" type="password" name="phone" placeholder="Введите пароль" autocomplete="off">
-        -->
-        <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Введите пароль', 'autocomplete' => "off"])->label(false) ?>
-
-        <div class="children__checkbox">
-            <!--
-            <input type="checkbox" name="checkbox" hidden="">
-            -->
-            <button class="children__btn" type="button" name="check" data-name="Запомнить меня"></button>
-            <?php
-            echo $form->field($model, 'rememberMe')->hiddenInput()->label(false);
-            ?>
-        </div>
-
-        <a id="open-restore-password-form" href="">Восстановить пароль</a>
-
-        <button id="input-password-submit" class="for_enter__submit text_18" type="button" name="submit">Продолжить</button>
-    </div>
-*/ ?>
-
-    <?php /*
-    <div class="row">
-        <div class="col-sm-6">
-            <?= $form->field($model, 'phone')->textInput(['autofocus' => true, 'disabled' => true])->label('Ваш телефон'); ?>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-6">
-            <?php
-
-            $length = strlen($model->email) - 3;
-            $stars = '';
-            for($i = 0; $i < $length; $i++) {
-                $stars .= '*';
-            }
-            $model->email = substr($model->email, 0, 3).$stars;
-            echo $form->field($model, 'email')->textInput(['autofocus' => true, 'disabled' => true])->label('Ваш email');
-            ?>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-sm-6">
-            <?= $form->field($model, 'password')->passwordInput()->label('Введите пароль') ?>
-        </div>
-
-        <div class="col-sm-3" style="margin-top:28px;">
-            <?= Html::button('Восстановить пароль', ['class' => 'btn btn-info', 'id' => 'open-restore-password-form']) ?>
-        </div>
-    </div>
-
-
-
-    <!--
-    <div class="row">
-        <div class="col-sm-10">
-            <?php
-            // echo $form->field($model, 'rememberMe')->checkbox([])->label('Запомнить');
-             ?>
-        </div>
-    </div>-->
-
-    <br />
-    <div class="form-group">
-        <?= Html::button('Войти', ['class' => 'btn btn-primary', 'id' => 'input-password-submit']) ?>
-    </div>*/ ?>
 
     <?php ActiveForm::end(); ?>
 </div>

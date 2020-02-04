@@ -3,10 +3,10 @@
 use app\models\ClientExtChild;
 
 $this->registerJsFile('https://www.google.com/recaptcha/api.js?render=6Lewg8wUAAAAABhM-tLlmiRNYSLdf17N87agjkmR', ['depends'=>'app\assets\NewAppAsset']);
-// $this->registerJsFile('/js/libs.js', ['depends'=>'app\assets\NewAppAsset']);
-// $this->registerJsFile('/js/main_new.js', ['depends'=>'app\assets\NewAppAsset']);
+$this->registerJsFile('/libs/bscroll.min.js', ['depends'=>'app\assets\NewAppAsset']);
+$this->registerJsFile('/libs/rolltime.js', ['depends'=>'app\assets\NewAppAsset']);
 
-//$this->registerCssFile('css/create-order.css', ['depends'=>'app\assets\NewAppAsset']);
+$this->registerCssFile('/libs/rolltime.css', ['depends'=>'app\assets\NewAppAsset']);
 
 ?>
 <div class="welcome_wrap" id="new-order">
@@ -18,7 +18,7 @@ $this->registerJsFile('https://www.google.com/recaptcha/api.js?render=6Lewg8wUAA
 
                     <label class="welcome__col city_select"><span class="welcome__sub text_16">Откуда</span>
                         <input name="ClientExt[city_from_id]" type="hidden" />
-                        <input id="city-from-text" class="welcome__input text_18" style="font-weight: 400;" type="text" name="out" autocomplete="off">
+                        <input id="city-from-text" class="welcome__input text_18" style="font-weight: 400;" type="text" name="out" autocomplete="off" readonly>
                         <div class="select_city_wrap city_out">
                             <div class="select_city">
                                 <button class="select_city__item text_18" type="button" name="city" data-city="Альметьевск" data-val="2">Альметьевск</button>
@@ -28,13 +28,14 @@ $this->registerJsFile('https://www.google.com/recaptcha/api.js?render=6Lewg8wUAA
                     </label>
 
                     <label class="welcome__col city_select">
+                        <span class="welcome__sub text_16">Куда</span>
+                        <input name="ClientExt[city_to_id]" type="hidden" />
+                        <input id="city-to-text" class="welcome__input text_18" style="font-weight: 400;" type="text" name="out" autocomplete="off" readonly>
                         <button class="welcome__icon btn_reverse" type="button" name="reverse">
                             <svg class="icon icon-exchange welcome__svg no-pointer">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#exchange"></use>
                             </svg>
-                        </button><span class="welcome__sub text_16">Куда</span>
-                        <input name="ClientExt[city_to_id]" type="hidden" />
-                        <input id="city-to-text" class="welcome__input text_18" style="font-weight: 400;" type="text" name="out" autocomplete="off">
+                        </button>
                         <div class="select_city_wrap city_in">
                             <div class="select_city">
                                 <button class="select_city__item text_18" type="button" name="city" data-city="Казань" data-val="1">Казань</button>
@@ -316,28 +317,28 @@ $this->registerJsFile('https://www.google.com/recaptcha/api.js?render=6Lewg8wUAA
                         </li>
                     </ul> -->
                     <ul class="contacts_list">
-                        <li class="contacts_list__item">
+                        <a class="contacts_list__item contacts_list__link" href="https://vk.com/firma417">
                             <svg class = "icon contacts_list__icon"  width = "30" height = "30" viewBox="0 0 512 512"><path style="fill:#ffb100;" d="M440.649,295.361c16.984,16.582,34.909,32.182,50.142,50.436 c6.729,8.112,13.099,16.482,17.973,25.896c6.906,13.382,0.651,28.108-11.348,28.907l-74.59-0.034 c-19.238,1.596-34.585-6.148-47.489-19.302c-10.327-10.519-19.891-21.714-29.821-32.588c-4.071-4.444-8.332-8.626-13.422-11.932 c-10.182-6.609-19.021-4.586-24.84,6.034c-5.926,10.802-7.271,22.762-7.853,34.8c-0.799,17.564-6.108,22.182-23.751,22.986 c-37.705,1.778-73.489-3.926-106.732-22.947c-29.308-16.768-52.034-40.441-71.816-67.24 C58.589,258.194,29.094,200.852,2.586,141.904c-5.967-13.281-1.603-20.41,13.051-20.663c24.333-0.473,48.663-0.439,73.025-0.034 c9.89,0.145,16.437,5.817,20.256,15.16c13.165,32.371,29.274,63.169,49.494,91.716c5.385,7.6,10.876,15.201,18.694,20.55 c8.65,5.923,15.236,3.96,19.305-5.676c2.582-6.11,3.713-12.691,4.295-19.234c1.928-22.513,2.182-44.988-1.199-67.422 c-2.076-14.001-9.962-23.065-23.933-25.714c-7.129-1.351-6.068-4.004-2.616-8.073c5.995-7.018,11.634-11.387,22.875-11.387h84.298 c13.271,2.619,16.218,8.581,18.035,21.934l0.072,93.637c-0.145,5.169,2.582,20.51,11.893,23.931 c7.452,2.436,12.364-3.526,16.836-8.251c20.183-21.421,34.588-46.737,47.457-72.951c5.711-11.527,10.622-23.497,15.381-35.458 c3.526-8.875,9.059-13.242,19.056-13.049l81.132,0.072c2.406,0,4.84,0.035,7.17,0.434c13.671,2.33,17.418,8.211,13.195,21.561 c-6.653,20.945-19.598,38.4-32.255,55.935c-13.53,18.721-28.001,36.802-41.418,55.634 C424.357,271.756,425.336,280.424,440.649,295.361L440.649,295.361z"/></svg>
                             <div class="contacts_list__info">
-                                <a class="contacts_list__link text_18" href = "https://vk.com/firma417">Группа VK</a>
+                                <div class="text_18">Группа VK</div>
                             </div>
-                        </li>
+                        </a>
                         <li class="contacts_list__item">
                             <svg class="icon icon-flag contacts_list__icon">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#flag"></use>
                             </svg>
                             <div class="contacts_list__info">
-                                <p class="contacts_list__text text_18">г.Альметьевск, проспект Тукая, д.37</p>
+                                <p class="contacts_list__text text_18">г.Альметьевск, проспект&nbsp;Тукая, д.37</p>
                             </div>
                         </li>
-                        <li class="contacts_list__item">
+                        <a class="contacts_list__item contacts_list__link" href="tel:+7(8553) 420-417">
                             <svg class="icon icon-phone contacts_list__icon">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#phone"></use>
                             </svg>
                             <div class="contacts_list__info">
-                                <a class="contacts_list__link text_18" href="tel:+7(8553) 420-417">+7(8553) 420-417</a>
+                                <div class=" text_18">+7(8553) 420-417</div>
                             </div>
-                        </li>
+                        </a>
                         <li class="contacts_list__item">
                             <svg class="icon icon-envelope contacts_list__icon">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#envelope"></use>

@@ -35,7 +35,7 @@ endif;
     <meta charset="utf-8">
     <title>Главная страница</title><!--[if IE]>
     <meta http-equiv="X-UA-Compatible" content="IE = edge"><![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, minimum-scale=0.5, maximum-scale=1, initial-scale=1.0" />
     <meta name="keywords" content="">
     <!-- Favicon-->
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
@@ -330,54 +330,61 @@ endif;
                     </svg>
                 </button>
             </div>
+            <div class="modal_global__support" style = "display: none">
+                <a class = "text_20" href="tel:88553420417">
+                    8 (8553) 420-417
+                </a>
+            </div>
             <ul class="nav">
-                <li class="nav__item"><a class="nav__link text_16" href="/#new-order">Новый заказ</a></li>
-                <li class="nav__item"><a class="nav__link text_16" href="/#terms">Условия предоставления услуг</a></li>
-                <li class="nav__item"><a class="nav__link text_16" href="/#information">Правовая информация</a></li>
-                <li class="nav__item"><a class="nav__link text_16" href="/#contact">Контакты</a></li>
-                <li class="nav__item"><a class="nav__link text_16" href="/">t417417.ru</a></li>
+                <li class="nav__item"><a class="nav__link text_18" href="/#new-order">Новый заказ</a></li>
+                <li class="nav__item"><a class="nav__link text_18" href="/#terms">Условия предоставления услуг</a></li>
+                <li class="nav__item"><a class="nav__link text_18" href="/#information">Правовая информация</a></li>
+                <li class="nav__item"><a class="nav__link text_18" href="/#contact">Контакты</a></li>
+                <li class="nav__item"><a class="nav__link text_18" href="/">t417417.ru</a></li>
             </ul>
         </div>
     </div>
-    <div id="peoples-mobile" class="mobile_menu">
-        <div class="modal_global">
-            <div class="modal_global__name">
-                <span class="text_22">Пассажиры</span>
-                <button class="close" type="button" name="close" data-izimodal-close>
-                    <svg class="icon icon-close close__svg">
-                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
-                    </svg>
-                </button>
-            </div>
-            <div class="modal_global__enter">
-                <div class="modal_global__content">
-                    <div class="modal_global__input">
-                        <div class="select__wrap">
-                            <div class="select__title text_18">Взрослый</div>
-                            <div class="num_package">
-                                <button class="num_package__btn btn_prev text_24" type="button" name="minus">-</button>
-                                <input class="num_package__counter text_18" type="text" name="counter" value="0" readonly>
-                                <button class="num_package__btn btn_next text_24" type="button" name="plus">+</button>
+    <? if( $current_route == 'site/index' ): ?>
+        <div id="peoples-mobile" class="mobile_menu">
+            <div class="modal_global">
+                <div class="modal_global__name">
+                    <span class="text_22">Пассажиры</span>
+                    <button class="close" type="button" name="close" data-izimodal-close>
+                        <svg class="icon icon-close close__svg">
+                            <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal_global__enter">
+                    <div class="modal_global__content">
+                        <div class="modal_global__input">
+                            <div class="select__wrap">
+                                <div class="select__title text_18">Взрослый</div>
+                                <div class="num_package">
+                                    <button class="num_package__btn btn_prev text_24" type="button" name="minus">-</button>
+                                    <input class="num_package__counter text_18" type="text" name="counter" value="0" readonly>
+                                    <button class="num_package__btn btn_next text_24" type="button" name="plus">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal_global__input children_append">
+                            <div class="select__wrap">
+                                <div class="select__title"><span class="text_18">Ребенок до 10 лет</span></div>
+                                <div class="num_package last">
+                                    <button class="num_package__btn btn_prev text_24" type="button" name="minus">-</button>
+                                    <input name="ClientExt[child_count]" class="num_package__counter text_18" type="text" value="0" readonly>
+                                    <button class="num_package__btn btn_next text_24" type="button" name="plus">+</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal_global__input children_append">
-                        <div class="select__wrap">
-                            <div class="select__title"><span class="text_18">Ребенок до 10 лет</span></div>
-                            <div class="num_package last">
-                                <button class="num_package__btn btn_prev text_24" type="button" name="minus">-</button>
-                                <input name="ClientExt[child_count]" class="num_package__counter text_18" type="text" value="0" readonly>
-                                <button class="num_package__btn btn_next text_24" type="button" name="plus">+</button>
-                            </div>
-                        </div>
+                    <div class="modal_global__bottom">
+                        <button id="close-peoples-mobile" data-izimodal-close="" class="modal_global__submit text_16" type="button">Продолжить</button>
                     </div>
                 </div>
-                <div class="modal_global__bottom">
-                    <button id="close-peoples-mobile" data-izimodal-close="" class="modal_global__submit text_16" type="button" disabled>Продолжить</button>
-                </div>
-            </div>
-        </div> 
-    </div>
+            </div> 
+        </div>
+    <? endif; ?>
     <div id="enter-mobile" class="mobile_menu">
         <?php
         $form = ActiveForm::begin([
@@ -405,7 +412,7 @@ endif;
             </div>
             <div class="modal_global__enter">
                 <div class="modal_global__content">
-                    <p class="modal_global__title text_16">Для входа в личный кабинет<br>введите номер телефона</p>
+                    <p class="modal_global__title text_20">Для входа в личный кабинет<br>введите номер телефона</p>
                     <!--
                     <input class="modal_global__input" type="tel" name="phone" placeholder="+7 (000) 000 - 00 - 00" autocomplete="off">
                     -->
@@ -423,7 +430,7 @@ endif;
                     ?>
                 </div>
                 <div class="modal_global__btn">
-                    <button id="submit-login-phone-mobile" class="modal_global__submit text_16 test" type="button" disabled>Продолжить</button>
+                    <button id="submit-login-phone-mobile" class="modal_global__submit text_20 test" type="button" disabled>Продолжить</button>
                 </div>
             </div>
         </div>

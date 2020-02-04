@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             </div>
             <div class="modal_global__btn">
-                <button id="send-email-password-button-mobile" access_code="<?= $model->access_code ?>" class="modal_global__submit text_16 test" type="button" style="width: 100%;" name="submit">Зарегистрироваться</button>
+                <button id="send-email-password-button-mobile" access_code="<?= $model->access_code ?>" class="modal_global__submit text_20 test" type="button" style="width: 100%;" name="submit">Зарегистрироваться</button>
             </div>
         </div>
 

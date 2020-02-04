@@ -479,7 +479,7 @@ class SiteController extends Controller
 
 
     // возвращается форма ввода телефона при входе или регистрации
-    public function actionAjaxGetLoginForm($c = 0, $is_mobile = 0) {
+    public function actionAjaxGetLoginForm($c = 0) {
 
         Yii::$app->response->format = 'json';
 
@@ -537,74 +537,7 @@ class SiteController extends Controller
 
             endif;
 
-            // return [
-            //     'success' => false,
-            //     'inputphoneform_errors' => $current_reg
-            // ];
-
-            // // если ли такой пользователь и верифицирован ли email, если такой есть открывать форму2 "Введите пароль".
-            // // если такого пользователя нет или у пользователя не верифицирован email, то открывается форма3 "Отправка смс с кодом для регистрации"
-            // $user = User::find()->where(['phone' => $model->mobile_phone])->one();
-            // if($user) {
-
-            //     // принудительно отменяем подтверждение телефона - для тестов
-            //     // $user->setField('phone_is_confirmed', false);
-
-            //     // проверяем подтвержден ли телефон
-            //     // if( !$user->phone_is_confirmed ):
-
-            //         // открывать форму2 "Введите пароль".
-            //         $next_step = 'insert_password';
-
-            //     // else:
-
-            //         // открываем форму call-авторизации
-            //         // $next_step = 'confirm_phone';
-
-            //     // endif;
-
-            //     return [
-            //         'success' => true,
-            //         'next_step' => $next_step,
-            //         'user_phone' => $model->mobile_phone
-            //     ];
-
-            // } else {
-
-            //     // открывается форма3 "Отправка смс с кодом для регистрации"
-            //     $next_step = 'registration';
-            //     $current_reg = CurrentReg::find()->where(['mobile_phone' => $model->mobile_phone])->one();
-            //     if($current_reg == null) {
-            //         $current_reg = new CurrentReg();
-            //         $current_reg->mobile_phone = $model->mobile_phone;
-            //         $current_reg->access_code = $current_reg->generateAccessCode();
-
-            //         if(!$current_reg->save(false)) {
-            //             throw new ForbiddenHttpException('Не удалось сохранить регистрацию');
-            //         }
-            //     }else {
-            //         if(empty($current_reg->access_code)) {
-            //             $current_reg->access_code = $current_reg->generateAccessCode();
-            //             $current_reg->setField('access_code', $current_reg->access_code);
-            //         }
-            //     }
-
-            //     //$current_reg->generateAndSendSmsCode();
-
-            //     // if(Call::makeCallForwarding($current_reg->mobile_phone)) { // теперь будет подверждение юзера по звонку на номер
-            //     //     $current_reg->input_mobile_at = time();
-            //     //     $current_reg->setField('input_mobile_at', $current_reg->input_mobile_at);
-            //     // }
-
-            //     return [
-            //         'success' => true,
-            //         'next_step' => $next_step,
-            //         'access_code' => $current_reg->access_code,
-            //     ];
-            // }
-
-
-        }else {
+        } else {
 
             return [
                 'success' => false,

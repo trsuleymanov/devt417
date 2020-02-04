@@ -54,22 +54,22 @@ function clearAndHideMobileRegForms() {
 $(document).on('click', '#submit-login-phone', function() {
 
     var phone = $('#inputphone-form').find('input[name="InputPhoneForm[mobile_phone]"]').val();
-    sendMobileForm(phone, 0);
+    sendMobileForm(phone);
 
     return false;
 });
 $(document).on('click', '#submit-login-phone-mobile', function() {
 
     var phone = $('#inputphone-form-mobile').find('input[name="InputPhoneForm[mobile_phone2]"]').val();
-    sendMobileForm(phone, 1);
+    sendMobileForm(phone);
 
     return false;
 });
 
-function sendMobileForm(phone, is_mobile) {
+function sendMobileForm(phone) {
 
     $.ajax({
-        url: '/site/ajax-get-login-form?client_ext_id='+ window.client_ext_id +'&is_mobile=' + is_mobile,
+        url: '/site/ajax-get-login-form?client_ext_id='+ window.client_ext_id,
         type: 'post',
         data: {
             'InputPhoneForm[mobile_phone]': phone
@@ -97,17 +97,22 @@ function sendMobileForm(phone, is_mobile) {
 
             } else {
 
-                if(is_mobile() == "1") {
+                if( is_mobile() ) {
+
                     for (var field in response.inputphoneform_errors) {
                         var field_errors = response.inputphoneform_errors[field];
                         $('#inputphone-form-mobile').yiiActiveForm('updateAttribute', 'inputphoneform-mobile_phone2', field_errors);
                     }
-                }else {
+
+                } else {
+
                     for (var field in response.inputphoneform_errors) {
                         var field_errors = response.inputphoneform_errors[field];
                         $('#inputphone-form').yiiActiveForm('updateAttribute', 'inputphoneform-' + field, field_errors);
                     }
+
                 }
+
             }
         },
         error: function (data, textStatus, jqXHR) {
@@ -294,7 +299,7 @@ function sendEmailPasswordForm(access_code, email, password) {
                 if($('#order-client-form').length > 0) {
                     location.reload();
                 }else {
-                    location.href = '/account/order/history';
+                    location.href = '/account/personal';
                 }
             }else {
                 for (var field in response.errors) {
@@ -393,7 +398,7 @@ $(document).on('click', '#input-password-submit', function() {
                 if($('#order-client-form').length > 0 || $('.reservation-form').length > 0) {
                     location.reload();
                 }else {
-                    location.href = '/account/order/history';
+                    location.href = '/account/personal';
                 }
 
             }else {
