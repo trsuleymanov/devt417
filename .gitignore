@@ -31,3 +31,5 @@ tests/_support/_generated
 
 /config/db.php
 /config/params.php
+
+/public_html
