@@ -1,5 +1,3 @@
-
-
 //Address steps
 var isCompletedAddress = false;
 var isCompletedDest = false;
@@ -873,6 +871,7 @@ function addressToStep1(parent) {
     $(".reservation-drop__search").removeClass("d-n");
     $(".reservation-drop__selected").removeClass("d-b");
     $(".reservation-drop__time").removeClass("d-b");
+    $(".reservation-drop__map").addClass("d-b");
 }
 
 // клик на выпадающем в поиске одном из элементов
@@ -958,12 +957,6 @@ function toggleSubmitBut1() {
         }
     }
 }
-
-
-$(document).ready(function() {
-    initPlacesData();
-});
-
 
 // +
 // выбор точки посадки на всплывающей карте
@@ -1165,7 +1158,19 @@ $(document).on('click', '.reservation-drop--2 .reservation-drop__topline-cancel'
 
 
 $(document).ready(function() {
+
     $(".reservation-drop__map").addClass("d-b");
+
+    if( is_mobile() ){
+
+        $('#clientext-time_air_train_arrival')
+            .attr('readonly', 'true')
+            .Rolltime({
+              'step': 15
+            }); 
+
+    }
+
 });
 
 // +
@@ -1244,9 +1249,7 @@ $(document).on('click', '.reservation-drop__time-item', function() {
         departure_time, departure_date, arrival_time, arrival_date
     );
 
-
     setTimeout(function(){
-
         closeFormFrom();
         closeMap('map_from_static'); // может быть открыта
         clearInterval(timeItemAnimate);
@@ -1416,7 +1419,12 @@ $(document).on('click', '#reservation-item__checkbox-1', function() {
 
     var reservation_item_checked = $(this).is(':checked');
     if(reservation_item_checked == true) {
-        $('#clientext-time_air_train_arrival').removeAttr('disabled').focus();
+        $('#clientext-time_air_train_arrival').removeAttr('disabled');
+        if( is_mobile() ){
+            $('#clientext-time_air_train_arrival').trigger('click');
+        } else {
+            $('#clientext-time_air_train_arrival').focus();
+        }
     }else {
         $('#clientext-time_air_train_arrival').attr('disabled', true);
     }
@@ -1427,10 +1435,17 @@ $(document).on('click', '#reservation-item__checkbox-2', function() {
 
     var reservation_item_checked = $(this).is(':checked');
     if(reservation_item_checked == true) {
-        $('.reservation-item__input-luggage').removeAttr('disabled');
-    }else {
-        $('.reservation-item__input-luggage').attr('disabled', true);
 
+        $('.reservation-item__input-luggage').removeAttr('disabled');
+        if( is_mobile() ){
+            
+            $('#luggage-mobile').iziModal('open');
+
+        }
+
+    } else {
+
+        $('.reservation-item__input-luggage').attr('disabled', true);
         $('input[name="ClientExt[suitcase_count]"]').val(0);
         $('input[name="ClientExt[bag_count]"]').val(0);
 
@@ -1439,6 +1454,23 @@ $(document).on('click', '#reservation-item__checkbox-2', function() {
 
         $(".reservation-popup-luggage .reservation-popup__item").first().find(".reservation-popup__counter-num").text("0");
         $(".reservation-popup-luggage .reservation-popup__item").last().find(".reservation-popup__counter-num").text("0");
+
+        if( is_mobile() ) {
+
+            var parent = $('#luggage-mobile .modal_global__content .modal_global__input');
+
+        } else {
+
+            var parent = $('.reservation-popup-luggage .reservation-popup__item');
+
+        }
+        parent.first().find(".reservation-popup__counter-num").text(0);
+        parent.last().find(".reservation-popup__counter-num").text(0);
+        var message = "Чемоданы - 0, ручная кл. - 0";
+        $('input[name="ClientExt[suitcase_count]"]').val(0);
+        $('input[name="ClientExt[bag_count]"]').val(0);
+        $(".reservation-item__input-luggage").val(message);
+
     }
 });
 
@@ -1453,31 +1485,58 @@ $(document).on('click', '#reservation-item__checkbox-3', function() {
 });
 
 $(document).on('click', '.reservation-item__input-luggage', function(event) {
-    $(".reservation-popup-luggage").addClass("d-b");
 
-    if (!($(event.currentTarget).hasClass("reservation-item__input-luggage--active"))) {
-        addOverlay($(".reservation-popup-luggage"), "reservation-item__input-luggage--active");
+    if( is_mobile() ){
+
+        $('#luggage-mobile').iziModal('open');
+
+    } else {
+
+        $(".reservation-popup-luggage").addClass("d-b");
+        if (!($(event.currentTarget).hasClass("reservation-item__input-luggage--active"))) {
+            addOverlay($(".reservation-popup-luggage"), "reservation-item__input-luggage--active");
+        }
+        $(event.currentTarget).addClass("reservation-item__input-luggage--active");
+
     }
-    $(event.currentTarget).addClass("reservation-item__input-luggage--active");
+
 });
 
 
 // Counters - багаж
-$(".reservation-popup-luggage .reservation-popup__counter-minus, .reservation-popup-luggage .reservation-popup__counter-plus").click(function() {
-    setTimeout(function() {
-        var suitcaseNum = $(".reservation-popup-luggage .reservation-popup__item").first().find(".reservation-popup__counter-num").text();
-        var bagNum = $(".reservation-popup-luggage .reservation-popup__item").last().find(".reservation-popup__counter-num").text();
-        var message = "Чемоданы - " + suitcaseNum + ", ручная кл. - " + bagNum;
-        $('input[name="ClientExt[suitcase_count]"]').val(suitcaseNum);
-        $('input[name="ClientExt[bag_count]"]').val(bagNum);
-        $(".reservation-item__input-luggage").val(message);
-    }, 0);
+$(document).on('click', '.reservation-popup__counter-minus, .reservation-popup__counter-plus', function() {
+
+    var field_type = $(this).attr('field-type');
+    if(field_type == 'suitcase' || field_type == 'bag') {
+    
+
+        if( is_mobile() ) {
+
+            var parent = $('#luggage-mobile .modal_global__content .modal_global__input');
+
+        } else {
+
+            var parent = $('.reservation-popup-luggage .reservation-popup__item');
+
+        }
+
+        setTimeout(function() {
+            var suitcaseNum = parent.first().find(".reservation-popup__counter-num").text();
+            var bagNum = parent.last().find(".reservation-popup__counter-num").text();
+            var message = "Чемоданы - " + suitcaseNum + ", ручная кл. - " + bagNum;
+            $('input[name="ClientExt[suitcase_count]"]').val(suitcaseNum);
+            $('input[name="ClientExt[bag_count]"]').val(bagNum);
+            $(".reservation-item__input-luggage").val(message);
+        }, 0);
+
+    }
+
 });
 
 
 
 // этот код используется для открывающихся мини-форм заполнения багажа, и заполнения кол-ва мест студенов/детей и т.п.
-$(".reservation-popup__counter-plus").click(function (event) {
+$(document).on('click', '.reservation-popup__counter-plus', function (event) {
 
     var counter = $(event.currentTarget).parent().children(".reservation-popup__counter-num").text();
     counter++;
@@ -1489,6 +1548,7 @@ $(".reservation-popup__counter-plus").click(function (event) {
     }else if(field_type == 'child') {
         // $('input[name="ClientExt[child_count]"]').val(counter);
     }else if(field_type == 'adult') {
+
     }else if(field_type == 'suitcase') {
         $('input[name="ClientExt[suitcase_count]"]').val(counter);
     }else if(field_type == 'bag') {
@@ -1517,7 +1577,7 @@ $(".reservation-popup__counter-plus").click(function (event) {
     toggleSubmitBut2();
 });
 
-$(".reservation-popup__counter-minus").click(function (event) {
+$(document).on('click', '.reservation-popup__counter-minus', function (event) {
 
     var counter = $(event.currentTarget).parent().children(".reservation-popup__counter-num").text();
     if (counter > 0) {
@@ -1560,12 +1620,22 @@ $(".reservation-popup__counter-minus").click(function (event) {
 var calcCounter = $(".reservation-calc__counter-num").text();
 
 $(".reservation-calc__counter-plus, .reservation-calc__counter-minus").click(function (event) {
+
     var counter = $(event.currentTarget).parent().children(".reservation-calc__counter-num").text();
 
     $(event.currentTarget).parent().children(".reservation-calc__counter-num").text(counter);
 
-    $(".reservation-popup-calc").addClass("d-b");
-    addOverlay($(".reservation-popup-calc"));
+    if( is_mobile() ){
+
+        $('#peoples-mobile').iziModal('open');
+
+    } else {
+
+        $(".reservation-popup-calc").addClass("d-b");
+        addOverlay($(".reservation-popup-calc"));
+
+    }
+
 });
 
 

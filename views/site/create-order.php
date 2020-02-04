@@ -8,19 +8,17 @@ use yii\widgets\MaskedInput;
 
 $this->registerCssFile('css/create-order.css', ['depends'=>'app\assets\NewAppAsset']);
 $this->registerJsFile('https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=5c7acdc8-48c9-43d9-9f44-2e6b9e178101', ['depends'=>'app\assets\NewAppAsset', 'position' => \yii\web\View::POS_END]);
+$this->registerJsFile('/libs/bscroll.min.js', ['depends'=>'app\assets\NewAppAsset', 'position' => \yii\web\View::POS_END]);
+$this->registerJsFile('/libs/rolltime.js', ['depends'=>'app\assets\NewAppAsset', 'position' => \yii\web\View::POS_END]);
 $this->registerJsFile('/js/create-order.js', ['depends'=>'app\assets\NewAppAsset', 'position' => \yii\web\View::POS_END]);
+
+$this->registerCssFile('/libs/rolltime.css', ['depends'=>'app\assets\NewAppAsset']);
 
 // echo "model:<pre>"; print_r($model); echo "</pre>";
 //echo "errors:<pre>"; print_r($model->getErrors()); echo "</pre>";
 
 $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
 ?>
-<style type="text/css">
-    #search-place-from {
-        width: 600px;
-        color: #000000;
-    }
-</style>
 <?php
 $form = ActiveForm::begin([
     'id' => 'order-client-form',
@@ -41,8 +39,6 @@ $form = ActiveForm::begin([
             <div class="reservation-title-wrap">
                 <div class="reservation-title">Бронирование мест</div>
                 <div class="reservation-undertitle reservation-undertitle--1">Шаг 1 из 3 - Создание заказа</div>
-                <!--<div class="reservation-undertitle reservation-undertitle--2">Шаг 2 из 3 - инф. о заказчике</div>-->
-                <!--<div class="reservation-undertitle reservation-undertitle--3">Шаг 3 из 3 - Подтверждение заказа</div>-->
             </div>
         </div>
         <div class="mobile-burger">
@@ -473,7 +469,7 @@ $form = ActiveForm::begin([
                                     <div class="reservation-popup__item-text">Чемодан</div>
                                     <div class="reservation-popup__counter">
                                         <div class="reservation-popup__counter-minus" field-type="suitcase">-</div>
-                                        <div class="reservation-popup__counter-num"><?= $model->suitcase_count ?></div>
+                                        <div class="reservation-popup__counter-num"><?=intval($model->suitcase_count);?></div>
                                         <div class="reservation-popup__counter-plus" field-type="suitcase">+</div>
                                     </div>
                                 </li>
@@ -481,7 +477,7 @@ $form = ActiveForm::begin([
                                     <div class="reservation-popup__item-text">Ручная кладь</div>
                                     <div class="reservation-popup__counter">
                                         <div class="reservation-popup__counter-minus" field-type="bag">-</div>
-                                        <div class="reservation-popup__counter-num"><?= $model->bag_count ?></div>
+                                        <div class="reservation-popup__counter-num"><?=intval($model->bag_count);?></div>
                                         <div class="reservation-popup__counter-plus" field-type="bag">+</div>
                                     </div>
                                 </li>
@@ -610,21 +606,6 @@ $form = ActiveForm::begin([
                         </div>
                     </div>
                 </div>
-
-
-                <?php /*
-                <div class="reservation-popup__child-item">
-                    <div class="reservation-popup__input-wrap input-arrow reservation-popup__input-child-wrap">
-                        <input type="text" class="reservation-item__input reservation-popup__input reservation-popup__input-child" placeholder="Выберите возраст ребенка на момент поездки">
-                    </div>
-                    <div class="reservation-popup reservation-popup-child">
-                        <ul class="reservation-popup__list">
-                            <?php foreach (ClientExtChild::getAges() as $age_key => $age_value) { ?>
-                                <li class="reservation-popup__item-small" value="<?= $age_key ?>"><?= $age_value ?></li>
-                            <?php } ?>
-                        </ul>
-                    </div>
-                </div> */ ?>
                 <?php if(count($client_ext_childs) > 0) {
                     foreach ($client_ext_childs as $client_ext_child) { ?>
                         <div class="children_wrap">
@@ -651,42 +632,135 @@ $form = ActiveForm::begin([
                     <?php }
                 } ?>
             </li>
-            <?php /*
-            <li class="reservation-popup__item-big">
-                <div class="reservation-popup__item-wrap">
-                    <input name="ClientExt[student_count]" type="hidden" value="<?= $model->student_count ?>">
-                    <div class="reservation-popup__item-text">Студент</div>
-                    <div class="reservation-popup__counter">
-                        <div class="reservation-popup__counter-minus" field-type="student">-</div>
-                        <div class="reservation-popup__counter-num"><?= $model->student_count ?></div>
-                        <div class="reservation-popup__counter-plus" field-type="student">+</div>
-                    </div>
-                </div>
-            </li>*/ ?>
+        </ul>
     </div>
     <div class="reservation-calc__wrap">
         <div class="reservation-calc__line">
             <div class="reservation-calc__line-wrap">
                 <input name="ClientExt[places_count]" type="hidden" value="<?= $model->places_count ?>">
-                <div class="reservation-calc__label">Мест:</div>
+                <div class="reservation-calc__label text_24">Мест:</div>
                 <div class="reservation-calc__counter">
-                    <div class="reservation-calc__counter-plus">+</div>
-                    <div class="reservation-calc__counter-num"><?= $model->places_count ?></div>
-                    <div class="reservation-calc__counter-minus">-</div>
+                    <div class="reservation-calc__counter-plus text_24">+</div>
+                    <div class="reservation-calc__counter-num text_24"><?= $model->places_count ?></div>
+                    <div class="reservation-calc__counter-minus text_24">-</div>
                 </div>
             </div>
         </div>
         <div class="reservation-calc__line reservation-calc__line--second">
             <div class="reservation-calc__line-wrap">
-                <div class="reservation-calc__label-price">Стоимость</div>
-                <div class="reservation-calc__price"><?= $model->getCalculatePrice('unprepayment'); ?></div>
+                <div class="reservation-calc__label-price text_24">Стоимость</div>
+                <div class="reservation-calc__price text_24"><?= $model->getCalculatePrice('unprepayment'); ?></div>
             </div>
-            <div class="reservation-calc__subline">при оплате банковской картой</div>
+            <div class="reservation-calc__subline text_22">при оплате банковской картой</div>
         </div>
     </div>
     <div class="reservation-calc__button-wrap">
         <div class="reservation-calc__button-price">0</div>
-        <button id="submit-create-order-step-1" class="reservation-calc__button reservation-calc__button--disabled">Продолжить</button>
+        <button id="submit-create-order-step-1" class="reservation-calc__button reservation-calc__button--disabled text_24">Продолжить</button>
+    </div>
+</div>
+
+<div id="peoples-mobile" class="mobile_menu">
+    <div class="modal_global">
+        <div class="modal_global__name">
+            <span class="text_22">Пассажиры</span>
+            <button class="close" type="button" name="close" data-izimodal-close>
+                <svg class="icon icon-close close__svg">
+                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="modal_global__enter">
+            <div class="modal_global__content">
+                <div class="modal_global__input">
+                    <div class="select__wrap">
+                        <div class="select__title text_18">Взрослый</div>
+                        <div class="reservation-popup__counter">
+                            <div class="reservation-popup__counter-minus text_24" field-type="adult">-</div>
+                            <div class="reservation-popup__counter-num text_18"><?= ($model->places_count - $model->child_count - $model->student_count) ?></div>
+                            <div class="reservation-popup__counter-plus text_24" field-type="adult">+</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal_global__input children_append">
+                    <div class="select__wrap">
+                        <div class="select__title text_18">Ребенок до 10 лет</div>
+                        <div class="reservation-popup__counter">
+                            <div class="reservation-popup__counter-minus text_24" field-type="child">-</div>
+                            <div class="reservation-popup__counter-num text_18"><?= $model->child_count ?></div>
+                            <div class="reservation-popup__counter-plus text_24" field-type="child">+</div>
+                        </div>
+                    </div>
+                    <?php if(count($client_ext_childs) > 0) {
+                        foreach ($client_ext_childs as $client_ext_child) { ?>
+                            <div class="children_wrap">
+                                <div class="children">
+                                    <div class="children__placeholder">
+                                        <button class="children__title text_14" type="button" name="age" value="">
+                                            <span class="children_complete" value="<?= $client_ext_child->age ?>"><?= $client_ext_child->getAgeName() ?></span>
+                                            <svg class="icon icon-right-arrow children__icon">
+                                                <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#right-arrow"></use>
+                                            </svg>
+                                        </button>
+                                        <div class="children__list">
+                                            <?php foreach (ClientExtChild::getAges() as $age_key => $age_value) { ?>
+                                                <button class="children__item text_16" type="button" name="select" value="<?= $age_key ?>"><?= $age_value ?></button><br>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                    <div class="children__checkbox">
+                                        <button class="children__btn <?= ($client_ext_child->self_baby_chair == true ? 'check_active' : '') ?>" type="button" name="self_baby_chair"></button>
+                                        <input type="checkbox" name="self_baby_chair" hidden><span class="text_14">Свое детское кресло</span>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php }
+                    } ?>
+                </div>
+            </div>
+            <div class="modal_global__bottom">
+                <button id="close-peoples-mobile" data-izimodal-close="" class="modal_global__submit text_16" type="button">Продолжить</button>
+            </div>
+        </div>
+    </div> 
+</div>
+<div id="luggage-mobile" class="mobile_menu">
+    <div class="modal_global">
+        <div class="modal_global__name">
+            <span class="text_22">Багаж</span>
+            <button class="close" type="button" name="close" data-izimodal-close>
+                <svg class="icon icon-close close__svg">
+                    <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#close"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="modal_global__enter">
+            <div class="modal_global__content">
+                <div class="modal_global__input">
+                    <div class="select__wrap">
+                        <div class="select__title text_18">Чемодан</div>
+                        <div class="reservation-popup__counter">
+                            <div class="reservation-popup__counter-minus text_24" field-type="suitcase">-</div>
+                            <div class="reservation-popup__counter-num text_18"><?=intval($model->suitcase_count);?></div>
+                            <div class="reservation-popup__counter-plus text_24" field-type="suitcase">+</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal_global__input">
+                    <div class="select__wrap">
+                        <div class="select__title text_18">Ручная кладь</div>
+                        <div class="reservation-popup__counter">
+                            <div class="reservation-popup__counter-minus text_24" field-type="bag">-</div>
+                            <div class="reservation-popup__counter-num text_18"><?=intval($model->bag_count);?></div>
+                            <div class="reservation-popup__counter-plus text_24" field-type="bag">+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal_global__bottom">
+                <button id="close-peoples-mobile" data-izimodal-close="" class="modal_global__submit text_16" type="button">Продолжить</button>
+            </div>
+        </div>
     </div>
 </div>
 

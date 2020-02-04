@@ -28,7 +28,7 @@ endif;
     <title>Главная страница</title>
     <!--[if IE]>
     <meta http-equiv="X-UA-Compatible" content="IE = edge"><![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, minimum-scale=0.5, maximum-scale=1, initial-scale=1.0" />
     <meta name="keywords" content="">
     <!-- Favicon-->
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">

@@ -20,6 +20,7 @@ function initPlacesData() {
       self_baby_chair: $(this).find('.children__btn').hasClass('check_active')
     };
   });
+  console.log(places_count);
 
   // console.log('places_count='+places_count+' ClientExtChilds:'); console.log(ClientExtChilds);
 }
@@ -53,24 +54,100 @@ function showError(error) {
         });
       });
 
+      if( is_mobile() ){
+
+        $('#picker-time').Rolltime({
+          'step': 15
+        });
+
+        $('#contact .map').hide();
+
+      } else {
+
+        $('#picker-time').datepicker({
+          timepicker: true,
+          onlyTimepicker: true,
+          minutesStep: 15
+        });
+
+      }
+
+      $('#picker-date').datepicker({
+        autoClose: true,
+        minDate: new Date(),
+        onSelectDate: function() {
+          var selected_date = $('#picker-date').val();
+          //alert('date='+date);
+
+          // получим сегодняшнюю дату
+          var now = new Date();
+          var today_day = now.getDate();
+          if(today_day < 10) {
+            today_day = '0' + today_day;
+          }
+          var today_month = now.getMonth() + 1;
+          if(today_month < 10) {
+            today_month = '0' + today_month;
+          }
+          var today_date = today_day + '.' + today_month + '.' + now.getFullYear();
+
+          // если выбран сегодняшний день, то установить автоматически время в поле "Время посадки"
+          //   +1 час к текущему с округлением до 15 минут в нижнюю сторону; если любой другой - то 03:00
+          if(selected_date == today_date) {
+
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+
+            if(hours < 23) {
+              hours = hours + 1;
+            }
+            if(minutes < 15) {
+              minutes = 0;
+            }else if(minutes < 30) {
+              minutes = 15;
+            }else if(minutes < 45) {
+              minutes = 30;
+            } else {
+              minutes = 45;
+            }
+
+            if(hours < 10) {
+              hours = '0' + hours;
+            }
+            if(minutes < 10) {
+              minutes = '0' + minutes;
+            }
+
+            var new_time = hours + ':' + minutes;
+            $('#picker-time').val(new_time).trigger('change');
+
+          } else {
+
+            $('#picker-time').val('03:00').trigger('change');
+
+          }
+
+        },
+      });
+
     }
 
     initPlacesData(); // заполняем: ClientExtChilds и places_count по содержимому в html
 
-
     if($('#inputphoneform-mobile_phone').hasClass('use_imask')) {
       var currencyMask = new IMask(
-          document.getElementById('inputphoneform-mobile_phone'),
-          {
-            mask: /^[+]\d{0,13}$/,
-            blocks: {
-              num: {
-                mask: Number,
-                thousandsSeparator: ' '
-              }
+        document.getElementById('inputphoneform-mobile_phone'),
+        {
+          mask: /^[+]\d{0,13}$/,
+          blocks: {
+            num: {
+              mask: Number,
+              thousandsSeparator: ' '
             }
-          });
+          }
+        });
     }
+
   });
   $(document).on('click', '.services__read', function (event) {
     event.preventDefault();
@@ -80,9 +157,9 @@ function showError(error) {
     autoScrollSpeed: true,
     offset: 110,
     highlightClass: 'active_link',
-    onStart: function onStart() {
-      menu.iziModal('close');
-    }
+    // onStart: function onStart() {
+    //   menu.iziModal('close');
+    // }
   });
   window.addEventListener('load', windowWidth, false);
   window.addEventListener('resize', windowWidth, false);
@@ -109,14 +186,6 @@ function showError(error) {
     overlayColor: 'rgba(0,0,0,.9)'
   });
 
-  var menu = $('.mobile_menu').iziModal({
-    width: '100%',
-    top: 0,
-    loop: false,
-    overlayColor: 'rgba(0,0,0,.9)',
-    zindex: 9999
-  }); // Modals init in Video Page
-
   $(document).on('click', '.video__link', function () {
     var way = $(this).attr('data-video');
     var title = $(this).attr('data-title');
@@ -134,104 +203,12 @@ function showError(error) {
       }
     });
   });
-  $('#picker-date').datepicker({
-    autoClose: true,
-    minDate: new Date(),
-    onSelectDate: function() {
-      var selected_date = $('#picker-date').val();
-      //alert('date='+date);
-
-      // получим сегодняшнюю дату
-      var now = new Date();
-      var today_day = now.getDate();
-      if(today_day < 10) {
-        today_day = '0' + today_day;
-      }
-      var today_month = now.getMonth() + 1;
-      if(today_month < 10) {
-        today_month = '0' + today_month;
-      }
-      var today_date = today_day + '.' + today_month + '.' + now.getFullYear();
-      //alert('today_date='+today_date);
-
-      // если выбран сегодняшний день, то установить автоматически время в поле "Время посадки"
-      //   +1 час к текущему с округлением до 15 минут в нижнюю сторону; если любой другой - то 03:00
-      if(selected_date == today_date) {
-
-        var hours = now.getHours();
-        var minutes = now.getMinutes();
-
-        //alert('hours='+hours+' minutes='+minutes);
-
-        if(hours < 23) {
-          hours = hours + 1;
-        }
-        if(minutes < 15) {
-          minutes = 0;
-        }else if(minutes < 30) {
-          minutes = 15;
-        }else if(minutes < 45) {
-          minutes = 30;
-        } else {
-          minutes = 45;
-        }
-
-        if(hours < 10) {
-          hours = '0' + hours;
-        }
-        if(minutes < 10) {
-          minutes = '0' + minutes;
-        }
-
-        var new_time = hours + ':' + minutes;
-        $('#picker-time').val(new_time);
-
-      }else {
-        $('#picker-time').val('03:00');
-      }
-
-    },
-  });
-
-  // $(document).on('keyup', '#picker-date', function () {
-  //   alert('keyup');
-  // });
-  // $(document).on('change', '#picker-date', function () {
-  //   alert('ch');
-  // });
-  // $('#picker-date').change(function() {
-  //   alert('ch');
-  // });
-
-  // var datepicker_is_visible = false;
-  // $(document).on('click', '#picker-time', function() {
-  //   console.log('datepicker_is_visible=' + datepicker_is_visible);
-  // });
-  $('#picker-time').datepicker({
-    timepicker: true,
-    onlyTimepicker: true,
-    minutesStep: 15
-    // onShow: function() {
-    //   //datepicker_is_visible = true;
-    //   console.log('onShow');
-    // },
-    // onHide: function () {
-    //   //datepicker_is_visible = false;
-    // },
-    // onSelect: function() {
-    //   // console.log('onSelect');
-    // }
-  });
 
   $(document).on('click', '#btn-time', function (event) {
     event.preventDefault();
     event.stopPropagation();
     $('#picker-time').trigger('click');
   });
-
-
-
-
 
   // var counter = 0;
   var $peoples_input = $('#peoples input');
@@ -246,7 +223,7 @@ function showError(error) {
   }
 
 
-  $('.btn_next').on('click', function (e) {
+  $(document).on('click', '.btn_next', function (e) {
     e.preventDefault();
     places_count++;
     $(this).prev().val(parseInt($(this).prev().val()) + 1);
@@ -254,7 +231,7 @@ function showError(error) {
     updatePeoplesText();
   });
 
-  $('.btn_prev').on('click', function (e) {
+  $(document).on('click', '.btn_prev', function (e) {
     e.preventDefault();
     if ($(this).next().val() > 0) {
       places_count--;
@@ -341,7 +318,7 @@ function showError(error) {
 */
 
 
-  $('.children_append .btn_next').on('click', function () {
+  $(document).on('click', '.children_append .btn_next', function () {
     renderChildrenHtml();
 
     var ClientExtChild = {
@@ -351,7 +328,7 @@ function showError(error) {
     ClientExtChilds[ClientExtChilds.length] = ClientExtChild;
   });
 
-  $('.children_append .btn_prev').on('click', function () {
+  $(document).on('click', '.children_append .btn_prev', function () {
     $(this).parents('.children_append').find('.children_wrap').last().remove();
 
     ClientExtChilds.pop();
@@ -399,12 +376,6 @@ function showError(error) {
       age = 'Выберите возраст ребенка';
     } else {
       age = 'Возраст ребенка';
-      $(document).on('click', '.city_select', function () {
-        window.scrollTo({
-          top: 110,
-          behavior: "smooth"
-        });
-      });
     }
   });
 
@@ -468,16 +439,27 @@ function showError(error) {
 
     }
 
-    // выбор города
-    if( $(this).is('.city_select') ){
+    // служба поддержки
+    if( $(this).is('button[name="help"]') ){
+      $(this).toggleClass('opened');
+      $('.modal_global__support').slideToggle();
+    }
 
+    // выбор города
+    if( $(this).is('.city_select') && !$(this).hasClass('fix_down') ){
+      console.log('city_select');
+      $('.city_select.fix_down')
+        .removeClass('fix_down')
+        .find('.select_city_wrap').slideUp(100);
       $(this)
-          .toggleClass('fix_down')
-          .find('.select_city_wrap').slideDown(100);
+        .toggleClass('fix_down')
+        .find('.select_city_wrap').slideToggle(100);
 
     } else if ($('.city_select').hasClass('fix_down') && !$(this).closest('.city_select').length ) {
 
-      $('.select_city_wrap').slideUp(100).removeClass('fix_down');
+      $('.city_select.fix_down')
+        .removeClass('fix_down')
+        .find('.select_city_wrap').slideUp(100);
 
     }
 
@@ -499,6 +481,17 @@ function showError(error) {
 
       $('#peoples').removeClass('slide_down');
       $('.select').slideUp(100);
+
+    }
+
+    // иконка карты
+    if( $(this).closest('.icon-flag').length ){
+
+      if( is_mobile() ){
+
+        $('#contact .map').slideToggle();
+
+      }
 
     }
 
@@ -534,13 +527,15 @@ $(document).on('click', '.select_city__item', function (event) {
     $('#city-to-text').val('Казань');
   }
 
-  $(this).parents('.welcome__col').find('.select_city_wrap').slideUp(100);
+  $(this)
+    .parents('.welcome__col').removeClass('fix_down')
+    .find('.select_city_wrap').slideUp(100);
 
   clearFormError();
 });
 
 $(document).on('click', '.btn_reverse', function() {
-
+  console.log('btn_reverse');
   var city_from_id = $('*[name="ClientExt[city_from_id]"]').val();
   if(city_from_id == 1) {
     $('*[name="ClientExt[city_from_id]"]').val(2);
