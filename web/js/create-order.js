@@ -1535,10 +1535,17 @@ $(document).on('click', '#reservation-item__checkbox-3', function() {
 
     var reservation_item_checked = $(this).is(':checked');
     if(reservation_item_checked == true) {
-        $('.reservation-item__input-luggage').removeAttr('disabled');
-    }else {
-        $('.reservation-item__input-luggage').attr('disabled', true);
 
+        $('.reservation-item__input-luggage').removeAttr('disabled');
+        if( is_mobile() ){
+
+            $('#luggage-mobile').iziModal('open');
+
+        }
+
+    } else {
+
+        $('.reservation-item__input-luggage').attr('disabled', true);
         $('input[name="ClientExt[suitcase_count]"]').val(0);
         $('input[name="ClientExt[bag_count]"]').val(0);
 
@@ -1547,8 +1554,28 @@ $(document).on('click', '#reservation-item__checkbox-3', function() {
 
         $(".reservation-popup-luggage .reservation-popup__item").first().find(".reservation-popup__counter-num").text("0");
         $(".reservation-popup-luggage .reservation-popup__item").last().find(".reservation-popup__counter-num").text("0");
+
+        if( is_mobile() ) {
+
+            var parent = $('#luggage-mobile .modal_global__content .modal_global__input');
+
+        } else {
+
+            var parent = $('.reservation-popup-luggage .reservation-popup__item');
+
+        }
+        parent.first().find(".reservation-popup__counter-num").text(0);
+        parent.last().find(".reservation-popup__counter-num").text(0);
+        var message = "Чемоданы - 0, ручная кл. - 0";
+        $('input[name="ClientExt[suitcase_count]"]').val(0);
+        $('input[name="ClientExt[bag_count]"]').val(0);
+        $(".reservation-item__input-luggage").val(message);
+
     }
 });
+
+
+
 
 // Дополнительные пожелания
 $(document).on('click', '#reservation-item__checkbox-4', function() {
