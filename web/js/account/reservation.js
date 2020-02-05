@@ -68,7 +68,7 @@ function closeOrderDetail() {
 $(document).on('click', '.cancel-order', function () {
 
     //var order_id = $(this).parents('.reservation').attr('order-id');
-    var access_code = $(this).parents('.reservation').attr('access-code');
+    var access_code = $(this).attr('access-code');
 
     if(confirm("Вы уверены что хотите отменить заказ?")) {
         $.ajax({

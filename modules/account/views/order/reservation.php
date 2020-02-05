@@ -39,7 +39,7 @@ $this->registerJsFile('js/account/reservation.js', ['depends'=>'app\assets\NewAp
             $datetime = $order->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
 
             ?>
-            <div class="active__order" access-code="<?= $order->access_code ?>">
+            <div class="active__order">
                 <div class = "order__direction">
                     <span><?= $order->direction_id == 1 ? 'Альметьевск-Казань' : 'Казань-Альметьевск' ?></span>
                 </div>
@@ -56,7 +56,7 @@ $this->registerJsFile('js/account/reservation.js', ['depends'=>'app\assets\NewAp
                 </div>
                 <div class = "order__price">
                     <div class = "order__price__row">
-                        <div class = "order__price__title">К оплате:</div>
+                        <div class = "order__price__title"><?= ($order->is_paid == true ? 'Оплачено:' : 'К оплате:') ?></div>
                         <div class = "order__price__value"><?= $order->price ?><span>р.</span>
                         </div>
                     </div>
@@ -66,7 +66,7 @@ $this->registerJsFile('js/account/reservation.js', ['depends'=>'app\assets\NewAp
                 </div>
                 <div class = "order__actions">
                     <a class = "order__actions__edit" href="/site/create-order?c=<?= $order->access_code ?>">Изменить</a>
-                    <a class = "order__actions__cancel" href="">Отменить</a>
+                    <a class = "order__actions__cancel cancel-order" href="" access-code="<?= $order->access_code ?>">Отменить</a>
                 </div>
             </div>
         <?php }

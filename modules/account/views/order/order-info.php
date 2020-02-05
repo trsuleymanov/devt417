@@ -8,8 +8,8 @@ use app\models\ClientExtChild; ?>
     <div class="order-detail__topline">
         <div class="order-detail__topline-title">Информация о заказе</div>
         <div class="order-detail__actions">
-            <a class="order-detail__actions__edit" href="#">Изменить</a>
-            <a class="order-detail__actions__cancel" href="#">Отменить</a>
+            <a class="order-detail__actions__edit" href="/site/create-order?c=<?= $model->access_code ?>">Изменить</a>
+            <a class="order-detail__actions__cancel cancel-order" href="#" access-code="<?= $model->access_code ?>">Отменить</a>
         </div>
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="11px" height="11px" class="order-detail__topline-close">
             <image x="0px" y="0px" width="11px" height="11px" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAQAAAADpb+tAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfjCgwRHwH725PaAAAAx0lEQVQI1zXPvS6DUQCA4ec46XcDxuMKXIArsDYxuQIJ8RMiSLRputDoYCASBg0mkyuwGlS6kFRil6aDjRCNfMdQ3ht484SZnutwlH/8V1FXjVOTdg08KyEUltScxHRnpG2grwxFXrYXNpzFRNfIvlcvFkPTtg4xIdz7tGXafGjowEQQ5OxYz4LbfDH+xgSFVXNuzIYPfSUxCYU1DTWtkPOBN0/KmAormmHTFR58aRnqx7Sjbt3lH6brXdt3TIdOnY8x4FFF9RfiuD2T4K923QAAAABJRU5ErkJggg=="></image>
