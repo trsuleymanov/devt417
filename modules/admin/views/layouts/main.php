@@ -208,7 +208,7 @@ $cookie = Yii::$app->getRequest()->getCookies();
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    <li><a href="/site/logout">Выход (<?= Yii::$app->user->identity->fio ?>) </a> </li>
+                    <li><a href="/site/logout">Выход (<?= Yii::$app->user->identity->last_name.' '.Yii::$app->user->identity->first_name ?>) </a> </li>
                     <?php
                     if(Yii::$app->session->get('role_alias') == 'warehouse_turnover') {
                         $url = '/storage';

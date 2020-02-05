@@ -70,7 +70,7 @@ class ClientExt extends \yii\db\ActiveRecord
             ['city_from_id', 'checkCityFrom', 'skipOnEmpty' => false],
             ['city_to_id', 'checkCityTo', 'skipOnEmpty' => false],
 
-            [['yandex_point_from_name', 'yandex_point_to_name', ], 'string', 'max' => 255],
+            [['yandex_point_from_name', 'yandex_point_to_name', 'additional_wishes'], 'string', 'max' => 255],
             [['yandex_point_from_lat', 'yandex_point_from_long', 'yandex_point_to_lat', 'yandex_point_to_long'], 'number'],
             [['is_mobile', 'is_not_places'], 'boolean'],
             [['main_server_order_id', 'price', 'paid_summ',
@@ -199,7 +199,8 @@ class ClientExt extends \yii\db\ActiveRecord
             'suitcase_count', 'bag_count',
             'places_count', 'student_count', 'child_count', // +
             // 'price', // +
-            'user_id'
+            'user_id',
+            'additional_wishes'
         ];
 
 
@@ -282,6 +283,7 @@ class ClientExt extends \yii\db\ActiveRecord
             'penalty_cash_back' => 'Использованный кэш-бэк для оплаты заказа',
             'used_cash_back' => 'Списанный кэш-бэк как штраф',
             'but_checkout' => 'Кнопка завершения создания заказа', // Оплатить сейчас или Бронировать
+            'additional_wishes' => 'Дополнительные пожелания',
 
             'transport_car_reg' => 'Гос. номер т/с',
             'transport_model' => 'Марка т/с',
@@ -640,7 +642,6 @@ class ClientExt extends \yii\db\ActiveRecord
             throw new ErrorException('Не удалось сохранить заказ');
         }
     }
-
 
 
     public function getPrizeTripCount()

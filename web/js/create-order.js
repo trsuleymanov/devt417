@@ -1778,7 +1778,8 @@ $(document).on('click', '#submit-create-order-step-1', function() {
         // child_count: $('input[name="ClientExt[child_count]"]').val(),
         // student_count: $('input[name="ClientExt[student_count]"]').val()
         places_count: places_count,
-        child_count: ClientExtChilds.length
+        child_count: ClientExtChilds.length,
+        additional_wishes: $.trim($('#additional-wishes').val())
     };
 
     for(var i in ClientExtChilds) {

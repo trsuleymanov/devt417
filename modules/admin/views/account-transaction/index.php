@@ -44,7 +44,7 @@ $pagination->totalCount = $dataProvider->getTotalCount();
                 [
                     'attribute' => 'user_id',
                     'content' => function ($model) {
-                        return $model->user->fio;
+                        return $model->user->last_name.' '.$model->user->first_name;
                     },
                     'filter' => Html::activeDropDownList(
                         $searchModel,

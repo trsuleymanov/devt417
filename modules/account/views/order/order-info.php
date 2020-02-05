@@ -139,7 +139,7 @@ use app\models\ClientExtChild; ?>
                 </div>
                 <div class="reservation-step-info_row">
                     <div class="reservation-step-info_title">Сообщение для оператора:</div>
-                    <div class="reservation-step-info_value">Нет</div>
+                    <div class="reservation-step-info_value"><?= (empty($model->additional_wishes) ? 'Нет' : $model->additional_wishes) ?></div>
                 </div>
                 <div class="reservation-step-info_row">
                     <div class="reservation-step-info_deadline">

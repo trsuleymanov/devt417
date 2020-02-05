@@ -584,7 +584,7 @@ if(($model->yandexPointFrom != null && $model->yandexPointFrom->critical_point =
                             <label for="reservation-item__checkbox-4" class="reservation-item__checkbox-label">Дополнительные пожелания</label>
                         </div>
                         <div class = "reservation-item__textarea">
-                            <textarea disabled="true"></textarea>
+                            <textarea id="additional-wishes" disabled="true"></textarea>
                         </div>
                     </li>
                 </ul>

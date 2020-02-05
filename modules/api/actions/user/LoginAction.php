@@ -38,7 +38,7 @@ class LoginAction extends \yii\rest\Action
                 'token' => $user->token,
                 'code_for_friends' => $user->code_for_friends,
                 'email' => $user->email,
-                'fio' => $user->fio,
+                'fio' => $user->last_name.' '.$user->first_name,
                 'phone' => $user->phone,
                 'account' => $user->account,
 //                'one_place_discount_list' => $user->getDirectionsPlaceDiscountList(),

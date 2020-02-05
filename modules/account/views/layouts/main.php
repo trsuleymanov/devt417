@@ -160,7 +160,7 @@ endif;
                             throw new ForbiddenHttpException('Тариф не найден');
                         }
 
-                        if(!empty($order->fio)) {
+                        if(!empty($order->last_name)) {
                             $link = '/site/check-order?c='.$order->access_code;
                         }elseif($order->trip_id > 0) {
                             $link = '/site/create-order-step2?c='.$order->access_code;

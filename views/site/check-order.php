@@ -247,12 +247,12 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
                             $aRows[] = $model->bag_count.' '.Helper::getNumberString($model->bag_count, 'ручная кладь', 'ручные клади', 'ручных клади');
                         }
                         ?>
-                        <?= implode(', ', $aRows) ?>
+                        <?= count($aRows) > 0 ? implode(', ', $aRows) : 'Нет багажа' ?>
                     </div>
                 </div>
                 <div class = "reservation-step-info_row">
                     <div class = "reservation-step-info_title">Сообщение для оператора:</div>
-                    <div class = "reservation-step-info_value">Нет</div>
+                    <div class = "reservation-step-info_value"><?= (empty($model->additional_wishes) ? 'Нет' : $model->additional_wishes) ?></div>
                 </div>
                 <? if(!empty($model->time_air_train_arrival)) { ?>
                     <div class = "reservation-step-info_row">
@@ -285,7 +285,7 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
                 <?php if(!empty($model->time_air_train_arrival)) { ?>
                     <div class="reservation-step-info__arrival">Прибытие поезда / посадка в самолет в <?= $model->time_air_train_arrival ?></div>
                 <?php } ?>
-                <div class="reservation-step-info__name">Пассажир: <?= $model->fio ?></div>
+                <div class="reservation-step-info__name">Пассажир: <?= $model->last_name.' '.$model->first_name ?></div>
                 <?php
                 $aPlaces = [];
                 $grown_count = $model->places_count - $model->student_count - $model->child_count;
@@ -308,81 +308,14 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
         </div>
 
     </div>
+    <?php /*
     <div class="container container-drop--1">
         <div class="reservation-drop reservation-drop--1">
             <div class="reservation-drop__topline">
                 <div class="reservation-drop__topline-title">Адрес и время посадки</div>
                 <img src="/images_new/cancel.svg" alt="" class="reservation-drop__topline-cancel">
             </div>
-            <div class="reservation-drop__content">
-                <?php /*
-                <div class="reservation-drop-offer">
-                    <div class="reservation-drop-offer__cover">
-                        <div class="reservation-drop-offer__cover-wrap">
-                            <div class="reservation-drop-offer__cover-title">Совершите...<br>поездку за <b>417</b> руб.</div>
-                            <div class="reservation-drop-offer__cover-subtitle">Выберите адрес из опций быстрого выезда. Цена за одно место действует при условии предоплаты.</div>
-                        </div>
-                        <img src="/images_new/arrow-tab.png" alt="" class="reservation-drop-offer__cover-arrow">
-                    </div>
-                    <ul class="reservation-drop-offer__list">
-                        <li class="reservation-drop-offer__item">
-                            <div class="reservation-drop-offer__item-title">«Орион» - <b>417</b> руб.</div>
-                            <div class="reservation-drop-offer__item-subtitle">ул. Ленина, 92</div>
-                        </li>
-                        <li class="reservation-drop-offer__item">
-                            <div class="reservation-drop-offer__item-title">«Лента» - <b>417</b> руб.</div>
-                            <div class="reservation-drop-offer__item-subtitle">ул. Ленина, 105</div>
-                        </li>
-                        <li class="reservation-drop-offer__item">
-                            <div class="reservation-drop-offer__item-title">«Сбербанк» - <b>417</b> руб.</div>
-                            <div class="reservation-drop-offer__item-subtitle">ул. Ленина, 105</div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="reservation-drop__search">
-                    <div class="reservation-drop__search-text">… или введите адрес вручную для выбора точки посадки рядом с домом</div>
-                    <div class="reservation-drop__search-input-wrap">
-                        <input type="text" class="reservation-drop__search-input" placeholder="Начните вводить адрес...">
-                        <div class="reservation-popup reservation-popup-search">
-                            <ul class="reservation-popup__list">
-                                <li class="reservation-popup__item">
-                                    <div class="reservation-popup__item-text">Пушкина 1</div>
-                                </li>
-                                <li class="reservation-popup__item">
-                                    <div class="reservation-popup__item-text">Проспект Победы 4а</div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="reservation-drop__search-geo"><span>использовать мою геопозицию</span></div>
-                </div>
-                <div class="reservation-drop__map">
-                    <iframe src="https://yandex.ua/map-widget/v1/?um=constructor%3Ad85c33d8c2998c0058266a0bafaaa69c1c2197088f04a1e4ed222bdbeca7aa6b&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
-                </div>
-                <div class="reservation-drop__selected">
-                    <div class="reservation-drop__selected-big">Выбрана точка посадки:</div>
-                    <div class="reservation-drop__selected-showmap">
-                        <div class="reservation-drop__selected-address">«Лента» ул. Ленина, 105</div>
-                        <div class="reservation-drop__selected-showmap-wrap"><span>на карте</span></div>
-                    </div>
-                    <div class="reservation-drop__selected-map">
-                        <iframe src="https://yandex.ua/map-widget/v1/?um=constructor%3Ad85c33d8c2998c0058266a0bafaaa69c1c2197088f04a1e4ed222bdbeca7aa6b&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
-                    </div>
-                </div>
-                <div class="reservation-drop__time">
-                    <div class="reservation-drop__time-paragraph">Указанное вами желаемое время посадки - <span class="reservation-drop__time-time">21:00</span>. На выбранной точке можно сесть в указанное время.</div>
-                    <div class="reservation-drop__time-title">Выберите время посадки:</div>
-                    <ul class="reservation-drop__time-list">
-                        <li class="reservation-drop__time-item">21:00</li>
-                        <li class="reservation-drop__time-item">22:00</li>
-                        <li class="reservation-drop__time-item">23:00</li>
-                    </ul>
-                    <div class="reservation-drop__time-back-wrap">
-                        <img src="/images_new/back-address.svg" alt="" class="reservation-drop__time-back-arrow">
-                        <div class="reservation-drop__time-back-text"><span>Другой адрес?</span></div>
-                    </div>
-                </div>*/ ?>
-            </div>
+            <div class="reservation-drop__content"></div>
         </div>
     </div>
     <div class="container container-drop--2">
@@ -422,7 +355,7 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
                 </div>
             </div>
         </div>
-    </div>
+    </div>*/ ?>
 </form>
 
 <? if($model->is_paid != 1) { ?>

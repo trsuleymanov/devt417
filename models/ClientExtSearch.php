@@ -37,7 +37,7 @@ class ClientExtSearch extends ClientExt
                 'accrual_cash_back', 'penalty_cash_back', 'used_cash_back',
                 'discount'], 'number'],
             [['time_air_train_arrival', 'time_air_train_departure', 'but_checkout', 'is_not_places', //'gen',
-                'payment_source'], 'safe'],
+                'payment_source', 'additional_wishes'], 'safe'],
         ];
     }
 
@@ -136,7 +136,8 @@ class ClientExtSearch extends ClientExt
             ->andFilterWhere(['like', 'transport_car_reg', $this->transport_car_reg])
             ->andFilterWhere(['like', 'transport_model', $this->transport_model])
             ->andFilterWhere(['like', 'transport_color', $this->transport_color])
-            ->andFilterWhere(['like', 'friend_code', $this->friend_code]);
+            ->andFilterWhere(['like', 'friend_code', $this->friend_code])
+            ->andFilterWhere(['like', 'additional_wishes', $this->additional_wishes]);
 
         if (!empty($this->status_setting_time)) {
             $status_setting_time = strtotime($this->status_setting_time);
