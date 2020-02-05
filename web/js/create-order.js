@@ -15,7 +15,7 @@ var time_to_close_map = 3000;
 
 
 // var ClientExtChilds = []; // уже инициализированы в main_new.js
-// var places_count = 0;
+var places_count = 0;
 
 // возвращается объект карты - placemark (т.е. точка)
 function getPlacemarkById(map_name, point_id) {
@@ -1028,9 +1028,9 @@ function toggleDopBlock() {
 }
 
 
-$(document).ready(function() {
-    initPlacesData();
-});
+// $(document).ready(function() {
+//     initPlacesData();
+// });
 
 
 // +
@@ -1794,6 +1794,8 @@ $(document).on('click', '#submit-create-order-step-1', function() {
     };
 
     var access_code = $('#order-client-form').attr('client-ext-code');
+
+    // console.log('post:'); console.log(post);
 
 
     $.ajax({

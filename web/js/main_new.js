@@ -7,6 +7,7 @@ var places_count = 0;
 // заполняем: ClientExtChilds и places_count по содержимому в html
 function initPlacesData() {
 
+  places_count = 0;
   $('#order-client-form .reservation-popup__item-big').each(function() {
     var text = $(this).find('.reservation-popup__counter-num').text();
     if(text.length > 0) {
@@ -20,7 +21,6 @@ function initPlacesData() {
       self_baby_chair: $(this).find('.children__btn').hasClass('check_active')
     };
   });
-  console.log(places_count);
 
   // console.log('places_count='+places_count+' ClientExtChilds:'); console.log(ClientExtChilds);
 }
@@ -225,6 +225,7 @@ function showError(error) {
 
   $(document).on('click', '.btn_next', function (e) {
     e.preventDefault();
+
     places_count++;
     $(this).prev().val(parseInt($(this).prev().val()) + 1);
 
