@@ -1,5 +1,8 @@
 <?php
+
+use app\components\Helper;
 use app\models\ClientExt;
+use app\models\ClientExtChild;
 use yii\widgets\ActiveForm;
 
 
@@ -160,9 +163,21 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
                         </div>
                         <div class="reservation-step-line-content-top-right">
                             <div class="reservation-step-line-date">
-                                <?= $model->time ?>
+                                <?php
+                                $aTimes = explode(':', $model->time);
+                                $hours = intval($aTimes[0]) + 4;
+                                if($hours >= 24) {
+                                    $hours = $hours - 24;
+                                    $model->data += 86400;
+                                }
+                                if($hours < 10) {
+                                    $hours = '0'.$hours;
+                                }
+                                ?>
+
+                                ~ <?= $hours.':'.$aTimes[1] ?>
                             </div>
-                            <div class=" reservation-step-line-time">
+                            <div class="reservation-step-line-time">
                                 <?= intval(date('d', $model->data)) ?> <?= $aMonths[intval(date('m', $model->data))] ?>
                             </div>
                         </div>
@@ -182,23 +197,85 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
             <div class="reservation-step-info d-b">
                 <div class = "reservation-step-info_row">
                     <div class = "reservation-step-info_title">Заказчик:</div>
-                    <div class = "reservation-step-info_value">Ахмадиев Артур, +7-917-939-7393</div>
+                    <div class = "reservation-step-info_value"><?= $model->last_name ?> <?= $model->first_name ?>, <?= $model->phone ?></div>
                 </div>
                 <div class = "reservation-step-info_row">
                     <div class = "reservation-step-info_title">Пассажиры:</div>
-                    <div class = "reservation-step-info_value">ВЗР - 1, ДЕТИ - 2, свое детское кресло</div>
+                    <div class = "reservation-step-info_value">
+                        <?php
+                        $adult_count = $model->places_count - $model->student_count - $model->child_count;
+
+                        $aRows = [];
+
+                        if($adult_count > 0) {
+                            $aRows[] = 'ВЗР - '.$adult_count;
+                        }if($model->student_count > 0) {
+                            $aRows[] = 'СТУД - '.$model->student_count;
+                        }
+                        if($model->child_count > 0) {
+                            $self_baby_chair_count = 0;
+                            $client_ext_childs = ClientExtChild::find()->where(['clientext_id' => $model->id])->all();
+                            if(count($client_ext_childs) > 0) {
+                                foreach ($client_ext_childs as $client_ext_child) {
+                                    if($client_ext_child->self_baby_chair == true) {
+                                        $self_baby_chair_count++;
+                                    }
+                                }
+                            }
+                            $row = 'ДЕТИ - '.$model->child_count;
+                            if($self_baby_chair_count > 0) {
+                                $row .= ', свое детское кресло';
+                            }
+                            if($self_baby_chair_count > 1) {
+                                $row .= '('.$self_baby_chair_count.' шт.)';
+                            }
+                            $aRows[] = $row;
+                        } ?>
+
+                        <?= implode(', ', $aRows) ?>
+                    </div>
                 </div>
                 <div class = "reservation-step-info_row">
                     <div class = "reservation-step-info_title">Информация о багаже:</div>
-                    <div class = "reservation-step-info_value">Нет</div>
+                    <div class = "reservation-step-info_value">
+                        <?php
+                        $aRows = [];
+                        if($model->suitcase_count > 0) {
+                            $aRows[] = $model->suitcase_count.' '.Helper::getNumberString($model->suitcase_count, 'чемодан', 'чемодана', 'чемоданов');
+                        }
+                        if($model->bag_count > 0) {
+                            $aRows[] = $model->bag_count.' '.Helper::getNumberString($model->bag_count, 'ручная кладь', 'ручные клади', 'ручных клади');
+                        }
+                        ?>
+                        <?= implode(', ', $aRows) ?>
+                    </div>
                 </div>
                 <div class = "reservation-step-info_row">
                     <div class = "reservation-step-info_title">Сообщение для оператора:</div>
                     <div class = "reservation-step-info_value">Нет</div>
                 </div>
-                <div class = "reservation-step-info_row">
-                    <div class = "reservation-step-info_deadline">Прибытие поезда в 14:00</div>
-                </div>
+                <? if(!empty($model->time_air_train_arrival)) { ?>
+                    <div class = "reservation-step-info_row">
+                        <div class = "reservation-step-info_deadline">
+                        <? if($model->yandexPointFrom->alias == 'airoport') { ?>
+                            Время прилета самолета <?= $model->time_air_train_arrival ?>
+                        <? }else { ?>
+                            Прибытие поезда в <?= $model->time_air_train_arrival ?>
+                        <? } ?>
+                        </div>
+                    </div>
+                <? } ?>
+                <? if(!empty($model->time_air_train_departure)) { ?>
+                    <div class = "reservation-step-info_row">
+                        <div class = "reservation-step-info_deadline">
+                    <? if($model->yandexPointTo->alias == 'airoport') { ?>
+                        Начало регистрации вылета <?= $model->time_air_train_departure ?>
+                    <? }else { ?>
+                        Отправление поезда в <?= $model->time_air_train_departure ?>
+                    <? } ?>
+                        </div>
+                    </div>
+                <? } ?>
             </div>
             <div class = "reservation-step-actions">
                 <a href="/site/create-order?c=<?= $model->access_code ?>">Изменить данные заказа</a>
@@ -348,21 +425,23 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
     </div>
 </form>
 
-<div class="reservation-prices">
-    <div class="container">
-        <div class="reservation-price d-b">
-            <div class="reservation-price__title"><b class="reservation-price__one-price"><?= $model->getCalculatePrice('prepayment', 1) ?></b> рублей за место</div>
-            <div class="reservation-price__subtitle">Итого: <b class="reservation-price__price"><?= $model->getCalculatePrice('prepayment') ?></b> р.</div>
-            <div id="make-simple-payment-checkorderpage" class="reservation-price__button" access_code="<?= $model->access_code ?>">Оплатить сейчас</div>
+<? if($model->is_paid != 1) { ?>
+    <div class="reservation-prices">
+        <div class="container">
+            <div class="reservation-price d-b">
+                <div class="reservation-price__title"><b class="reservation-price__one-price"><?= $model->getCalculatePrice('prepayment', 1) ?></b> рублей за место</div>
+                <div class="reservation-price__subtitle">Итого: <b class="reservation-price__price"><?= $model->getCalculatePrice('prepayment') ?></b> р.</div>
+                <div class="reservation-price__button make-simple-payment-checkorderpage" access_code="<?= $model->access_code ?>">Оплатить сейчас</div>
+            </div>
         </div>
-    </div>
 
-    <div class="container">
-        <div class="reservation-price reservation-price--cash d-b">
-            <div class="reservation-price__title"><b class="reservation-price__cash-price"><?= $model->getCalculatePrice('unprepayment') ?></b> рублей</div>
-            <div class="reservation-price__subtitle">При оплате наличными</div>
-            <div id="but_reservation" class="reservation-price__button" access_code="<?= $model->access_code ?>">Продолжить без оплаты</div>
-            <div class="reservation-price__label">Доступно авторизованным пользователям</div>
+        <div class="container">
+            <div class="reservation-price reservation-price--cash d-b">
+                <div class="reservation-price__title"><b class="reservation-price__cash-price"><?= $model->getCalculatePrice('unprepayment') ?></b> рублей</div>
+                <div class="reservation-price__subtitle">При оплате наличными</div>
+                <div class="reservation-price__button but_reservation" access_code="<?= $model->access_code ?>">Продолжить без оплаты</div>
+                <div class="reservation-price__label">Доступно авторизованным пользователям</div>
+            </div>
         </div>
     </div>
-</div>
+<? } ?>

@@ -1,6 +1,6 @@
 
-
-$(document).on('click', '#make-simple-payment-checkorderpage', function() {
+/*
+$(document).on('click', '.make-simple-payment-checkorderpage', function() {
 
     // var client_ext_id = $('#order-client-form').attr('client-ext-id');
     var access_code = $(this).attr('access_code');
@@ -62,6 +62,7 @@ $(document).on('click', '#make-simple-payment-checkorderpage', function() {
     return false;
 });
 
+*/
 
 var t;
 function upScreen() {
@@ -93,8 +94,8 @@ $(document).on('submit', '.reservation-form', function() {
     return false;
 });
 
-
-$(document).on('click', '#but_reservation', function() {
+/*
+$(document).on('click', '.but_reservation', function() {
 
     // var client_ext_id = $('#order-client-form').attr('client-ext-id');
     var access_code = $(this).attr('access_code');
@@ -133,3 +134,4 @@ $(document).on('click', '#but_reservation', function() {
 
     return false;
 });
+*/

@@ -129,14 +129,17 @@ endif;
                     <div id="modal_restorepassword" class="for_enter_wrap"></div>
                     <div id="modal_entersmscode" class="for_enter_wrap"></div>
                     <div id="modal_registration" class="for_enter_wrap"></div>
-                <?php }else { ?>
+                <?php }else {
+
+                    $fio = Yii::$app->user->identity->last_name.' '.Yii::$app->user->identity->first_name;
+                    ?>
                     <a class="header__login text_14" href="#" onclick="">
                         <i>
                             <svg class="icon icon-user header__icon">
                                 <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#user"></use>
                             </svg>
                         </i>
-                        Я, <?= (mb_strlen(Yii::$app->user->identity->fio) > 11 ? mb_substr(Yii::$app->user->identity->fio, 0, 11) : Yii::$app->user->identity->fio) ?>
+                        Я, <?= (mb_strlen($fio) > 11 ? mb_substr($fio, 0, 11) : $fio) ?>
                     </a>
                     <div class="for_enter_wrap modal_enter" style="display: none;">
                      <div class="for_enter">

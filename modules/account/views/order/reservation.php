@@ -62,7 +62,7 @@ $this->registerJsFile('js/account/reservation.js', ['depends'=>'app\assets\NewAp
                     </div>
                 </div>
                 <div class = "order__detail">
-                    <a href="">Подробнее ></a>
+                    <a href="" order-id="<?= $order->id ?>">Подробнее ></a>
                 </div>
                 <div class = "order__actions">
                     <a class = "order__actions__edit" href="/site/create-order?c=<?= $order->access_code ?>">Изменить</a>
@@ -74,6 +74,10 @@ $this->registerJsFile('js/account/reservation.js', ['depends'=>'app\assets\NewAp
         <div class="empty-text">У вас нет активных заказов</div>
     <?php } ?>
 </div>
+<div id="order-detail-container">
+
+</div>
+<?php /*
 <div class = "order-detail">
     <div class="order-detail__topline">
         <div class="order-detail__topline-title">Информация о заказе</div>
@@ -176,3 +180,4 @@ $this->registerJsFile('js/account/reservation.js', ['depends'=>'app\assets\NewAp
         </div>
     </div>
 </div>
+ */ ?>

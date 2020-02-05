@@ -709,6 +709,109 @@ $(document).on('click', '.modal_global__logout', function() {
 // });
 
 
+// кнопка "Оплатить сейчас" (при оформлении заказа и в личном кабинете)
+$(document).on('click', '.make-simple-payment-checkorderpage', function() {
+
+  // var client_ext_id = $('#order-client-form').attr('client-ext-id');
+  var access_code = $(this).attr('access_code');
+
+  $.ajax({
+    url: '/site/ajax-save-but-checkout?c=' + access_code + '&type_button=payment',
+    type: 'post',
+    data: {},
+    success: function (response) {
+
+      $.ajax({
+        url: '/yandex-payment/payment/ajax-make-simple-payment?c=' + access_code + '&source_page=check-order',
+        type: 'post',
+        data: {},
+        success: function (response) {
+          if (response.success === true) {
+            //alert(response.redirect_url);
+            location.href = response.redirect_url;
+          }else {
+            alert(response);
+          }
+        },
+        error: function (data, textStatus, jqXHR) {
+          if (textStatus == 'error' && data != undefined) {
+            if (void 0 !== data.responseJSON) {
+              if (data.responseJSON.message.length > 0) {
+                alert(data.responseJSON.message);
+              }
+            } else {
+              if (data.responseText.length > 0) {
+                alert(data.responseText);
+              }
+            }
+          }else {
+            //handlingAjaxError(data, textStatus, jqXHR);
+          }
+        }
+      });
+
+
+    },
+    error: function (data, textStatus, jqXHR) {
+      if (textStatus == 'error' && data != undefined) {
+        if (void 0 !== data.responseJSON) {
+          if (data.responseJSON.message.length > 0) {
+            alert(data.responseJSON.message);
+          }
+        } else {
+          if (data.responseText.length > 0) {
+            alert(data.responseText);
+          }
+        }
+      }else {
+        //handlingAjaxError(data, textStatus, jqXHR);
+      }
+    }
+  });
+
+  return false;
+});
+
+// кнопка "Продолжить без оплаты" (при оформлении заказа и в личном кабинете)
+$(document).on('click', '.but_reservation', function() {
+
+  // var client_ext_id = $('#order-client-form').attr('client-ext-id');
+  var access_code = $(this).attr('access_code');
+
+  $.ajax({
+    url: '/site/ajax-save-but-checkout?c=' + access_code + '&type_button=reservation',
+    type: 'post',
+    data: {},
+    success: function (response) {
+
+      if (response.success === true) {
+        location.href = '/site/finish-order?c=' + access_code;
+      }else {
+        if(response.action == 'need_auth') {
+          // openLoginForm(access_code);
+          upScreen();
+        }
+      }
+    },
+    error: function (data, textStatus, jqXHR) {
+      if (textStatus == 'error' && data != undefined) {
+        if (void 0 !== data.responseJSON) {
+          if (data.responseJSON.message.length > 0) {
+            alert(data.responseJSON.message);
+          }
+        } else {
+          if (data.responseText.length > 0) {
+            alert(data.responseText);
+          }
+        }
+      }else {
+        //handlingAjaxError(data, textStatus, jqXHR);
+      }
+    }
+  });
+
+  return false;
+});
 
 
 

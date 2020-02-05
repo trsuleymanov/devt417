@@ -46,6 +46,24 @@ class OrderController extends Controller
         ]);
     }
 
+
+    public function actionGetOrderInfo($order_id) {
+
+        $order = ClientExt::find()->where(['id' => $order_id])->one();
+        if($order == null) {
+            throw new ErrorException('Заказ не найден');
+        }
+
+        if($order->user_id != Yii::$app->user->identity->getId()) {
+            throw new ForbiddenHttpException('Заказ не принадлежит текущему пользователю');
+        }
+
+        return $this->renderPartial('order-info', [
+            'model' => $order
+        ]);
+    }
+
+
     /**
      * @param $id
      * @throws ForbiddenHttpException

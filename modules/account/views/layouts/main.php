@@ -46,7 +46,7 @@ endif;
     <?php $this->head() ?>
 </head>
 
-<body class="<?=$addClass;?>">
+<body class="<?= (isset($addClass) ? $addClass : '') ?>">
 <?php $this->beginBody() ?>
 <div class="wrapper">
     <header>
@@ -64,7 +64,9 @@ endif;
                     <a href="/">417417.ru</a>
                 </div>
 
-                <?php if($user != null) { ?>
+                <?php if($user != null) {
+                    $fio = $user->last_name.' '.$user->first_name;
+                    ?>
                     <div class="header__enter text_16">
                         <a class="header__login text_14" href="#" onclick="">
                             <i>
@@ -72,7 +74,7 @@ endif;
                                     <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#user"></use>
                                 </svg>
                             </i>
-                            Я, <?= (mb_strlen(Yii::$app->user->identity->fio) > 11 ? mb_substr(Yii::$app->user->identity->fio, 0, 11) : Yii::$app->user->identity->fio) ?>
+                            Я, <?= (mb_strlen($fio) > 11 ? mb_substr($fio, 0, 11) : $fio) ?>
                         </a>
                         <div class="for_enter_wrap modal_enter">
                             <div  class="for_enter">
