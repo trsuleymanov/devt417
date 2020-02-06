@@ -1467,6 +1467,10 @@ $(document).on('click', '#search-from-block[city-extended-external-use="1"] .sea
 $(document).on('click', '#search-from-block[city-extended-external-use="0"] .main-list li', function () {
 
     var yandex_point_from_id = $(this).val();
+    var text = $.trim($(this).text());
+    var $obj = $(this).parents('.psw-outer-block').prev('.psw-element');
+    pointSelectWidgetInsertValue($obj, yandex_point_from_id, text);
+
     showMapFromAndOpenTripTimes(yandex_point_from_id);
 });
 
@@ -1476,6 +1480,10 @@ $(document).on('click', '#search-from-block[city-extended-external-use="0"] .mai
 $(document).on('click', '#search-to-block li', function() {
 
     var yandex_point_to_id = $(this).val();
+
+    var text = $.trim($(this).text());
+    var $obj = $(this).parents('.psw-outer-block').prev('.psw-element');
+    pointSelectWidgetInsertValue($obj, yandex_point_to_id, text);
 
     var placemark = selectPlacemark('map_to', yandex_point_to_id);
     var coordinates = placemark.geometry.getCoordinates();
