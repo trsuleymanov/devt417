@@ -452,6 +452,9 @@ class MainServerController extends Controller
                         $exist_trip->start_time = $data_trip['start_time'];
                         $exist_trip->mid_time = $data_trip['mid_time'];
                         $exist_trip->end_time = $data_trip['end_time'];
+                        $exist_trip->start_time_unixtime = $data_trip['start_time_unixtime'];
+                        $exist_trip->mid_time_unixtime = $data_trip['mid_time_unixtime'];
+                        $exist_trip->end_time_unixtime = $data_trip['end_time_unixtime'];
                         $exist_trip->created_updated_at = $data['new_max_date'];
 
                         if(!$exist_trip->save(false)) {
@@ -472,13 +475,16 @@ class MainServerController extends Controller
                             $data_trip['start_time'],
                             $data_trip['mid_time'],
                             $data_trip['end_time'],
+                            $data_trip['start_time_unixtime'],
+                            $data_trip['mid_time_unixtime'],
+                            $data_trip['end_time_unixtime'],
                             $data['new_max_date']
                         ];
                     }
 
                     Yii::$app->db->createCommand()->batchInsert(
                         'trip',
-                        ['main_server_trip_id', 'name', 'date', 'direction_id', 'commercial', 'start_time', 'mid_time', 'end_time', 'created_updated_at'],
+                        ['main_server_trip_id', 'name', 'date', 'direction_id', 'commercial', 'start_time', 'mid_time', 'end_time', 'start_time_unixtime', 'mid_time_unixtime', 'end_time_unixtime', 'created_updated_at'],
                         $aSqlNewTrips
                     )->execute();
                 }

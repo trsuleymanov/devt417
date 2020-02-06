@@ -42,7 +42,8 @@ class Trip extends \yii\db\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['date', 'main_server_trip_id', 'direction_id', 'commercial', 'created_updated_at'], 'integer'],
+			[['date', 'main_server_trip_id', 'direction_id', 'commercial', 'created_updated_at',
+                'start_time_unixtime', 'mid_time_unixtime', 'end_time_unixtime'], 'integer'],
 			[['name'], 'string', 'max' => 50],
 			[['start_time', 'mid_time', 'end_time'], 'string', 'max' => 5],
 			[['date', 'direction_id', 'name', 'start_time', 'mid_time', 'end_time'], 'required']
@@ -64,6 +65,9 @@ class Trip extends \yii\db\ActiveRecord
 			'start_time' => 'Начало сбора',
 			'mid_time' => 'Середина сбора',
 			'end_time' => 'Конец сбора',
+            'start_time_unixtime' => 'Начало сбора',
+            'mid_time_unixtime' => 'Середина сбора',
+            'end_time_unixtime' => 'Конец сбора',
 			'created_updated_at' => 'Дата создания/редатирования'
 		];
 	}

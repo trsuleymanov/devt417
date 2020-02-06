@@ -915,6 +915,10 @@ class ClientExt extends \yii\db\ActiveRecord
         $unixtime = $this->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
 
 
+        // ищем самый ближний рейс до выбранного времени
+
+
+
         $day_trips = Trip::find()
             ->where(['direction_id' => $this->direction_id])
             ->andWhere(['date' => $this->data])
