@@ -942,6 +942,8 @@ class ClientExt extends \yii\db\ActiveRecord
 
             if($key == 0) {
 
+                //echo "day_trip_unixtime=".$day_trip->unixtime.' unixtime='.$unixtime;
+
                 if($day_trip->unixtime >= $unixtime - 3599) {
 
                     // значит предшествующий рейс - это вчерашний рейс, а следующие 2 рейса - это первые 2 сегодняшних рейсов
@@ -960,9 +962,12 @@ class ClientExt extends \yii\db\ActiveRecord
                         $prev_day_trip->unixtime = $day_trip_unixtime;
                         $PrevDayTrips[$prev_day_trip->unixtime] = $prev_day_trip;
                     }
-                    ksort($PrevDayTrips);
+                    krsort($PrevDayTrips);
+
+
 
                     foreach ($PrevDayTrips as $unixtime => $prev_day_trip) {
+                        //exit('q1');
                         $prev_trip = $prev_day_trip;
                         break;
                     }
@@ -973,6 +978,7 @@ class ClientExt extends \yii\db\ActiveRecord
             }else {
 
                 if($day_trip->unixtime >= $unixtime - 3599) {
+
                     $prev_trip = $aUnixtimeDayTrips2[$key];
                     //echo "prev_trip:<pre>"; print_r($prev_trip); echo "</pre>";
 
@@ -1036,6 +1042,7 @@ class ClientExt extends \yii\db\ActiveRecord
         }
 
         if($prev_trip == null && $next_trip_1 == null) { // например если желаемое время 23:00, то рейсы не будут найдены
+
             $next_day_trips = Trip::find()
                 ->where(['direction_id' => $this->direction_id])
                 ->andWhere(['date' => $this->data + 86400])
