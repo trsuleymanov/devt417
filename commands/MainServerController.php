@@ -435,11 +435,6 @@ class MainServerController extends Controller
                 $aNewDataTrips = [];
                 foreach($data['trips'] as $data_trip) {
 
-                    if($data_trip['id'] == 41327) {
-                        echo "data_trip:<pre>"; print_r($data_trip); echo "</pre>";
-                    }
-
-
                     if($aExistTrips[$data_trip['id']]) {
                         $aExistDataTrips[$data_trip['id']] = $data_trip;
                     }else {
@@ -450,6 +445,7 @@ class MainServerController extends Controller
 
                 if(count($aExistDataTrips) > 0) {
                     foreach ($aExistDataTrips as $data_trip) {
+
                         $exist_trip = $aExistTrips[$data_trip['id']];
                         $exist_trip->name = $data_trip['name'];
                         $exist_trip->date = $data_trip['date'];
@@ -463,16 +459,12 @@ class MainServerController extends Controller
                         $exist_trip->end_time_unixtime = $data_trip['end_time_unixtime'];
                         $exist_trip->created_updated_at = $data['new_max_date'];
 
-                        $exist_trip->date_start_sending = $data['date_start_sending'];
-                        $exist_trip->date_issued_by_operator = $data['date_issued_by_operator'];
-                        $exist_trip->date_sended = $data['date_sended'];
+                        $exist_trip->date_start_sending = $data_trip['date_start_sending'];
+                        $exist_trip->date_issued_by_operator = $data_trip['date_issued_by_operator'];
+                        $exist_trip->date_sended = $data_trip['date_sended'];
 
                         if(!$exist_trip->save(false)) {
                             throw new ErrorException('Не удалось обновлить рейс');
-                        }
-
-                        if($data_trip['id'] == 41327) {
-                            echo "exist_trip:<pre>"; print_r($exist_trip); echo "</pre>";
                         }
                     }
                 }
