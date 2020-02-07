@@ -407,7 +407,7 @@ class SiteController extends Controller
         $unixtime = $clientext->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
 
         $prev_trip = Trip::find()
-            ->where(['direction_id' => $this->direction_id])
+            ->where(['direction_id' => $clientext->direction_id])
             ->andWhere(['<', 'end_time_unixtime', $unixtime])
             ->orderBy(['end_time_unixtime' => SORT_DESC])
             ->one();
