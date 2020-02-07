@@ -434,6 +434,12 @@ class MainServerController extends Controller
                 $aExistDataTrips = [];
                 $aNewDataTrips = [];
                 foreach($data['trips'] as $data_trip) {
+
+                    if($data_trip['id'] == 41327) {
+                        echo "data_trip:<pre>"; print_r($data_trip); echo "</pre>";
+                    }
+
+
                     if($aExistTrips[$data_trip['id']]) {
                         $aExistDataTrips[$data_trip['id']] = $data_trip;
                     }else {
@@ -441,9 +447,6 @@ class MainServerController extends Controller
                     }
                 }
 
-                if($data_trip['id'] == 41327) {
-                    echo "data_trip:<pre>"; print_r($data_trip); echo "</pre>";
-                }
 
                 if(count($aExistDataTrips) > 0) {
                     foreach ($aExistDataTrips as $data_trip) {
