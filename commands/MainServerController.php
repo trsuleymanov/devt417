@@ -441,6 +441,9 @@ class MainServerController extends Controller
                     }
                 }
 
+                if($data_trip['id'] == 41327) {
+                    echo "data_trip:<pre>"; print_r($data_trip); echo "</pre>";
+                }
 
                 if(count($aExistDataTrips) > 0) {
                     foreach ($aExistDataTrips as $data_trip) {
