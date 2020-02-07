@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Class m200207_154311_add_fields_to_trip
  */
-class m200207_154311_add_fields_to_trip extends Migration
+class m200207_154311_add_fields_to_trip2 extends Migration
 {
     public function up()
     {

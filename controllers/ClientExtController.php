@@ -85,8 +85,22 @@ class ClientExtController extends Controller
                 $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
 
                 $arrival = $time_confirm + 12000;
+
+
+                if(!empty($trip->date_sended)) {
+                    $status = 'Закрыт в '.date('H:i', $trip->date_sended);
+                }elseif(!empty($trip->date_issued_by_operator)) {
+                    $status = 'Отправлен в '.date('H:i', $trip->date_issued_by_operator);
+                }elseif(!empty($trip->date_start_sending)) {
+                    $status = 'Начата отправка в '.date('H:i', $trip->date_start_sending);
+                }else {
+                    $status = 'Не начат';
+                }
+
+
                 $aTripsTimeConfirms[] = [
                     'trip_id' => $trip->id,
+                    'status' => $status,
                     'data' => date("d.m.Y", $time_confirm),
                     'departure_date' => date('d', $time_confirm) .' '. $aMonths[intval(date('m', $time_confirm))],
                     'departure_time' => date("H:i", $time_confirm),

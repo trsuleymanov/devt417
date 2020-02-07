@@ -537,23 +537,9 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
 
                     has_elems = true;
                     var trip_obj = response.trips_time[key];
-                    // var str = '';
-                    // if(trip_obj.data != undefined) {
-                    //     str += "<span class='trip-data'>" + trip_obj.data + "</span><br />";
-                    // }
-                    // str += "<span class='trip-time'>" + trip_obj.time + "</span>";
-                    // var i = 1 + parseInt(key);
-                    // $('#trip-time-confirm-' + i).html(str)
-                    //     .attr('trip-id', trip_obj.trip_id)
-                    //     .attr('travel_time_h', trip_obj.travel_time_h)
-                    //     .attr('travel_time_m', trip_obj.travel_time_m);
 
-                    // trip_id  3491
-                    // time 03:10
-                    // data 12.10.2019
-                    // travel_time_h    3
-                    // travel_time_m
 
+                    var text = trip_obj.data + trip_obj.departure_time + ' (' + trip_obj.status + ')';
                     trips_html += '<li class="reservation-drop__time-item"' +
                         ' trip-id="' + trip_obj.trip_id + '"' +
                         ' data-departure-date="'+ trip_obj.departure_date +'" ' +
@@ -567,7 +553,8 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
                         'yandex-point-description="' + response.yandex_point_description + '"' +
                         'yandex-point-critical-point="' + response.yandex_point_critical_point + '"' +
                         'yandex-point-alias="' + response.yandex_point_alias + '"' +
-                        '>' + (response.client_ext_data != trip_obj.data ? trip_obj.data + ' ' : '') + trip_obj.departure_time + '</li>';
+                        //'>' + (response.client_ext_data != trip_obj.data ? trip_obj.data + ' ' : '') + trip_obj.departure_time + '</li>';
+                        '>' + text + '</li>';
                 }
 
                 var yandex_point_name = response.yandex_point_name;
