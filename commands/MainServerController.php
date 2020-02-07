@@ -470,6 +470,10 @@ class MainServerController extends Controller
                         if(!$exist_trip->save(false)) {
                             throw new ErrorException('Не удалось обновлить рейс');
                         }
+
+                        if($data_trip['id'] == 41327) {
+                            echo "exist_trip:<pre>"; print_r($exist_trip); echo "</pre>";
+                        }
                     }
                 }
 
