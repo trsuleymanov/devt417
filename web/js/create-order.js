@@ -539,7 +539,7 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
                     var trip_obj = response.trips_time[key];
 
 
-                    var text = trip_obj.data + trip_obj.departure_time + ' (' + trip_obj.status + ')';
+                    var text = trip_obj.data + ' ' + trip_obj.departure_time + ' (' + trip_obj.status + ')';
                     trips_html += '<li class="reservation-drop__time-item"' +
                         ' trip-id="' + trip_obj.trip_id + '"' +
                         ' data-departure-date="'+ trip_obj.departure_date +'" ' +
