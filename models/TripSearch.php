@@ -18,7 +18,8 @@ class TripSearch extends Trip
     public function rules()
     {
         return [
-            [['id', 'main_server_trip_id', 'date', 'direction_id', 'commercial', 'created_updated_at'], 'integer'],
+            [['id', 'main_server_trip_id', 'date', 'direction_id', 'commercial', 'created_updated_at',
+                'date_start_sending', 'date_issued_by_operator', 'date_sended'], 'integer'],
             [['name', 'start_time', 'mid_time', 'end_time'], 'safe'],
         ];
     }
@@ -70,6 +71,9 @@ class TripSearch extends Trip
             'direction_id' => $this->direction_id,
             'commercial' => $this->commercial,
             'created_updated_at' => $this->created_updated_at,
+            'date_start_sending' => $this->date_start_sending,
+            'date_issued_by_operator' => $this->date_issued_by_operator,
+            'date_sended' => $this->date_sended,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

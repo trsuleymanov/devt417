@@ -457,6 +457,10 @@ class MainServerController extends Controller
                         $exist_trip->end_time_unixtime = $data_trip['end_time_unixtime'];
                         $exist_trip->created_updated_at = $data['new_max_date'];
 
+                        $exist_trip->date_start_sending = $data['date_start_sending'];
+                        $exist_trip->date_issued_by_operator = $data['date_issued_by_operator'];
+                        $exist_trip->date_sended = $data['date_sended'];
+
                         if(!$exist_trip->save(false)) {
                             throw new ErrorException('Не удалось обновлить рейс');
                         }
@@ -478,13 +482,20 @@ class MainServerController extends Controller
                             $data_trip['start_time_unixtime'],
                             $data_trip['mid_time_unixtime'],
                             $data_trip['end_time_unixtime'],
-                            $data['new_max_date']
+                            $data['new_max_date'],
+
+                            $data['date_start_sending'],
+                            $data['date_issued_by_operator'],
+                            $data['date_sended'],
                         ];
                     }
 
                     Yii::$app->db->createCommand()->batchInsert(
                         'trip',
-                        ['main_server_trip_id', 'name', 'date', 'direction_id', 'commercial', 'start_time', 'mid_time', 'end_time', 'start_time_unixtime', 'mid_time_unixtime', 'end_time_unixtime', 'created_updated_at'],
+                        ['main_server_trip_id', 'name', 'date', 'direction_id', 'commercial', 'start_time',
+                            'mid_time', 'end_time', 'start_time_unixtime', 'mid_time_unixtime',
+                            'end_time_unixtime', 'created_updated_at',
+                            'date_start_sending', 'date_issued_by_operator', 'date_sended'],
                         $aSqlNewTrips
                     )->execute();
                 }

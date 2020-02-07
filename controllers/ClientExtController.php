@@ -68,7 +68,7 @@ class ClientExtController extends Controller
 
         $client_ext = ClientExt::find()->where(['access_code' => $c])->one();
         $trips = $client_ext->getTripsForChange();
-        // echo "trips:<pre>"; print_r($trips); echo "</pre>";
+        //echo "trips:<pre>"; print_r($trips); echo "</pre>"; exit;
 
         $aTripsTimeConfirms = [];
         $yandex_point_from = YandexPoint::find()->where(['id' => $yandex_point_from_id])->one();
@@ -94,37 +94,6 @@ class ClientExtController extends Controller
                     'arrival_time' => date("H:i", $arrival)
                 ];
 
-                // $aTripEndTime = explode(':', $trip->end_time);
-                // $trip_end_time = 3600*intval($aTripEndTime[0]) + 60*intval($aTripEndTime[1]);
-                // //$travel_time = $trip_end_time - $time_confirm + 10800; // unixtime
-                // $travel_time = 2*$trip->date + $trip_end_time - $time_confirm + 10800;
-
-                // if(date("d.m.Y", $time_confirm) == date("d.m.Y", $client_ext->data)) {
-
-                //     $aTripsTimeConfirms[] = [
-                //         'trip_id' => $trip->id,
-                //         'time' => date("H:i", $time_confirm),
-                //         'travel_time_h' => intval(date("H", $travel_time)),
-                //         'travel_time_m' => intval(date("i", $travel_time)),
-                //         'data' => date("d.m.Y", $time_confirm),
-                //     ];
-                // }else {
-
-                //     $date = date("d.m.Y", $time_confirm);
-                //     if($date == date("d.m.Y", time() + 86400)) {
-                //         $date = "завтра";
-                //     }elseif($date == date("d.m.Y", time() + 86400)) {
-                //         $date = "вчера";
-                //     }
-
-                //     $aTripsTimeConfirms[] = [
-                //         'trip_id' => $trip->id,
-                //         'time' => date("H:i", $time_confirm),
-                //         'data' => $date,
-                //         'travel_time_h' => intval(date("H", $travel_time)),
-                //         'travel_time_m' => intval(date("i", $travel_time)),
-                //     ];
-                // }
             }
 
         }

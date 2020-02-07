@@ -43,7 +43,8 @@ class Trip extends \yii\db\ActiveRecord
 	{
 		return [
 			[['date', 'main_server_trip_id', 'direction_id', 'commercial', 'created_updated_at',
-                'start_time_unixtime', 'mid_time_unixtime', 'end_time_unixtime'], 'integer'],
+                'start_time_unixtime', 'mid_time_unixtime', 'end_time_unixtime',
+                'date_start_sending', 'date_issued_by_operator', 'date_sended'], 'integer'],
 			[['name'], 'string', 'max' => 50],
 			[['start_time', 'mid_time', 'end_time'], 'string', 'max' => 5],
 			[['date', 'direction_id', 'name', 'start_time', 'mid_time', 'end_time'], 'required']
@@ -68,6 +69,9 @@ class Trip extends \yii\db\ActiveRecord
             'start_time_unixtime' => 'Начало сбора',
             'mid_time_unixtime' => 'Середина сбора',
             'end_time_unixtime' => 'Конец сбора',
+            'date_start_sending' => 'Время начала отправки машины',
+            'date_issued_by_operator' => 'Дата выпуска рейса оператором',
+            'date_sended' => 'Дата/время отправки рейса',
 			'created_updated_at' => 'Дата создания/редатирования'
 		];
 	}

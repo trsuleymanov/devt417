@@ -528,10 +528,13 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
 
             if( typeof response_function != 'undefined' ){
 
+                // console.log('trips_time:'); console.log(response.trips_time);
+
 
                 var has_elems = false;
                 var trips_html = '';
                 for(var key in response.trips_time) {
+
                     has_elems = true;
                     var trip_obj = response.trips_time[key];
                     // var str = '';
@@ -589,14 +592,6 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
                     '        <div class="reservation-drop__time-back-text"><span class="reservation-drop__time-back-trigger">Другой адрес?</span></div>' +
                     '    </div>';
                 $('.reservation-drop--1').find('.reservation-drop__time').html(html);
-
-                // if(has_elems == true) {
-                //     $('#select-trip-list').show();
-                //     $('#map-text').html("<br />Выберите время посадки на указанной точке:");
-                // }else {
-                //     $('#select-trip-list').hide();
-                //     $('#map-text').html("<br />На выбранной точке к сожалению нельзя сесть. Выберите пожалуйста другую точку.");
-                // }
 
 
                 response_function(response);

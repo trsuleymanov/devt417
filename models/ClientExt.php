@@ -912,6 +912,8 @@ class ClientExt extends \yii\db\ActiveRecord
     public function getTripsForChange() {
 
         $aTime = explode(':', $this->time);
+
+        // дата-время в заказе
         $unixtime = $this->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
 
 
@@ -930,10 +932,10 @@ class ClientExt extends \yii\db\ActiveRecord
 
         $aUnixtimeDayTrips = [];
         foreach ($day_trips as $day_trip) {
-            $aDayTripTime = explode(':', $day_trip->end_time);
-            $day_trip_unixtime = $day_trip->date + 3600 * intval($aDayTripTime[0]) + 60 * intval($aDayTripTime[1]);
-            $day_trip->unixtime = $day_trip_unixtime;
-            $aUnixtimeDayTrips[$day_trip->unixtime] = $day_trip;
+            //$aDayTripTime = explode(':', $day_trip->end_time);
+            //$day_trip_unixtime = $day_trip->date + 3600 * intval($aDayTripTime[0]) + 60 * intval($aDayTripTime[1]);
+            //$day_trip->unixtime = $day_trip_unixtime;
+            $aUnixtimeDayTrips[$day_trip->end_time_unixtime] = $day_trip;
         }
 
         //echo "aUnixtimeDayTrips:<pre>"; print_r($aUnixtimeDayTrips); echo "</pre>";
@@ -951,13 +953,13 @@ class ClientExt extends \yii\db\ActiveRecord
             if($key == 0) {
 
                 //echo "day_trip_unixtime=".$day_trip->unixtime.' unixtime='.$unixtime;
-                /*
                 if($day_trip->unixtime >= $unixtime - 3599) {
 
                     // значит предшествующий рейс - это вчерашний рейс, а следующие 2 рейса - это первые 2 сегодняшних рейсов
                     $next_trip_1 = $aUnixtimeDayTrips2[0];
                     $next_trip_2 = $aUnixtimeDayTrips2[1];
 
+                    /*
                     $prev_day_trips = Trip::find()
                         ->where(['direction_id' => $this->direction_id])
                         ->andWhere(['date' => $this->data - 86400])
@@ -977,10 +979,10 @@ class ClientExt extends \yii\db\ActiveRecord
                     foreach ($PrevDayTrips as $unixtime => $prev_day_trip) {
                         $prev_trip = $prev_day_trip;
                         break;
-                    }
+                    }*/
 
                     break;
-                }*/
+                }
 
             }else {
 
@@ -1048,7 +1050,7 @@ class ClientExt extends \yii\db\ActiveRecord
             }
         }
 
-        if($prev_trip == null && $next_trip_1 == null) { // например если желаемое время 23:00, то рейсы не будут найдены
+        if($next_trip_1 == null) { // например если желаемое время 23:00, то рейсы не будут найдены
 
             $next_day_trips = Trip::find()
                 ->where(['direction_id' => $this->direction_id])
@@ -1069,7 +1071,7 @@ class ClientExt extends \yii\db\ActiveRecord
                 $aUnixtimeNextDayTrips[] = $day_trip;
             }
             if(count($aUnixtimeNextDayTrips) > 0) {
-                $prev_trip = $aUnixtimeNextDayTrips[0];
+                //$prev_trip = $aUnixtimeNextDayTrips[0];
                 $next_trip_1 = $aUnixtimeNextDayTrips[1];
                 $next_trip_2 = $aUnixtimeNextDayTrips[2];
             }
