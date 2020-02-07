@@ -406,6 +406,13 @@ class SiteController extends Controller
         $aTime = explode(':', $clientext->time);
         $unixtime = $clientext->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
 
+        // 1583687460
+        // 1581195600 + 3600*3 =
+        // 1581206400
+        // 1581232020
+
+        echo "unixtime=$unixtime <br />";
+
         $prev_trip = Trip::find()
             ->where(['direction_id' => $clientext->direction_id])
             ->andWhere(['<', 'end_time_unixtime', $unixtime])
@@ -413,6 +420,9 @@ class SiteController extends Controller
             ->one();
 
         echo "prev_trip:<pre>"; print_r($prev_trip); echo "</pre>";
+
+
+        //echo strtotime(date('d.m.Y')) + 2*86400;
     }
 
     public function actionTest2() {
