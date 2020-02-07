@@ -12,6 +12,7 @@ use app\models\InputPhoneForm;
 use app\models\RegistrationForm;
 use app\models\RestorePasswordForm;
 use app\models\Setting;
+use app\models\Trip;
 use Yii;
 use yii\base\ErrorException;
 use yii\web\Controller;
@@ -397,8 +398,21 @@ class SiteController extends Controller
         // $email = 'vlad.shetinin@gmail.com'; // vl**********n@g***l.com
         // $email = 'kal@li.ru'; // k*l@li.ru
         // $email = 'absuz@cook.com'; // ab**z@c**k.com
-        $email = 'ya@ya.ru'; // ya@ya.ru
-        echo Helper::setMaskToEmail($email);
+        //$email = 'ya@ya.ru'; // ya@ya.ru
+        //echo Helper::setMaskToEmail($email);
+
+        $clientext = ClientExt::find()->where(['id' => 204241])->one();
+
+        $aTime = explode(':', $clientext->time);
+        $unixtime = $clientext->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
+
+        $prev_trip = Trip::find()
+            ->where(['direction_id' => $this->direction_id])
+            ->andWhere(['<', 'end_time_unixtime', $unixtime])
+            ->orderBy(['end_time_unixtime' => SORT_DESC])
+            ->one();
+
+        echo "prev_trip:<pre>"; print_r($prev_trip); echo "</pre>";
     }
 
     public function actionTest2() {
