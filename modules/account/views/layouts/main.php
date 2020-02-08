@@ -258,7 +258,6 @@ endif;
                 </button>
             </div>
             <ul class="reservation-menu__list">
-
                 <li class="nav__item reservation-menu__item text_18" id="active__reservation"><a class="nav__link <?= $current_route == 'account/order/reservation' ? 'active' : ''; ?>" href="/account/order/reservation">АКТИВНЫЕ ЗАКАЗЫ</a></li>
                 <li class="nav__item reservation-menu__item text_18" id="pass_reservation"><a class="nav__link <?= $current_route == 'account/order/history' ? 'active' : ''; ?>" href="/account/order/history">ИСТОРИЯ ЗАКАЗОВ</a></li>
                 <li class="nav__item reservation-menu__item text_18" id="pass_reservation"><a class="nav__link <?= $current_route == 'account/personal/index' ? 'active' : ''; ?>" href="/account/personal">МОЙ ПРОФИЛЬ</a></li>
@@ -292,6 +291,11 @@ endif;
                         <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#right-arrow"></use>
                     </svg>
                 </button>
+            </div>
+            <div class="modal_global__support" style = "display: none">
+                <a class = "text_20" href="tel:88553420417">
+                    8 (8553) 420-417
+                </a>
             </div>
             <ul class="nav">
                 <li class="nav__item"><a class="nav__link text_18" href="/#new-order">Новый заказ</a></li>

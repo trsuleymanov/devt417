@@ -378,8 +378,9 @@ endif;
                             </div>
                         </div>
                     </div>
-                    <div class="modal_global__bottom">
-                        <button id="close-peoples-mobile" data-izimodal-close="" class="modal_global__submit text_16" type="button">Продолжить</button>
+                    <div class="modal_global__bottom error__wrapper">
+                        <button id="close-peoples-mobile" class="modal_global__submit text_18" type="button">Продолжить</button>
+                        <div class = "error"></div>
                     </div>
                 </div>
             </div> 

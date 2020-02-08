@@ -109,8 +109,20 @@ $(document).on('click', '#but_reservation', function() {
                 location.href = '/site/finish-order?c=' + access_code;
             }else {
                 if(response.action == 'need_auth') {
-                    // openLoginForm(access_code);
+
                     upScreen();
+                    if( $('body').is('.guest') ){
+
+                        $('.header__login').toggleClass('click_fix');
+                        $('#modal_enter_phone').toggle();
+                        $('#inputphoneform-mobile_phone').focus();
+
+                    } else {
+
+                        $('.for_enter_wrap').toggle(100);
+
+                    }
+
                 }
             }
         },
