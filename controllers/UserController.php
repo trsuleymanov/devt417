@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\Helper;
 use app\models\CurrentReg;
 use app\models\User;
 use Yii;
@@ -83,6 +84,7 @@ class UserController extends Controller
             $phone = "+".$phone;
         }
 
+        $phone = Helper::convertWebToDBMobile($phone);
         $user = User::find()->where(['phone' => $phone])->one();
 
         return [

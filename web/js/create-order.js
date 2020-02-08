@@ -1937,25 +1937,25 @@ $(document).on('blur', 'input[name="ClientExt[last_name]"]', function(e) {
     return true;
 });
 
-var has_first_name_error = false;
-$(document).on('blur', 'input[name="ClientExt[first_name]"]', function(e) {
-
-    if(has_first_name_error == false) {
-
-        var first_name = $(this).val();
-        first_name = first_name.replace(/^\s+/g, '');
-        if (first_name.length == 0) {
-            has_first_name_error = true;
-            alert('Заполните Имя');
-        }
-    }else {
-        has_first_name_error = false;
-    }
-
-    //toggleSubmitBut2(); // Имя - вообще не обязательное поле
-
-    return true;
-});
+// var has_first_name_error = false;
+// $(document).on('blur', 'input[name="ClientExt[first_name]"]', function(e) {
+//
+//     if(has_first_name_error == false) {
+//
+//         var first_name = $(this).val();
+//         first_name = first_name.replace(/^\s+/g, '');
+//         if (first_name.length == 0) {
+//             has_first_name_error = true;
+//             alert('Заполните Имя');
+//         }
+//     }else {
+//         has_first_name_error = false;
+//     }
+//
+//     //toggleSubmitBut2(); // Имя - вообще не обязательное поле
+//
+//     return true;
+// });
 
 
 
@@ -1968,13 +1968,12 @@ $(document).ready(function() {
 $(document).on('blur', 'input[name="ClientExt[phone]"]', function() {
 
     var phone = $.trim($(this).val());
-    phone = phone.replace(/\*/g,'');
-    if(phone[13] == '-') {
-        phone = phone.substr(0, 13) + phone.substr(14);
-    }
+    // phone = phone.replace(/\*/g,'');
+    // if(phone[13] == '-') {
+    //     phone = phone.substr(0, 13) + phone.substr(14);
+    // }
 
-
-    if(phone.length === 15) {
+    if(phone.length === 18) {
 
         $.ajax({
             url: '/user/ajax-check-phone?phone=' + phone,
@@ -1986,6 +1985,8 @@ $(document).on('blur', 'input[name="ClientExt[phone]"]', function() {
                 if(response.user_is_exist == true) {
                     alert('С таким телефоном пользователь уже зарегистрирован. Авторизуйтесь пожалуйста для дальнейшего оформления заказа.');
                 }
+
+                toggleSubmitBut2();
             },
             error: function (data, textStatus, jqXHR) {
 
@@ -2006,7 +2007,6 @@ $(document).on('blur', 'input[name="ClientExt[phone]"]', function() {
         });
     }
 
-    toggleSubmitBut2();
 });
 
 
@@ -2057,10 +2057,10 @@ function toggleSubmitBut2() {
     }
 
     var phone = $('input[name="ClientExt[phone]"]').val();
-    phone = phone.replace(/\*/g,'');
-    if(phone[13] == '-') {
-        phone = phone.substr(0, 13) + phone.substr(14);
-    }
+    // phone = phone.replace(/\*/g,'');
+    // if(phone[13] == '-') {
+    //     phone = phone.substr(0, 13) + phone.substr(14);
+    // }
     var last_name = $.trim($('input[name="ClientExt[last_name]"]').val());
     // var first_name = $.trim($('input[name="ClientExt[first_name]"]').val());
     var email = $.trim($('input[name="ClientExt[email]"]').val());
@@ -2071,7 +2071,7 @@ function toggleSubmitBut2() {
 
     // console.log('phone='+phone+' fio='+fio+' email='+email+' gender='+gender+' places_count='+places_count);
 
-    if(phone.length >= 15 && last_name != "" && email != "" && places_count > 0) {
+    if(phone.length >= 18 && last_name != "" && email != "" && places_count > 0) {
         $('#submit-create-order-step-2').removeClass('reservation-calc__button--disabled');
     }else {
         if($('#submit-create-order-step-2').hasClass('.reservation-calc__button--disabled') == false) {
