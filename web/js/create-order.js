@@ -14,7 +14,7 @@ var all_points_show_scale = 12;
 var time_to_close_map = 3000;
 
 
-// var ClientExtChilds = []; // уже инициализированы в main_new.js
+var ClientExtChilds = []; // уже инициализированы в main_new.js
 var places_count = 0;
 
 // возвращается объект карты - placemark (т.е. точка)
@@ -1744,9 +1744,9 @@ $(document).on('submit', '#order-client-form', function () {
 // отправка данных формы 1
 $(document).on('click', '#submit-create-order-step-1', function() {
 
-    if($(this).hasClass('reservation-calc__button--disabled') == true) {
-        return false;
-    }
+    // if($(this).hasClass('reservation-calc__button--disabled') == true) {
+    //     return false;
+    // }
 
 
     var ClientExt = {
@@ -1786,7 +1786,7 @@ $(document).on('click', '#submit-create-order-step-1', function() {
 
     var access_code = $('#order-client-form').attr('client-ext-code');
 
-    // console.log('post:'); console.log(post);
+    //console.log('post:'); console.log(post);
 
 
     $.ajax({
@@ -2148,6 +2148,8 @@ $(document).on('click', '#submit-create-order-step-2', function() {
         ClientExt: ClientExt,
         ClientExtChild: ClientExtChilds
     };
+    //console.log('post:'); console.log(post);
+
 
     var access_code = $('#order-client-form').attr('client-ext-code');
 

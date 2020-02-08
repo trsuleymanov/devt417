@@ -8,6 +8,8 @@ var places_count = 0;
 function initPlacesData() {
 
   places_count = 0;
+  ClientExtChilds = [];
+
   $('#order-client-form .reservation-popup__item-big').each(function() {
     var text = $(this).find('.reservation-popup__counter-num').text();
     if(text.length > 0) {
@@ -15,7 +17,8 @@ function initPlacesData() {
     }
   });
 
-  $('#order-client-form .children_wrap').each(function() {
+  //$('#order-client-form .children_wrap').each(function() {
+  $('#reservation-calc .children_wrap').each(function() {
     ClientExtChilds[ClientExtChilds.length] = {
       age: $(this).find('.children_complete').attr('value'),
       self_baby_chair: $(this).find('.children__btn').hasClass('check_active')

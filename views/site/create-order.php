@@ -643,7 +643,7 @@ if(($model->yandexPointFrom != null && $model->yandexPointFrom->critical_point =
 </div>
 
 <div class="hr"></div>
-<div class="reservation-calc">
+<div id="reservation-calc" class="reservation-calc">
     <div class="reservation-popup reservation-popup-calc">
         <div class="reservation-popup__title">
             <div class="reservation-popup__title-text">Пассажиры</div>
