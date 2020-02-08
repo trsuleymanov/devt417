@@ -212,6 +212,7 @@ class SiteController extends Controller
             throw new ForbiddenHttpException('Заказ не найден');
         }
 
+        // тут проблема потому что нужно дать одному зарегистрированному пользователю регистрировать другого
         $user = Yii::$app->user->identity;
         if($user != null && empty($model->user_id)) {
             $model->user_id = $user->getId();

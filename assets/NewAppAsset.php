@@ -16,15 +16,7 @@ class NewAppAsset extends AssetBundle
     public $baseUrl = '@web';
 
     public $css = [
-
-//        'https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap&subset=cyrillic-ext',
-//        'css/main_page/main.css?v=002',
-//        'css/select-widget.css',
-//        'css/main.css'
-
         'https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap&subset=cyrillic-ext',
-//        'css/main_page/main.css?v=002',
-//        'css/libs.min.css',
         'css/libs.css',
         'css/styles.css',
         'css/main_new.css',
@@ -32,15 +24,11 @@ class NewAppAsset extends AssetBundle
         'css/point-select-widget.css',
     ];
     public $js = [
-        //'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
-        //'https://api-maps.yandex.ru/2.1/?lang=ru_RU',
-        //'js/main_page/main_page.js',
         'js/select-widget.js',
         'js/point-select-widget.js',
         'js/libs.js',
         'js/imask.js',
         'js/editable-text-widget.js',
-        'js/main_new.js',
         'js/site.js',
     ];
     public $depends = [

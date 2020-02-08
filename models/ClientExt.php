@@ -85,24 +85,24 @@ class ClientExt extends \yii\db\ActiveRecord
         // +7 (123) 432 42 25
         if(!Helper::isValidWebMobile($this->$attribute)) {
             $this->addError($attribute, 'Телефон должен быть в формате +7 (---) --- -- --');
-        }else {
-
-            // проверяю что у текущего телефона нет дублей
-            $phone = Helper::convertWebToDBMobile($this->$attribute);
-            $user = User::find()->where(['phone' => $phone])->one();
-
-
-
-            if($user != null) {
-                if(Yii::$app->user->identity == null) {
-                    $this->addError($attribute, 'Пользователь с таким номером уже зарегистрирован, авторизуйтесь пожалуйста');
-                }elseif($user->id != Yii::$app->user->identity->getId()) {
-                    $this->addError($attribute, 'Пользователь с таким номером уже зарегистрирован, авторизуйтесь пожалуйста');
-                }
-            }
-
-            return true;
         }
+//        else {
+//
+//            // проверяю что у текущего телефона нет дублей
+//            $phone = Helper::convertWebToDBMobile($this->$attribute);
+//            $user = User::find()->where(['phone' => $phone])->one();
+//
+//
+//            if($user != null) {
+//                if(Yii::$app->user->identity == null) {
+//                    $this->addError($attribute, 'Пользователь с таким номером уже зарегистрирован, авторизуйтесь пожалуйста');
+//                }elseif($user->id != Yii::$app->user->identity->getId()) {
+//                    $this->addError($attribute, 'Пользователь с таким номером уже зарегистрирован, авторизуйтесь пожалуйста');
+//                }
+//            }
+//
+//            return true;
+//        }
     }
 
     public function checkPlacesCount($attribute, $params) {
@@ -366,10 +366,6 @@ class ClientExt extends \yii\db\ActiveRecord
         }
 
 
-//        if(!empty($this->phone) && $this->phone[13] == '-') {
-//            $this->phone = substr($this->phone, 0, 13).substr($this->phone, 14);
-//        }
-
         // преобразуем телефон из +7 (123) 432 42 25 в +7-123-432-4225
         if(!empty($this->phone) && Helper::isValidWebMobile($this->phone)) {
             $this->phone = Helper::convertWebToDBMobile($this->phone);
@@ -395,6 +391,9 @@ class ClientExt extends \yii\db\ActiveRecord
             if ($user == null) {
                 // throw new ForbiddenHttpException('Пока временно отключена создания заказа без предварительно авторизованного пользователя');
             } else {
+
+                // у авторизованного пользователя должна быть возможность создать заказ с данными другого человека
+                /*
                 if (!empty($this->phone) && $user->phone != $this->phone) {
                     throw new ForbiddenHttpException('Нельзя изменить телефон пользователя');
                 }
@@ -404,10 +403,7 @@ class ClientExt extends \yii\db\ActiveRecord
                     $user->email = $this->email;
                     $update_user = true;
                 }
-//                if (!empty($this->fio) && $user->fio != $this->fio) {
-//                    $user->fio = $this->fio;
-//                    $update_user = true;
-//                }
+
                 // 'last_name', 'first_name'
                 if (!empty($this->last_name) && $user->last_name != $this->last_name) {
                     $user->last_name = $this->last_name;
@@ -423,7 +419,7 @@ class ClientExt extends \yii\db\ActiveRecord
                     if (!$user->save(false)) {
                         throw new ForbiddenHttpException('Не удалось обновить данные пользователя');
                     }
-                }
+                }*/
             }
         }
 

@@ -19,6 +19,7 @@ $this->registerCssFile('/libs/rolltime.css', ['depends'=>'app\assets\NewAppAsset
 
 $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
 ?>
+<div id="order-step-1">
 <?php
 $form = ActiveForm::begin([
     'id' => 'order-client-form',
@@ -26,7 +27,7 @@ $form = ActiveForm::begin([
         //'client-ext-id' => $model->id,
         'client-ext-code' => $model->access_code,
         'direction-id' => $model->direction_id,
-        'time' => $model->time
+        'time' => $model->time,
     ]
 ]);
 ?>
@@ -1129,3 +1130,4 @@ echo $form->field($model, 'email')
  */ ?>
 
 <?php ActiveForm::end(); ?>
+</div>

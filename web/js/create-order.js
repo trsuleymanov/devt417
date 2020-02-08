@@ -1,8 +1,4 @@
-//Address steps
-var isCompletedAddress = false;
-var isCompletedDest = false;
 
-var geolocation = null;
 var map_from = null;
 var map_from2 = null;
 var map_from_static = null;
@@ -939,31 +935,6 @@ function updatePrice1() {
 }
 
 
-// активация/деактивация кнопки отправки данных формы 1
-function toggleSubmitBut1() {
-
-    if($('.reservation-undertitle--1').length == 0) {
-        return false;
-    }
-
-    var trip_id = $('input[name="ClientExt[trip_id]"]').val();
-    var yandex_point_from_id = $('input[name="ClientExt[yandex_point_from_id]"]').val();
-    var yandex_point_to_id = $('input[name="ClientExt[yandex_point_to_id]"]').val();
-    //var bag_count = $('input[name="ClientExt[bag_count]"]').val();
-    //var suitcase_count = $('input[name="ClientExt[suitcase_count]"]').val();
-    //var places_count = $('input[name="ClientExt[places_count]"]').val();
-    // существует глобальная переменная places_count
-
-    //console.log('trip_id='+trip_id+' yandex_point_from_id='+yandex_point_from_id+' yandex_point_to_id='+yandex_point_to_id+' places_count='+places_count);
-
-    if(trip_id != '' && yandex_point_from_id != '' && yandex_point_to_id != '' && places_count > 0) {
-        $('#submit-create-order-step-1').removeClass('reservation-calc__button--disabled');
-    }else {
-        if($('#submit-create-order-step-1').hasClass('.reservation-calc__button--disabled') == false) {
-            $('#submit-create-order-step-1').addClass('reservation-calc__button--disabled');
-        }
-    }
-}
 
 
 function toggleDopBlock() {
@@ -1010,19 +981,828 @@ function toggleDopBlock() {
 }
 
 
-// $(document).ready(function() {
-//     initPlacesData();
-// });
+// заполняем: ClientExtChilds и places_count по содержимому в html
+function initPlacesData() {
+
+    places_count = 0;
+    ClientExtChilds = [];
+
+    $('#order-client-form .reservation-popup__item-big').each(function() {
+        var text = $(this).find('.reservation-popup__counter-num').text();
+        if(text.length > 0) {
+            places_count += parseInt(text);
+        }
+    });
+
+    //$('#order-client-form .children_wrap').each(function() {
+    $('#reservation-calc .children_wrap').each(function() {
+        ClientExtChilds[ClientExtChilds.length] = {
+            age: $(this).find('.children_complete').attr('value'),
+            self_baby_chair: $(this).find('.children__btn').hasClass('check_active')
+        };
+    });
+
+    // console.log('places_count='+places_count+' ClientExtChilds:'); console.log(ClientExtChilds);
+}
+
+// активация/деактивация кнопки отправки данных формы 1
+function toggleSubmitBut1() {
+
+    if($('.reservation-undertitle--1').length == 0) {
+        return false;
+    }
+
+    console.log('toggleSubmitBut1()');
+
+    var trip_id = $('input[name="ClientExt[trip_id]"]').val();
+    var yandex_point_from_id = $('input[name="ClientExt[yandex_point_from_id]"]').val();
+    var yandex_point_to_id = $('input[name="ClientExt[yandex_point_to_id]"]').val();
+    //var bag_count = $('input[name="ClientExt[bag_count]"]').val();
+    //var suitcase_count = $('input[name="ClientExt[suitcase_count]"]').val();
+    //var places_count = $('input[name="ClientExt[places_count]"]').val();
+    // существует глобальная переменная places_count
+
+    //console.log('trip_id='+trip_id+' yandex_point_from_id='+yandex_point_from_id+' yandex_point_to_id='+yandex_point_to_id+' places_count='+places_count);
+
+    if(trip_id != '' && yandex_point_from_id != '' && yandex_point_to_id != '' && places_count > 0) {
+        $('#submit-create-order-step-1').removeClass('reservation-calc__button--disabled');
+    }else {
+        if($('#submit-create-order-step-1').hasClass('.reservation-calc__button--disabled') == false) {
+            $('#submit-create-order-step-1').addClass('reservation-calc__button--disabled');
+        }
+    }
+}
+
+// активация/деактивация кнопки отправки данных формы 2
+function toggleSubmitBut2() {
+
+    if($('.reservation-undertitle--2').length == 0) {
+        return false;
+    }
+
+    console.log('toggleSubmitBut2()');
+
+    var phone = $('input[name="ClientExt[phone]"]').val();
+    var last_name = $.trim($('input[name="ClientExt[last_name]"]').val());
+    var email = $.trim($('input[name="ClientExt[email]"]').val());
+
+    //alert('phone_length=' + phone.length + ' last_name='+last_name+' '+' email='+email+' places_count='+places_count);
+    if(phone.length >= 18 && last_name != "" && email != "" && places_count > 0) {
+        $('#submit-create-order-step-2').removeClass('reservation-calc__button--disabled');
+    }else {
+        if($('#submit-create-order-step-2').hasClass('.reservation-calc__button--disabled') == false) {
+            $('#submit-create-order-step-2').addClass('reservation-calc__button--disabled');
+        }
+    }
+}
 
 
-// +
+function renderChildrenHtml() {
+
+    var html = "<div class='children_wrap'>" + $('#children_wrap_etalon').html() + "</div>";
+    $('.children_append').append(html);
+}
+
+function showError(element, error) {
+
+    $(element).find('.error').text(error).show();
+    setTimeout(function(){
+        $(element).find('.error').text('').hide();
+    }, 3000);
+}
+
+function clearFormError() {
+
+    if($('#new-order .error').is(':visible')) {
+        $('#new-order .error').text('').hide();
+    }
+}
+
+
+
+$(document).ready(function() {
+
+    $(".reservation-drop__map").addClass("d-b");
+
+    if( is_mobile() ){
+
+        $('#clientext-time_air_train_arrival')
+            .attr('readonly', 'true')
+            .Rolltime({
+                'step': 15
+            });
+    }
+
+    initPlacesData();
+    if($('#order-step-1').length > 0) {
+
+        toggleSubmitBut1();
+
+    }else if($('#order-step-2').length > 0) {
+
+        toggleSubmitBut2();
+
+    }else if($('#order-step-3').length > 0) {
+
+    }
+
+
+    svg4everybody({});
+
+    if( $('body').is('.index-page') ){
+
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6Lewg8wUAAAAABhM-tLlmiRNYSLdf17N87agjkmR', {action: 'homepage'}).then(function(token) {
+                $('button:disabled').each(function(){
+                    $(this).attr('disabled', false);
+                });
+            });
+        });
+
+        if( is_mobile() ){
+
+            $('#picker-time').Rolltime({
+                'step': 15
+            });
+
+            $('#contact .map').hide();
+
+        } else {
+
+            $('#picker-time').datepicker({
+                timepicker: true,
+                onlyTimepicker: true,
+                minutesStep: 15
+            });
+
+        }
+
+        $('#picker-date').datepicker({
+            autoClose: true,
+            minDate: new Date(),
+            onSelectDate: function() {
+                var selected_date = $('#picker-date').val();
+                //alert('date='+date);
+
+                // получим сегодняшнюю дату
+                var now = new Date();
+                var today_day = now.getDate();
+                if(today_day < 10) {
+                    today_day = '0' + today_day;
+                }
+                var today_month = now.getMonth() + 1;
+                if(today_month < 10) {
+                    today_month = '0' + today_month;
+                }
+                var today_date = today_day + '.' + today_month + '.' + now.getFullYear();
+
+                // если выбран сегодняшний день, то установить автоматически время в поле "Время посадки"
+                //   +1 час к текущему с округлением до 15 минут в нижнюю сторону; если любой другой - то 03:00
+                if(selected_date == today_date) {
+
+                    var hours = now.getHours();
+                    var minutes = now.getMinutes();
+
+                    if(hours < 23) {
+                        hours = hours + 1;
+                    }
+                    if(minutes < 15) {
+                        minutes = 0;
+                    }else if(minutes < 30) {
+                        minutes = 15;
+                    }else if(minutes < 45) {
+                        minutes = 30;
+                    } else {
+                        minutes = 45;
+                    }
+
+                    if(hours < 10) {
+                        hours = '0' + hours;
+                    }
+                    if(minutes < 10) {
+                        minutes = '0' + minutes;
+                    }
+
+                    var new_time = hours + ':' + minutes;
+                    $('#picker-time').val(new_time).trigger('change');
+
+                } else {
+
+                    $('#picker-time').val('03:00').trigger('change');
+
+                }
+
+            },
+        });
+
+    }
+
+
+    if($('#inputphoneform-mobile_phone').hasClass('use_imask')) {
+        var currencyMask = new IMask(
+            document.getElementById('inputphoneform-mobile_phone'),
+            {
+                mask: /^[+]\d{0,13}$/,
+                blocks: {
+                    num: {
+                        mask: Number,
+                        thousandsSeparator: ' '
+                    }
+                }
+            });
+    }
+
+});
+
+
+
+
+
+$(document).on('click', 'body', function() {
+    clearFormError();
+});
+
+$(document).on('click', '#close-peoples-mobile', function() {
+
+    for(var i in ClientExtChilds) {
+        if( ClientExtChilds[i].age == "") {
+            var element = $('#peoples-mobile');
+            showError(element, 'Для ребенка не выбран возраст');
+            return false;
+        }
+    }
+    $('#peoples-mobile').iziModal('close');
+
+});
+
+$(document).on('click', '#submit-order-form', function() {
+
+    var ClientExt = {
+        city_from_id: $('input[name="ClientExt[city_from_id]"]').val(),
+        city_to_id: $('input[name="ClientExt[city_to_id]"]').val(),
+        data: $('input[name="ClientExt[data]"]').val(),
+        time: $('input[name="ClientExt[time]"]').val(),
+        //places_count: parseInt($('input[name="ClientExt[places_count]"]').val()),
+        //child_count: $('input[name="ClientExt[child_count]"]').val(),
+        places_count: places_count,
+        child_count: ClientExtChilds.length
+    };
+
+
+    for(var i in ClientExtChilds) {
+        if( ClientExtChilds[i].age == "") {
+            var element = $('#new-order');
+            showError(element, 'Для ребенка не выбран возраст');
+            return false;
+        }
+    }
+
+    var post = {
+        ClientExt: ClientExt,
+        ClientExtChild: ClientExtChilds
+    };
+
+    if( ClientExt['city_from_id'] == '' || ClientExt['city_to_id'] == '' || ClientExt['data'] == '' || ClientExt['time'] == '' ){
+
+        // $('#new-order .error').text('Для заказа поездки заполните все поля').show();
+        // setTimeout(function(){
+        //   $('#new-order .error').text('').hide();
+        // }, 3000);
+        var element = $('#new-order');
+        showError(element, 'Для заказа поездки заполните все поля');
+
+    } else {
+
+        //console.log('post:'); console.log(post);
+
+        $.ajax({
+            url: '/site/index',
+            type: 'post',
+            data: post,
+            success: function (response) {
+
+                if (response.success === true) {
+
+                    location.href = response.redirect_url;
+
+                }else {
+
+                    var errors = [];
+                    for(var field in response.errors) {
+                        var field_errors = response.errors[field];
+                        for(var key in field_errors) {
+                            errors[errors.length] = field_errors[key];
+                        }
+                    }
+
+                    var str_errors = errors.join(' ');
+                    var element = $('#new-order');
+                    showError(element, str_errors);
+
+                }
+            },
+            error: function (data, textStatus, jqXHR) {
+                if (textStatus == 'error' && data != undefined) {
+                    if (void 0 !== data.responseJSON) {
+                        if (data.responseJSON.message.length > 0) {
+                            alert(data.responseJSON.message);
+                        }
+                    } else {
+                        if (data.responseText.length > 0) {
+                            alert(data.responseText);
+                        }
+                    }
+                }else {
+                    alert('error');
+                    //handlingAjaxError(data, textStatus, jqXHR);
+                }
+            }
+        });
+
+    }
+
+});
+
+
+$(document).on('click', '.select_city__item', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    //$(this).parents('.welcome__col').find('.welcome__input').val($(this).attr('data-city'));
+
+    if($(this).parents('.select_city_wrap').hasClass('city_out')) {
+        var city = 'out';
+    }else {
+        var city = 'in';
+    }
+
+    var city_from_id = $(this).attr('data-val');
+    if((city_from_id == 1 && city == 'out') || (city_from_id == 2 && city == 'in')) {
+        $('*[name="ClientExt[city_from_id]"]').val(1);
+        $('#city-from-text').val('Казань');
+        $('*[name="ClientExt[city_to_id]"]').val(2);
+        $('#city-to-text').val('Альметьевск');
+    }else if((city_from_id == 2 && city == 'out') || (city_from_id == 1 && city == 'in')) {
+        $('*[name="ClientExt[city_from_id]"]').val(2);
+        $('#city-from-text').val('Альметьевск');
+        $('*[name="ClientExt[city_to_id]"]').val(1);
+        $('#city-to-text').val('Казань');
+    }
+
+    $(this)
+        .parents('.welcome__col').removeClass('fix_down')
+        .find('.select_city_wrap').slideUp(100);
+
+    clearFormError();
+});
+
+$(document).on('click', '.btn_reverse', function() {
+    console.log('btn_reverse');
+    var city_from_id = $('*[name="ClientExt[city_from_id]"]').val();
+    if(city_from_id == 1) {
+        $('*[name="ClientExt[city_from_id]"]').val(2);
+        $('#city-from-text').val('Альметьевск');
+        $('*[name="ClientExt[city_to_id]"]').val(1);
+        $('#city-to-text').val('Казань');
+    }else if(city_from_id == 2) {
+        $('*[name="ClientExt[city_from_id]"]').val(1);
+        $('#city-from-text').val('Казань');
+        $('*[name="ClientExt[city_to_id]"]').val(2);
+        $('#city-to-text').val('Альметьевск');
+    }
+
+    clearFormError();
+    return false;
+});
+
+
+
+$(document).on('click', '.modal_global__logout', function() {
+    //alert('Выход');
+
+    $.ajax({
+        url: '/site/ajax-logout',
+        type: 'post',
+        data: {},
+        success: function (response) {
+            location.reload();
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                //handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+});
+
+
+// кнопка "Оплатить сейчас" (при оформлении заказа и в личном кабинете)
+$(document).on('click', '.make-simple-payment-checkorderpage', function() {
+
+    // var client_ext_id = $('#order-client-form').attr('client-ext-id');
+    var access_code = $(this).attr('access_code');
+
+    $.ajax({
+        url: '/site/ajax-save-but-checkout?c=' + access_code + '&type_button=payment',
+        type: 'post',
+        data: {},
+        success: function (response) {
+
+            $.ajax({
+                url: '/yandex-payment/payment/ajax-make-simple-payment?c=' + access_code + '&source_page=check-order',
+                type: 'post',
+                data: {},
+                success: function (response) {
+                    if (response.success === true) {
+                        //alert(response.redirect_url);
+                        location.href = response.redirect_url;
+                    }else {
+                        alert(response);
+                    }
+                },
+                error: function (data, textStatus, jqXHR) {
+                    if (textStatus == 'error' && data != undefined) {
+                        if (void 0 !== data.responseJSON) {
+                            if (data.responseJSON.message.length > 0) {
+                                alert(data.responseJSON.message);
+                            }
+                        } else {
+                            if (data.responseText.length > 0) {
+                                alert(data.responseText);
+                            }
+                        }
+                    }else {
+                        //handlingAjaxError(data, textStatus, jqXHR);
+                    }
+                }
+            });
+
+
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                //handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+
+    return false;
+});
+
+
+// кнопка "Продолжить без оплаты" (при оформлении заказа и в личном кабинете)
+$(document).on('click', '.but_reservation', function() {
+
+    // var client_ext_id = $('#order-client-form').attr('client-ext-id');
+    var access_code = $(this).attr('access_code');
+
+    $.ajax({
+        url: '/site/ajax-save-but-checkout?c=' + access_code + '&type_button=reservation',
+        type: 'post',
+        data: {},
+        success: function (response) {
+
+            if (response.success === true) {
+                location.href = '/site/finish-order?c=' + access_code;
+            }else {
+                if(response.action == 'need_auth') {
+                    upScreen();
+                }
+            }
+        },
+        error: function (data, textStatus, jqXHR) {
+            if (textStatus == 'error' && data != undefined) {
+                if (void 0 !== data.responseJSON) {
+                    if (data.responseJSON.message.length > 0) {
+                        alert(data.responseJSON.message);
+                    }
+                } else {
+                    if (data.responseText.length > 0) {
+                        alert(data.responseText);
+                    }
+                }
+            }else {
+                //handlingAjaxError(data, textStatus, jqXHR);
+            }
+        }
+    });
+
+    return false;
+});
+
+
+$(document).on('click', '.services__read', function (event) {
+    event.preventDefault();
+    $(this).toggleClass('read_active').parents('.services').find('.list_hidden').slideToggle(300);
+});
+$(".nav a[href*='#']").mPageScroll2id({
+    autoScrollSpeed: true,
+    offset: 110,
+    highlightClass: 'active_link',
+    // onStart: function onStart() {
+    //   menu.iziModal('close');
+    // }
+});
+window.addEventListener('load', windowWidth, false);
+window.addEventListener('resize', windowWidth, false);
+window.addEventListener('orientationchange', windowWidth, false);
+
+function windowWidth() {
+    window.addEventListener("scroll", windowScroll, false);
+}
+
+function windowScroll() {
+    var wrapper = document.querySelector('.wrapper');
+
+    if (this.scrollY > 5) {
+        wrapper.classList.add('sticky');
+    } else {
+        wrapper.classList.remove('sticky');
+    }
+}
+
+$('.iziModal').iziModal({
+    width: 1200,
+    group: true,
+    loop: false,
+    overlayColor: 'rgba(0,0,0,.9)'
+});
+
+$(document).on('click', '.video__link', function () {
+    var way = $(this).attr('data-video');
+    var title = $(this).attr('data-title');
+    $("#modal-video").iziModal({
+        headerColor: '#ffb100',
+        title: title,
+        iframe: true,
+        iframeURL: way,
+        fullscreen: true,
+        closeOnEscape: true,
+        closeButton: true,
+        overlayColor: 'rgba(0,0,0,.9)',
+        onClosed: function onClosed() {
+            $('#modal-video').iziModal('destroy');
+        }
+    });
+});
+
+$(document).on('click', '#btn-time', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    $('#picker-time').trigger('click');
+});
+
+// var counter = 0;
+var $peoples_input = $('#peoples input');
+
+function updatePeoplesText() {
+
+    if (places_count < 2 || places_count > 4) {
+        $peoples_input.val(places_count + ' человек');
+    } else {
+        $peoples_input.val(places_count + ' человека');
+    }
+}
+
+
+$(document).on('click', '.btn_next', function (e) {
+    e.preventDefault();
+
+    places_count++;
+    $(this).prev().val(parseInt($(this).prev().val()) + 1);
+
+    updatePeoplesText();
+});
+
+$(document).on('click', '.btn_prev', function (e) {
+    e.preventDefault();
+    if ($(this).next().val() > 0) {
+        places_count--;
+        $(this).next().val(parseInt($(this).next().val()) - 1);
+        updatePeoplesText();
+    } else {
+        return false;
+    }
+});
+
+
+
+$(document).on('click', '.children_append .btn_next', function () {
+    renderChildrenHtml();
+
+    var ClientExtChild = {
+        age: '',
+        self_baby_chair: true
+    };
+    ClientExtChilds[ClientExtChilds.length] = ClientExtChild;
+});
+
+$(document).on('click', '.children_append .btn_prev', function () {
+    $(this).parents('.children_append').find('.children_wrap').last().remove();
+
+    ClientExtChilds.pop();
+});
+
+$(document).on('click', '.children__title', function (event) {
+    event.preventDefault();
+    $(this).toggleClass('active_select');
+    $(this).next().stop(true).slideToggle(200);
+});
+
+
+$(document).on('click', '.children__item', function (event) {
+
+    event.preventDefault();
+
+    var $elem = $(this).parents('.children').find('.children__title span');
+
+    var age = $(this).attr('value');
+    if(age == '<1') {
+        var $children__btn = $(this).parents('.children').find('.children__btn');
+        if($children__btn.hasClass('check_active') == false) {
+            $children__btn.addClass('check_active');
+        }
+    }
+
+    $elem
+        .text($(this).text())
+        .attr('value', age)
+        .addClass('children_complete');
+
+    $(this).parents('.children__list').slideUp(300);
+    $(this).parents('.children').find('.active_select').removeClass('active_select');
+
+    var $children_wrap = $(this).parents('.children_wrap');
+    var $children_append = $children_wrap.parents('.children_append');
+    var index = $children_append.find('.children_wrap').index($children_wrap);
+    ClientExtChilds[index].age = age;
+});
+
+//
+var age;
+$(window).on('resize load orientationchange', function () {
+    if ($(window).outerWidth() > 992) {
+        age = 'Выберите возраст ребенка';
+    } else {
+        age = 'Возраст ребенка';
+    }
+});
+
+
+
+$(document).on('click', '.children__btn', function (event) {
+
+    event.preventDefault();
+
+
+    var age = $(this).parents('.children').find('.children__title span').attr('value');
+    if(age == '<1') {
+        var error = 'Младенца в люльке можно перевести только в своем кресле';
+
+        if($(this).parents('#new-order').length > 0 && !is_mobile()) {
+            var element = $('#new-order');
+            showError(element, error);
+        }else {
+            alert(error);
+        }
+
+    }else {
+
+        var $children_wrap = $(this).parents('.children_wrap');
+        var $children_append = $children_wrap.parents('.children_append');
+        var index = $children_append.find('.children_wrap').index($children_wrap);
+
+        if($(this).hasClass('check_active')) {
+            $(this).removeClass('check_active');
+            ClientExtChilds[index].self_baby_chair = false;
+        }else {
+            $(this).addClass('check_active');
+            ClientExtChilds[index].self_baby_chair = true;
+        }
+    }
+});
+
+$(document).on('click', '*', function (event) {
+
+    event.stopPropagation();
+
+    // кнопка Войти
+    if( $(this).is('.header__login') ){
+
+        if( $('body').is('.guest') ){
+
+            $(this).toggleClass('click_fix');
+            $('#modal_enter_phone').toggle();
+            $('#inputphoneform-mobile_phone').focus();
+
+        } else {
+
+            event.preventDefault();
+            $('.for_enter_wrap').toggle(100);
+
+        }
+
+    } else if( $('.header__login').is('.click_fix') && !$(this).closest('.for_enter_wrap').length ){
+
+        $('.header__login').removeClass('click_fix');
+        $('.for_enter_wrap').hide();
+
+    }
+
+    // служба поддержки
+    if( $(this).is('button[name="help"]') ){
+        $(this).toggleClass('opened');
+        $('.modal_global__support').slideToggle();
+    }
+
+    // выбор города
+    if( $(this).is('.city_select') && !$(this).hasClass('fix_down') ){
+        console.log('city_select');
+        $('.city_select.fix_down')
+            .removeClass('fix_down')
+            .find('.select_city_wrap').slideUp(100);
+        $(this)
+            .toggleClass('fix_down')
+            .find('.select_city_wrap').slideToggle(100);
+
+    } else if ($('.city_select').hasClass('fix_down') && !$(this).closest('.city_select').length ) {
+
+        $('.city_select.fix_down')
+            .removeClass('fix_down')
+            .find('.select_city_wrap').slideUp(100);
+
+    }
+
+    // кнопка Пассажиры
+    if( $(this).is('#peoples') ){
+
+        $(this).toggleClass('slide_down');
+        if( is_mobile() ){
+
+            $('#peoples-mobile').iziModal('open');
+
+        } else {
+
+            $('.select').slideToggle(100);
+
+        }
+
+    } else if( $('#peoples').hasClass('slide_down') && !$(this).closest('.welcome__label__peoples').length ) {
+
+        $('#peoples').removeClass('slide_down');
+        $('.select').slideUp(100);
+
+    }
+
+    // иконка карты
+    if( $(this).closest('.icon-flag').length ){
+
+        if( is_mobile() ){
+
+            $('#contact .map').slideToggle();
+
+        }
+
+    }
+
+});
+
+
+$(document).on('click', '.reservation-popup-calc', function() {
+    return false;
+});
+
+
+
+
+
+
 // выбор точки посадки на всплывающей карте
 $(document).on('click', '#ya-map-from .btn-select-placemark', function() {
 
     var yandex_point_from_id = $(this).parents('.placemark-balloon-content').attr('point-id');
     showMapFromAndOpenTripTimes(yandex_point_from_id);
 });
-// +
+
 // выбор точки посадки на карте открытой внутри "окна" выбора времени рейса
 $(document).on('click', '#ya-map-from2 .btn-select-placemark', function() {
 
@@ -1044,7 +1824,7 @@ $(document).on('click', '#ya-map-from2 .btn-select-placemark', function() {
     }, time_to_close_map - 500); // здесь на 0.5 сек уменьшаю так как данные по времени рейсов еще грузяться с сервера
 
 });
-// +
+
 // выбор точки посадки на "статичной" карте открытой на странице с формой заказа
 $(document).on('click', '#ya-map-from-static .btn-select-placemark', function() {
 
@@ -1069,7 +1849,6 @@ $(document).on('click', '#ya-map-from-static .btn-select-placemark', function() 
 });
 
 
-// +
 $(document).on('click', '#ya-map-to .btn-select-placemark', function() {
 
     var yandex_point_to_id = $(this).parents('.placemark-balloon-content').attr('point-id');
@@ -1096,7 +1875,6 @@ $(document).on('click', '#ya-map-to .btn-select-placemark', function() {
 
 });
 
-// +
 $(document).on('click', '#ya-map-to-static .btn-select-placemark', function() {
 
     var yandex_point_to_id = $(this).parents('.placemark-balloon-content').attr('point-id');
@@ -1129,7 +1907,6 @@ $(document).on('click', '#open-select-point-from', function(e) {
     openSelectPointFromModal();
 });
 
-// +
 // выбор популярной точки в форме "Адрес и время посадки"
 $(document).on('click', '.select-point-from', function() {
 
@@ -1142,7 +1919,6 @@ $(document).on('click', '#open-select-point-to', function(e) {
     openSelectPointToModal();
 });
 
-// +
 $(document).on('click', '.select-point-to', function() {
 
     var yandex_point_to_id = $(this).attr('data-id');
@@ -1199,7 +1975,6 @@ $(document).on('click', '.reservation-drop__time-back-trigger', function () {
     addressToStep1();
 });
 
-// +
 // выбор "синей" точки супер-предложения
 $(document).on('click', '.reservation-drop-offer__item', function () {
 
@@ -1221,23 +1996,6 @@ $(document).on('click', '.reservation-drop--2 .reservation-drop__topline-cancel'
 
 
 
-$(document).ready(function() {
-
-    $(".reservation-drop__map").addClass("d-b");
-
-    if( is_mobile() ){
-
-        $('#clientext-time_air_train_arrival')
-            .attr('readonly', 'true')
-            .Rolltime({
-              'step': 15
-            });
-
-    }
-
-});
-
-// +
 // label 'использовать мою геопозицию'
 $(document).on('click', '.reservation-drop__search-geo span', function() {
 
@@ -1268,7 +2026,6 @@ $(document).on('click', '.reservation-drop__search-geo span', function() {
 });
 
 
-// +
 // в форме выбора точки посадке в "окне" выбора времени посадки (рейса) нажатие на "на карте"
 $(document).on('click', ".reservation-drop__selected-showmap-trigger", function () {
 
@@ -1288,7 +2045,7 @@ $(document).on('click', ".reservation-drop__selected-showmap-trigger", function 
     }
 });
 
-// +
+
 // выбор одного из 3-х времен рейса
 $(document).on('click', '.reservation-drop__time-item', function() {
 
@@ -1328,7 +2085,7 @@ $(document).on('focus', '#search-place-from', function(e) {
     $('.reservation-drop-offer__list').removeClass('d-b');
 });
 
-// +
+
 $(document).on('keyup', '#search-place-from', function(e) {
 
     var search = $.trim($(this).val());
@@ -1403,7 +2160,6 @@ $(document).on('keyup', '#search-place-from', function(e) {
 
 
 
-// +
 // в выпадающей списке строки поиска по адресам - показывает карту и наводит на выбранный адрес
 $(document).on('click', '#search-from-block[city-extended-external-use="1"] .search-result-block li', function() {
 
@@ -1442,9 +2198,6 @@ $(document).on('click', '#search-from-block[city-extended-external-use="1"] .sea
 });
 
 
-
-
-// +
 // в выпадающей списке - выбор яндекс-точки посадки
 $(document).on('click', '#search-from-block[city-extended-external-use="0"] .main-list li', function () {
 
@@ -1457,7 +2210,6 @@ $(document).on('click', '#search-from-block[city-extended-external-use="0"] .mai
 });
 
 
-// +
 // в выпадающей списке - выбор яндекс-точки высадки
 $(document).on('click', '#search-to-block li', function() {
 
@@ -1487,7 +2239,6 @@ $(document).on('click', '#search-to-block li', function() {
 
     }, time_to_close_map);
 });
-
 
 
 // Прибытие поезда / Время прилета самолета
@@ -1563,8 +2314,6 @@ $(document).on('click', '#reservation-item__checkbox-3', function() {
 
     }
 });
-
-
 
 
 // Дополнительные пожелания
@@ -1671,6 +2420,7 @@ $(document).on('click', '.reservation-popup__counter-plus', function (event) {
     toggleSubmitBut1();
     toggleSubmitBut2();
 });
+
 
 $(document).on('click', '.reservation-popup__counter-minus', function (event) {
 
@@ -1844,7 +2594,6 @@ $(document).on('click', '#submit-create-order-step-1', function() {
     return false;
 });
 
-// +
 // нажатие "на карте" в точке посадки
 $(document).on('click', "#city-from-block .reservation-step-line-showmap", function(event) {
 
@@ -1916,20 +2665,26 @@ $(document).on('keyup', 'input[name="ClientExt[first_name]"]', function(e) {
     }
 });
 
-var has_last_name_error = false;
+// var has_last_name_error = false;
 $(document).on('blur', 'input[name="ClientExt[last_name]"]', function(e) {
 
-    if(has_last_name_error == false) {
+    // if(has_last_name_error == false) {
+    //
+    //     var last_name = $(this).val();
+    //     last_name = last_name.replace(/^\s+/g, '');
+    //     if (last_name.length == 0) {
+    //         has_last_name_error = true;
+    //         $('input[name="ClientExt[last_name]"]').blur();
+    //         alert('Заполните Фамилию');
+    //     }
+    // }else {
+    //     has_last_name_error = false;
+    // }
 
-        var last_name = $(this).val();
-        last_name = last_name.replace(/^\s+/g, '');
-        if (last_name.length == 0) {
-            has_last_name_error = true;
-            $('input[name="ClientExt[last_name]"]').blur();
-            alert('Заполните Фамилию');
-        }
-    }else {
-        has_last_name_error = false;
+
+
+    if($.trim($(this).val()) == '') {
+        alert('Заполните Фамилию');
     }
 
     toggleSubmitBut2();
@@ -1937,41 +2692,12 @@ $(document).on('blur', 'input[name="ClientExt[last_name]"]', function(e) {
     return true;
 });
 
-// var has_first_name_error = false;
-// $(document).on('blur', 'input[name="ClientExt[first_name]"]', function(e) {
-//
-//     if(has_first_name_error == false) {
-//
-//         var first_name = $(this).val();
-//         first_name = first_name.replace(/^\s+/g, '');
-//         if (first_name.length == 0) {
-//             has_first_name_error = true;
-//             alert('Заполните Имя');
-//         }
-//     }else {
-//         has_first_name_error = false;
-//     }
-//
-//     //toggleSubmitBut2(); // Имя - вообще не обязательное поле
-//
-//     return true;
-// });
-
-
-
-$(document).ready(function() {
-    toggleSubmitBut1();
-    toggleSubmitBut2();
-});
 
 
 $(document).on('blur', 'input[name="ClientExt[phone]"]', function() {
 
+    /*
     var phone = $.trim($(this).val());
-    // phone = phone.replace(/\*/g,'');
-    // if(phone[13] == '-') {
-    //     phone = phone.substr(0, 13) + phone.substr(14);
-    // }
 
     if(phone.length === 18) {
 
@@ -2005,13 +2731,18 @@ $(document).on('blur', 'input[name="ClientExt[phone]"]', function() {
                 }
             }
         });
-    }
 
+    }else {
+        toggleSubmitBut2();
+    }*/
+
+    toggleSubmitBut2();
 });
 
 
 $(document).on('blur', 'input[name="ClientExt[email]"]', function() {
 
+    /*
     var email = $.trim($(this).val());
 
     if(email.length > 3 && email.indexOf('@') > -1) {
@@ -2025,6 +2756,7 @@ $(document).on('blur', 'input[name="ClientExt[email]"]', function() {
                 if (response.user_is_exist == true) {
                     alert('С такой почтой пользователь уже зарегистрирован. Авторизуйтесь пожалуйста для дальнейшего оформления заказа.');
                 }
+                toggleSubmitBut2();
             },
             error: function (data, textStatus, jqXHR) {
 
@@ -2043,42 +2775,12 @@ $(document).on('blur', 'input[name="ClientExt[email]"]', function() {
                 }
             }
         });
-    }
+    }else {
+        toggleSubmitBut2();
+    }*/
 
     toggleSubmitBut2();
 });
-
-
-// активация/деактивация кнопки отправки данных формы 2
-function toggleSubmitBut2() {
-
-    if($('.reservation-undertitle--2').length == 0) {
-        return false;
-    }
-
-    var phone = $('input[name="ClientExt[phone]"]').val();
-    // phone = phone.replace(/\*/g,'');
-    // if(phone[13] == '-') {
-    //     phone = phone.substr(0, 13) + phone.substr(14);
-    // }
-    var last_name = $.trim($('input[name="ClientExt[last_name]"]').val());
-    // var first_name = $.trim($('input[name="ClientExt[first_name]"]').val());
-    var email = $.trim($('input[name="ClientExt[email]"]').val());
-    // var gender = $.trim($('input[name="ClientExt[gen]"]').val());
-
-    //var places_count = $('input[name="ClientExt[places_count]"]').val();
-    // существует глобальная переменная places_count
-
-    // console.log('phone='+phone+' fio='+fio+' email='+email+' gender='+gender+' places_count='+places_count);
-
-    if(phone.length >= 18 && last_name != "" && email != "" && places_count > 0) {
-        $('#submit-create-order-step-2').removeClass('reservation-calc__button--disabled');
-    }else {
-        if($('#submit-create-order-step-2').hasClass('.reservation-calc__button--disabled') == false) {
-            $('#submit-create-order-step-2').addClass('reservation-calc__button--disabled');
-        }
-    }
-}
 
 
 $(document).on('click', '#submit-create-order-step-2', function() {
@@ -2207,7 +2909,6 @@ $(document).on('click', '#submit-create-order-step-2', function() {
     return false;
 });
 
-// +
 // нажатие на уже выбранный адрес точки откуда - открывает заново карту
 $(document).on('click', "#city-from-block .reservation-step-line-change", function() {
 
@@ -2236,9 +2937,6 @@ $(document).on('click', "#city-from-block .reservation-step-line-change", functi
 });
 
 
-
-
-// +
 $(document).on('click', "#city-to-block .reservation-step-line-showmap", function(event) {
 
     var $elem = $(this).closest(".reservation-step-line-content").find(".reservation-step-line-map");

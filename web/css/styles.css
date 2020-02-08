@@ -1,3 +1,4 @@
+/*
 @font-face {
   font-family: 'Roboto';
   font-display: block;
@@ -29,7 +30,7 @@
   src: url("../fonts_old/Roboto-light.eot?#iefix") format('embedded-opentype'), url("../fonts_old/Roboto-light.woff") format('woff'), url("../fonts_old/Roboto-light.ttf") format('truetype');
   font-weight: 300;
   font-style: normal;
-}
+}*/
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;

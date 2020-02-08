@@ -12,9 +12,12 @@ use yii\widgets\ActiveForm;
 
 $this->registerCssFile('css/create-order.css', ['depends'=>'app\assets\NewAppAsset']);
 $this->registerJsFile('/js/check-order.js', ['depends'=>'app\assets\NewAppAsset', 'position' => \yii\web\View::POS_END]);
+$this->registerJsFile('/js/create-order.js', ['depends'=>'app\assets\NewAppAsset', 'position' => \yii\web\View::POS_END]);
 
 $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
 ?>
+
+<div id="order-step-3">
 <div class="reservation-top">
     <div class="container">
         <div class="reservation-title-main">
@@ -378,3 +381,5 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
         </div>
     </div>
 <? } ?>
+
+</div>

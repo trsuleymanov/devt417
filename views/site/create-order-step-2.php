@@ -43,6 +43,8 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
         }
     }*/
 </style>
+
+<div id="order-step-2">
 <?php
 $form = ActiveForm::begin([
     'id' => 'order-client-form',
@@ -646,3 +648,4 @@ echo $form->field($model, 'email')
  */ ?>
 
 <?php ActiveForm::end(); ?>
+</div>
