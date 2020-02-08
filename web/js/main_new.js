@@ -31,11 +31,11 @@ function renderChildrenHtml() {
   $('.children_append').append(html);
 }
 
-function showError(error) {
+function showError(element, error) {
 
-  $('#new-order .error').text(error).show();
+  $(element).find('.error').text(error).show();
   setTimeout(function(){
-    $('#new-order .error').text('').hide();
+    $(element).find('.error').text('').hide();
   }, 3000);
 }
 
@@ -392,7 +392,8 @@ function showError(error) {
       var error = 'Младенца в люльке можно перевести только в своем кресле';
 
       if($(this).parents('#new-order').length > 0 && !is_mobile()) {
-        showError(error);
+        var element = $('#new-order');
+        showError(element, error);
       }else {
         alert(error);
       }
@@ -498,6 +499,10 @@ function showError(error) {
 
   });
 
+  function openLoginForm() {
+    
+  }
+
   $(document).on('click', '.reservation-popup-calc', function() {
     return false;
   });
@@ -567,6 +572,18 @@ $(document).on('click', 'body', function() {
   clearFormError();
 });
 
+$(document).on('click', '#close-peoples-mobile', function() {
+
+  for(var i in ClientExtChilds) {
+    if( ClientExtChilds[i].age == "") {
+      var element = $('#peoples-mobile');
+      showError(element, 'Для ребенка не выбран возраст');
+      return false;
+    }
+  }
+  $('#peoples-mobile').iziModal('close');
+
+});
 
 $(document).on('click', '#submit-order-form', function() {
 
@@ -604,7 +621,8 @@ $(document).on('click', '#submit-order-form', function() {
 
   for(var i in ClientExtChilds) {
     if( ClientExtChilds[i].age == "") {
-      showError('Для ребенка не выбран возраст');
+      var element = $('#new-order');
+      showError(element, 'Для ребенка не выбран возраст');
       return false;
     }
   }
@@ -620,7 +638,8 @@ $(document).on('click', '#submit-order-form', function() {
     // setTimeout(function(){
     //   $('#new-order .error').text('').hide();
     // }, 3000);
-    showError('Для заказа поездки заполните все поля');
+    var element = $('#new-order');
+    showError(element, 'Для заказа поездки заполните все поля');
 
   } else {
 
@@ -647,7 +666,8 @@ $(document).on('click', '#submit-order-form', function() {
           }
 
           var str_errors = errors.join(' ');
-          showError(str_errors);
+          var element = $('#new-order');
+          showError(element, str_errors);
 
          }
       },

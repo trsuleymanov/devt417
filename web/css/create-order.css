@@ -544,8 +544,16 @@
   justify-content: space-between;
   align-items: center;
 }
+.reservation-calc__subline {
+  font-size: 20px;
+}
 .reservation-calc__label {
+  font-size: 24px;
   color: #333333;
+}
+.reservation-calc__price {
+  font-size: 24px;
+  font-weight: bolder;
 }
 .reservation-calc__counter {
   display: flex;
@@ -558,23 +566,30 @@
 }
 .reservation-calc__counter-num {
   margin: 0 22px;
+  font-size: 24px;
+  font-weight: bolder;
   color: #ffb100;
 }
 .reservation-calc__price::after {
   content: " руб";
+  font-weight: normal;
 }
 .reservation-calc__subline {
   color: #cccccc;
 }
+.reservation-price__button,
 .reservation-calc__button {
-  padding: 0 50px;
-  height: 53px;
-  font-weight: 500;
+  width: 300px;
+  max-width: 100%;
+  padding: 11px 24px;
   border: 1px solid #ffb100;
+  border-radius: 8px;
+  margin-top: 12px;
   background-color: #ffb100;
-  color: #fff;
+  text-align: center;
+  color: #ffffff;
+  font-size: 20px;
   cursor: pointer;
-  border-radius: 7px;
   -webkit-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
@@ -1284,17 +1299,6 @@
   font-size: 18px;
   font-weight: 300;
 }
-.reservation-price__button {
-  max-width: 300px;
-  padding: 12px 24px;
-  border-radius: 8px;
-  margin-top: 12px;
-  background-color: #ffb100;
-  text-align: center;
-  color: #ffffff;
-  font-size: 20px;
-  cursor: pointer;
-}
 .reservation-price__label {
   margin-top: 7px;
   font-size: 12px;
@@ -1436,11 +1440,6 @@
   .reservation-calc__line {
     margin-top: 5px;
     padding-top: 5px;
-  }
-  .reservation-calc__button {
-    margin-top: 32px;
-    height: 13.333333333333334vw;
-    border-radius: 1.866666666666667vw;
   }
   .reservation-drop,
   .order-detail {
@@ -1708,17 +1707,23 @@
   }
 
   .reservation-step-line-title{
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 500;
   }
   .reservation-step-line-undertitle{
-    font-size: 14px;
+    font-size: 16px;
   }
   .reservation-step-line-content-top-left .reservation-step-line-undertitle{
     margin-right: 10px;
   }
+  .reservation-drop__select-select {
+    font-size: 16px;    
+  }
+  .reservation-step-line-confirmed {
+    font-size: 16px;  
+  }
   .reservation-step-line-selecte input{
-    font-size: 14px;
+    font-size: 16px;
   }
   .reservation-step-line-selecte-drop-top-title{
     font-size: 14px;
@@ -1752,6 +1757,9 @@
     padding-top: 24px;
   }
   .reservation-step-line-time {
+    font-size: 20px;
+  }
+  .reservation-step-line-date {
     font-size: 18px;
   }
   .reservation-step-line-dest-address {

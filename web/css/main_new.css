@@ -496,6 +496,9 @@ only screen and (min-resolution: 2dppx) and (min-width: 539px) {
     font-size: 3.2vw;
   }
 }
+.children__title span {
+  pointer-events: none;
+}
 .children__icon {
   width: 15px;
   height: 15px;
@@ -553,7 +556,7 @@ only screen and (min-resolution: 2dppx) and (min-width: 539px) {
 }
 @media (max-width: 992px) {
   .children__checkbox .text_14 {
-    font-size: 2.666666666666667vw;
+    font-size: 3.2vw;
   }
 }
 .children__btn {
@@ -1405,12 +1408,14 @@ input[name="ClientExt[places_count]"] {
 }
 
 .form-group,
-#new-order .error__wrapper {
+#new-order .error__wrapper,
+#peoples-mobile .error__wrapper  {
   position: relative;
 }
 
 .form-group .help-block,
-#new-order .error {
+#new-order .error,
+#peoples-mobile .error {
   display: none;
   background-color: #ff7575;
   color: white;
@@ -1424,14 +1429,16 @@ input[name="ClientExt[places_count]"] {
     margin: 20px 10px 0 10px;
     padding: 10px 20px;
   }
-  #new-order .error {
+  #new-order .error,
+  #peoples-mobile .error {
       margin-top: 20px;
       padding: 10px 20px;
   }
 }
 @media (min-width: 993px) {
   .form-group .help-block,
-  #new-order .error {
+  #new-order .error,
+  #peoples-mobile .error {
     padding: 5px 10px;
   }
   .form-group .help-block {
@@ -1452,14 +1459,16 @@ input[name="ClientExt[places_count]"] {
   text-decoration: none;
 }
 
-#new-order .error {
+#new-order .error,
+#peoples-mobile .error {
   position: absolute;
   z-index: 10;
   bottom: calc(100% + 3px);
 }
 
 .form-group .help-block:before,
-#new-order .error:before {
+#new-order .error:before,
+#peoples-mobile .error:before {
   position: absolute;
   left: 50%;
   margin-left: -5px;

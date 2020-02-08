@@ -346,18 +346,18 @@ $form = ActiveForm::begin([
         <div class="reservation-calc__line">
             <div class="reservation-calc__line-wrap">
                 <input name="ClientExt[places_count]" type="hidden" value="<?= $model->places_count ?>">
-                <div class="reservation-calc__label text_24">Мест:</div>
+                <div class="reservation-calc__label">Мест:</div>
                 <div class="reservation-calc__counter">
                     <div class="reservation-calc__counter-plus text_24">+</div>
-                    <div class="reservation-calc__counter-num text_24"><?= $model->places_count ?></div>
+                    <div class="reservation-calc__counter-num"><?= $model->places_count ?></div>
                     <div class="reservation-calc__counter-minus text_24">-</div>
                 </div>
             </div>
         </div>
         <div class="reservation-calc__line reservation-calc__line--second">
             <div class="reservation-calc__line-wrap">
-                <div class="reservation-calc__label-price text_24">Стоимость</div>
-                <div class="reservation-calc__price text_24"><?= $model->getCalculatePrice('unprepayment'); ?></div>
+                <div class="reservation-calc__label">Стоимость</div>
+                <div class="reservation-calc__price"><?= $model->getCalculatePrice('unprepayment'); ?></div>
             </div>
             <div class="reservation-calc__subline text_22">при оплате банковской картой</div>
         </div>

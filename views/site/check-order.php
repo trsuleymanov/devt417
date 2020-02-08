@@ -110,10 +110,10 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
                         </div>
 
                         <div class="reservation-step-line-content-top-right">
-                            <div class="reservation-step-line-title">
+                            <div class="reservation-step-line-time">
                                 <?= $model->time ?>
                             </div>
-                            <div class=" reservation-step-line-time">
+                            <div class=" reservation-step-line-date">
                                 <?= intval(date('d', $model->data)) ?> <?= $aMonths[intval(date('m', $model->data))] ?>
                             </div>
                         </div>
