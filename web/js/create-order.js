@@ -1046,8 +1046,8 @@ function toggleSubmitBut2() {
     var last_name = $.trim($('input[name="ClientExt[last_name]"]').val());
     var email = $.trim($('input[name="ClientExt[email]"]').val());
 
-    //alert('phone_length=' + phone.length + ' last_name='+last_name+' '+' email='+email+' places_count='+places_count);
-    if(phone.length >= 18 && last_name != "" && email != "" && places_count > 0) {
+    // alert('phone_length=' + phone.length + ' last_name='+last_name+' '+' email='+email+' places_count='+places_count);
+    if(phone.length >= 15 && last_name != "" && email != "" && places_count > 0) {
         $('#submit-create-order-step-2').removeClass('reservation-calc__button--disabled');
     }else {
         if($('#submit-create-order-step-2').hasClass('.reservation-calc__button--disabled') == false) {
@@ -1084,19 +1084,20 @@ $(document).ready(function() {
 
     $(".reservation-drop__map").addClass("d-b");
 
-    if( is_mobile() ){
-
-        $('#clientext-time_air_train_arrival')
-            .attr('readonly', 'true')
-            .Rolltime({
-                'step': 15
-            });
-    }
 
     initPlacesData();
     if($('#order-step-1').length > 0) {
 
         toggleSubmitBut1();
+
+        if( is_mobile() ){
+
+            $('#clientext-time_air_train_arrival')
+                .attr('readonly', 'true')
+                .Rolltime({
+                    'step': 15
+                });
+        }
 
     }else if($('#order-step-2').length > 0) {
 
@@ -1104,6 +1105,7 @@ $(document).ready(function() {
 
     }else if($('#order-step-3').length > 0) {
 
+        toggleSubmitBut2();
     }
 
 
