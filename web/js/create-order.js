@@ -2283,7 +2283,6 @@ $(document).on('click', '#reservation-item__checkbox-3', function() {
         if( is_mobile() ){
 
             $('#luggage-mobile').iziModal('open');
-
         }
 
     } else {
