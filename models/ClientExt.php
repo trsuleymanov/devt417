@@ -912,6 +912,10 @@ class ClientExt extends \yii\db\ActiveRecord
         // дата-время в заказе
         $unixtime = $this->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
 
+        $prev_trip = null;
+        $next_trip_1 = null;
+        $next_trip_2 = null;
+
 
         // ищем самый ближний рейс до выбранного времени
         $prev_trip = Trip::find()
@@ -920,7 +924,24 @@ class ClientExt extends \yii\db\ActiveRecord
             ->orderBy(['end_time_unixtime' => SORT_DESC])
             ->one();
 
+        // ищем самый ближний рейс после выбранного времени
+        if($prev_trip != null) {
+            $next_trip_1 = Trip::find()
+                ->where(['direction_id' => $this->direction_id])
+                ->andWhere(['>', 'end_time_unixtime', $prev_trip->end_time_unixtime])
+                ->orderBy(['end_time_unixtime' => SORT_ASC])
+                ->one();
+        }
 
+        if($next_trip_1 != null) {
+            $next_trip_2 = Trip::find()
+                ->where(['direction_id' => $this->direction_id])
+                ->andWhere(['>', 'end_time_unixtime', $next_trip_1->end_time_unixtime])
+                ->orderBy(['end_time_unixtime' => SORT_ASC])
+                ->one();
+        }
+
+        /*
         $day_trips = Trip::find()
             ->where(['direction_id' => $this->direction_id])
             ->andWhere(['date' => $this->data])
@@ -955,7 +976,7 @@ class ClientExt extends \yii\db\ActiveRecord
                     $next_trip_1 = $aUnixtimeDayTrips2[0];
                     $next_trip_2 = $aUnixtimeDayTrips2[1];
 
-                    /*
+
                     $prev_day_trips = Trip::find()
                         ->where(['direction_id' => $this->direction_id])
                         ->andWhere(['date' => $this->data - 86400])
@@ -975,7 +996,7 @@ class ClientExt extends \yii\db\ActiveRecord
                     foreach ($PrevDayTrips as $unixtime => $prev_day_trip) {
                         $prev_trip = $prev_day_trip;
                         break;
-                    }*/
+                    }
 
                     break;
                 }
@@ -1071,7 +1092,7 @@ class ClientExt extends \yii\db\ActiveRecord
                 $next_trip_1 = $aUnixtimeNextDayTrips[1];
                 $next_trip_2 = $aUnixtimeNextDayTrips[2];
             }
-        }
+        }*/
 
         $ResultTrips = [];
         $ResultTrips[] = $prev_trip;
