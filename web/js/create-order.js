@@ -945,6 +945,34 @@ function toggleDopBlock() {
     var critical_point_to = $('input[name="ClientExt[yandex_point_to_id]"]').attr('critical-point');
     var alias_to = $('input[name="ClientExt[yandex_point_to_id]"]').attr('alias');
 
+    if(critical_point_from == 1) {
+        $('#time-air-train-arrival-block').show();
+
+        if(alias_from == 'airport') {
+            $('#time-air-train-arrival-text').text('Время прилета самолета');
+        }else {
+            $('#time-air-train-arrival-text').text('Прибытие поезда');
+        }
+
+    }else {
+        $('#time-air-train-arrival-block').hide();
+    }
+
+
+    if(critical_point_to == 1) {
+
+        $('#time-air-train-departure-block').show();
+
+        if(alias_to == 'airport') {
+            $('#time-air-train-departure-text').text('Начало регистрации вылета');
+        }else {
+            $('#time-air-train-departure-text').text('Отправление поезда');
+        }
+    }else {
+        $('#time-air-train-departure-block').hide();
+    }
+
+    /*
     if(critical_point_from == 1 || critical_point_to == 1) {
         $('#dop-data').show();
 
@@ -977,7 +1005,7 @@ function toggleDopBlock() {
 
     }else {
         $('#dop-data').hide();
-    }
+    }*/
 }
 
 

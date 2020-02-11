@@ -244,11 +244,12 @@ $form = ActiveForm::begin([
 
 
 <?php
-if(($model->yandexPointFrom != null && $model->yandexPointFrom->critical_point == 1) || ($model->yandexPointTo != null && $model->yandexPointTo->critical_point == 1)) { ?>
+/* if(($model->yandexPointFrom != null && $model->yandexPointFrom->critical_point == 1) || ($model->yandexPointTo != null && $model->yandexPointTo->critical_point == 1)) { ?>
     <div id="dop-data" class="reservation-form reservation-form--step1">
 <? }else { ?>
     <div id="dop-data" style="display: none;" class="reservation-form reservation-form--step1">
-<? } ?>
+<? } */ ?>
+<div id="dop-data" class="reservation-form reservation-form--step1">
     <div class="container">
         <div class="reservation-step reservation-step--second">
             <ul class="reservation-tabs">
