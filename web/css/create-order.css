@@ -90,11 +90,13 @@
 
 .reservation-step-line-time {
   font-size: 24px;
+  line-height: 18px;
   font-weight: 500;
   white-space: nowrap;
 }
 
 .reservation-step-line-date {
+  margin-top: 5px;
   font-size: 22px;
   font-weight: 300;
   white-space: nowrap;
@@ -552,21 +554,29 @@
   color: #333333;
 }
 .reservation-calc__price {
+  width: 110px;
   font-size: 24px;
   font-weight: bolder;
+  text-align: center;
 }
 .reservation-calc__counter {
   display: flex;
   align-items: center;
+  text-align: center;
 }
-.reservation-calc__counter-minus, .reservation-calc__counter-plus {
+.reservation-calc__counter-minus,
+.reservation-calc__counter-plus {
+  width: 30px;
   font-family: monospace;
+  font-size: 28px;
+  line-height: 1;
   color: #333333;
   cursor: pointer;
 }
 .reservation-calc__counter-num {
-  margin: 0 22px;
+  width: 50px;
   font-size: 24px;
+  line-height: 30px;
   font-weight: bolder;
   color: #ffb100;
 }
@@ -584,7 +594,6 @@
   padding: 11px 24px;
   border: 1px solid #ffb100;
   border-radius: 8px;
-  margin-top: 12px;
   background-color: #ffb100;
   text-align: center;
   color: #ffffff;
@@ -789,11 +798,13 @@
   height: 27px;
   cursor: pointer;
 }
+.reservation-drop-offer {
+  margin-bottom: 15px;
+}
 .reservation-drop-offer__cover {
   display: flex;
   align-items: center;
   padding-bottom: 15px;
-  margin-bottom: 15px;
   border-bottom: 1px solid #ccc;
   cursor: pointer;
 }
@@ -818,18 +829,19 @@
 }
 .reservation-drop-offer__item {
   position: relative;
-  padding: 13px 0;
+  padding: 13px 0 13px 25px;
   border-bottom: 1px solid #ccc;
   cursor: pointer;
 }
-.reservation-drop-offer__item:hover::after {
+.reservation-drop-offer__item::after {
   content: '';
   position: absolute;
   top: 50%;
-  right: 15px;
+  left: 0;
   display: block;
-  width: 16px;
-  height: 16px;
+  width: 10px;
+  height: 10px;
+  background-color: #158EC5;
   border-radius: 50%;
   transform: translateY(-50%);
 }
@@ -1296,6 +1308,7 @@
 }
 .reservation-price__subtitle {
   margin-top: 3px;
+  margin-bottom: 10px;
   font-size: 18px;
   font-weight: 300;
 }
@@ -1708,7 +1721,6 @@
 
   .reservation-step-line-title{
     font-size: 20px;
-    font-weight: 500;
   }
   .reservation-step-line-undertitle{
     font-size: 16px;

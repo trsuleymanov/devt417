@@ -16,7 +16,7 @@ class NewAppAsset extends AssetBundle
     public $baseUrl = '@web';
 
     public $css = [
-        'https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap&subset=cyrillic-ext',
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap&subset=cyrillic-ext',
         'css/libs.css',
         'css/styles.css',
         'css/main_new.css',
@@ -24,6 +24,7 @@ class NewAppAsset extends AssetBundle
         'css/point-select-widget.css',
     ];
     public $js = [
+        'https://www.google.com/recaptcha/api.js?render=6Lewg8wUAAAAABhM-tLlmiRNYSLdf17N87agjkmR',
         'js/select-widget.js',
         'js/point-select-widget.js',
         'js/libs.js',

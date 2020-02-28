@@ -2,7 +2,6 @@
 
 use app\models\ClientExtChild;
 
-$this->registerJsFile('https://www.google.com/recaptcha/api.js?render=6Lewg8wUAAAAABhM-tLlmiRNYSLdf17N87agjkmR', ['depends'=>'app\assets\NewAppAsset']);
 $this->registerJsFile('/libs/bscroll.min.js', ['depends'=>'app\assets\NewAppAsset']);
 $this->registerJsFile('/libs/rolltime.js', ['depends'=>'app\assets\NewAppAsset']);
 $this->registerJsFile('/js/create-order.js', ['depends'=>'app\assets\NewAppAsset', 'position' => \yii\web\View::POS_END]);

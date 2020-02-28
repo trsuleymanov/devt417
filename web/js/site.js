@@ -679,6 +679,14 @@ $(document).on('click', '.sw-element[attribute-name="ClientExt[yandex_point_from
 
 $(document).ready(function() {
 
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6Lewg8wUAAAAABhM-tLlmiRNYSLdf17N87agjkmR', {action: 'homepage'}).then(function(token) {
+            $('button:disabled').each(function(){
+                $(this).attr('disabled', false);
+            });
+        });
+    });
+
     var menu = $('.mobile_menu').iziModal({
         width: '100%',
         top: 0,

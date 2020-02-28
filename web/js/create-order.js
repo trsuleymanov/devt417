@@ -1125,6 +1125,13 @@ $(document).ready(function() {
                 .Rolltime({
                     'step': 15
                 });
+
+            $('#clientext-time_air_train_departure')
+                .attr('readonly', 'true')
+                .Rolltime({
+                    'step': 15
+                });
+
         }
 
     }else if($('#order-step-2').length > 0) {
@@ -1140,14 +1147,6 @@ $(document).ready(function() {
     svg4everybody({});
 
     if( $('body').is('.index-page') ){
-
-        grecaptcha.ready(function() {
-            grecaptcha.execute('6Lewg8wUAAAAABhM-tLlmiRNYSLdf17N87agjkmR', {action: 'homepage'}).then(function(token) {
-                $('button:disabled').each(function(){
-                    $(this).attr('disabled', false);
-                });
-            });
-        });
 
         if( is_mobile() ){
 
@@ -1512,10 +1511,24 @@ $(document).on('click', '.but_reservation', function() {
         success: function (response) {
 
             if (response.success === true) {
+
                 location.href = '/site/finish-order?c=' + access_code;
+
             }else {
                 if(response.action == 'need_auth') {
+
                     upScreen();
+                    if( $('body').is('.guest') ){
+
+                        $('#modal_enter_phone').toggle();
+                        $('#inputphoneform-mobile_phone').focus();
+
+                    } else {
+
+                        $('.for_enter_wrap').toggle(100);
+
+                    }
+
                 }
             }
         },

@@ -39,6 +39,11 @@
         hours = now.getHours();
         minutes = Math.ceil( now.getMinutes() / settings.step ) * settings.step;
 
+        if(minutes == 60){
+          hours++;
+          minutes = 0;
+        }
+
       } else {
 
         parseTime(settings.value);
@@ -79,15 +84,23 @@
         $('body').append(html);
 
         hourScroll = new BScroll('#rolldate-hour', {
-            wheel: {
-                selectedIndex: activeHour
-            }
+          wheel: {
+            adjustTime: 0,
+            selectedIndex: activeHour
+          }
+        });
+        hourScroll.on('scrollEnd', function(){
+          hours = $('#rolldate-hour li[data-index="'+ hourScroll.getSelectedIndex() +'"]').text().replace(/\D/g, '');
         });
 
         minScroll = new BScroll('#rolldate-min', {
-            wheel: {
-                selectedIndex: activeMin
-            }
+          wheel: {
+            adjustTime: 0,
+            selectedIndex: activeMin
+          }
+        });
+        minScroll.on('scrollEnd', function(){
+          minutes = $('#rolldate-min li[data-index="'+ minScroll.getSelectedIndex() +'"]').text().replace(/\D/g, '');
         });
 
       });
@@ -100,8 +113,6 @@
 
       $(document).on('click', '.rolltime-confirm', function(){
 
-        hours = $('#rolldate-hour li[data-index="'+ hourScroll.getSelectedIndex() +'"]').text().replace(/\D/g, '');
-        minutes = $('#rolldate-min li[data-index="'+ minScroll.getSelectedIndex() +'"]').text().replace(/\D/g, '');
         trigger.val(hours +':'+ minutes);
         $('.rolltime-mask').trigger('click');
 
