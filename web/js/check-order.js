@@ -88,62 +88,6 @@ function upScreen() {
     return false;
 }
 
-
-
 $(document).on('submit', '.reservation-form', function() {
     return false;
 });
-
-/*
-$(document).on('click', '.but_reservation', function() {
-
-    // var client_ext_id = $('#order-client-form').attr('client-ext-id');
-    var access_code = $(this).attr('access_code');
-
-    $.ajax({
-        url: '/site/ajax-save-but-checkout?c=' + access_code + '&type_button=reservation',
-        type: 'post',
-        data: {},
-        success: function (response) {
-
-            if (response.success === true) {
-                location.href = '/site/finish-order?c=' + access_code;
-            }else {
-                if(response.action == 'need_auth') {
-
-                    upScreen();
-                    if( $('body').is('.guest') ){
-
-                        $('.header__login').toggleClass('click_fix');
-                        $('#modal_enter_phone').toggle();
-                        $('#inputphoneform-mobile_phone').focus();
-
-                    } else {
-
-                        $('.for_enter_wrap').toggle(100);
-
-                    }
-
-                }
-            }
-        },
-        error: function (data, textStatus, jqXHR) {
-            if (textStatus == 'error' && data != undefined) {
-                if (void 0 !== data.responseJSON) {
-                    if (data.responseJSON.message.length > 0) {
-                        alert(data.responseJSON.message);
-                    }
-                } else {
-                    if (data.responseText.length > 0) {
-                        alert(data.responseText);
-                    }
-                }
-            }else {
-                //handlingAjaxError(data, textStatus, jqXHR);
-            }
-        }
-    });
-
-    return false;
-});
-*/

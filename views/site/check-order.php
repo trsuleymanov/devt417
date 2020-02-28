@@ -165,7 +165,7 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
                             -->
                         </div>
                         <div class="reservation-step-line-content-top-right">
-                            <div class="reservation-step-line-date">
+                            <div class="reservation-step-line-time">
                                 <?php
                                 $aTimes = explode(':', $model->time);
                                 $hours = intval($aTimes[0]) + 4;
@@ -180,7 +180,7 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
 
                                 ~ <?= $hours.':'.$aTimes[1] ?>
                             </div>
-                            <div class="reservation-step-line-time">
+                            <div class="reservation-step-line-date">
                                 <?= intval(date('d', $model->data)) ?> <?= $aMonths[intval(date('m', $model->data))] ?>
                             </div>
                         </div>
