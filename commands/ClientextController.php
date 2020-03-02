@@ -58,7 +58,7 @@ class ClientextController extends Controller
     {
         $not_ready_orders = ClientExt::find()
             ->where(['status' => ''])
-            ->andWhere(['>', 'created_at', time() - 1800])
+            ->andWhere(['<', 'created_at', time() - 1800])
             ->all();
 
         $i = 0;

@@ -579,7 +579,9 @@ class ClientExt extends \yii\db\ActiveRecord
 
             if(in_array($status, ['canceled_by_client', 'canceled_not_ready_order_by_client', 'canceled_not_ready_order_auto'])) {
                 $this->cancellation_click_time = time();
-                $this->cancellation_clicker_id = Yii::$app->getUser()->getId();
+                if(!(\Yii::$app instanceof yii\console\Application)) {
+                    $this->cancellation_clicker_id = Yii::$app->getUser()->getId();
+                }
             }
 
         }elseif($status == 'sended') {// если заявка-заказ перешел в статус "отправлена", то при наличии кода друга начисляем другу деньгу
