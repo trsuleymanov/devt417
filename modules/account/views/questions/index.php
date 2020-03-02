@@ -1,6 +1,7 @@
 <?php
 
 $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset']);
+$this->registerJsFile('js/account/account.js', ['depends'=>'app\assets\NewAppAsset']);
 ?>
 <div class="reservation__menu">
     <div class="reservation_menu__title">ОТВЕТЫ НА ВОПРОСЫ</div>

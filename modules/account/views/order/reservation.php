@@ -3,6 +3,7 @@ use app\components\Helper;
 
 $this->registerCssFile('css/create-order.css', ['depends'=>'app\assets\NewAppAsset']);
 $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset']);
+$this->registerJsFile('js/account/account.js', ['depends'=>'app\assets\NewAppAsset']);
 $this->registerJsFile('js/account/reservation.js', ['depends'=>'app\assets\NewAppAsset']);
 ?>
 <div class="reservation__menu">

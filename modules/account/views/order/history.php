@@ -4,7 +4,7 @@ use app\components\Helper;
 use yii\web\ForbiddenHttpException;
 
 $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset']);
-$this->registerJsFile('js/account/order.js', ['depends'=>'app\assets\NewAppAsset']);
+$this->registerJsFile('js/account/account.js', ['depends'=>'app\assets\NewAppAsset']);
 ?>
 
 <div class="reservation__menu">
@@ -13,7 +13,7 @@ $this->registerJsFile('js/account/order.js', ['depends'=>'app\assets\NewAppAsset
     if(count($orders) > 0) {
         foreach ($orders as $order) {
 
-            if (in_array($order->status, ['canceled_by_client', 'canceled_by_operator', 'canceled_auto'])) {
+            if (in_array($order->status, ['canceled_by_client', 'canceled_by_operator', 'canceled_not_ready_order_auto', 'canceled_not_ready_order_by_client'])) {
                 $order_class = 'history__order__canceled';
             } elseif ($order->status == 'sended') {
 
@@ -28,7 +28,9 @@ $this->registerJsFile('js/account/order.js', ['depends'=>'app\assets\NewAppAsset
             $datetime = $order->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
 
             $trip = $order->trip;
-            $tariff = $trip->tariff;
+            if($trip != null) {
+                $tariff = $trip->tariff;
+            }
             ?>
 
 

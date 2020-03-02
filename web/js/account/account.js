@@ -36,6 +36,7 @@ $(document).on('click', '#order-list-page .cancel-order', function() {
 });
 
 
+
 $(document).on('click', '.cancel-not-ready-order', function() {
 
     var access_code = $(this).attr('access-code');

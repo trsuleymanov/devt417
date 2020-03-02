@@ -5,6 +5,7 @@ use yii\web\JsExpression;
 use app\widgets\EditableTextWidget;
 
 $this->registerCssFile('css/account/lk.css', ['depends'=>'app\assets\NewAppAsset']);
+$this->registerJsFile('js/account/account.js', ['depends'=>'app\assets\NewAppAsset']);
 
 //$email = $user->email;
 //$aEmails = explode('@', $user->email);

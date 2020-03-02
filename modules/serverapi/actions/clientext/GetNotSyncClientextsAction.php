@@ -25,8 +25,14 @@ class GetNotSyncClientextsAction extends \yii\rest\Action
 
         $client_exts = ClientExt::find()
             ->where(['sync_date' => NULL])
-            ->andWhere(['status' => ['created_with_time_confirm', 'created_without_time_confirm', 'canceled_by_client',
-                'canceled_by_operator', 'canceled_auto', 'created_with_time_sat', 'sended']])
+            ->andWhere(['status' => [
+                'created_with_time_confirm', 'created_without_time_confirm',
+                // не завершенные отмененные заказы не должны перетекать в CRM, чтобы не менять статистику отмен
+                //'canceled_not_ready_order_by_client', 'canceled_not_ready_order_auto',
+                'canceled_by_client',
+                'canceled_by_operator',
+                'created_with_time_sat', 'sended'
+            ]])
             ->limit(50)
             ->all();
 
