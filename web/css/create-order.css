@@ -959,13 +959,98 @@
   font-size: 18px;
 }
 .reservation-drop__time-list {
+  margin: 5px -5px;
   display: flex;
-  margin-top: 7px;
+  flex-wrap: wrap;
 }
-.reservation-drop__time-back-wrap {
+.reservation-drop__time-item {
+  position: relative;
+  margin: 5px;
+  padding: 12px 10px 12px 25px;
   display: flex;
   align-items: center;
-  margin-top: 49px;
+  justify-content: space-between;
+  flex: 0 0 345px;
+  max-width: 100%;
+  background-color: #fff4f4;
+  border: 1px solid #eae5e8;
+  border-radius: 7px;
+  color: #c94897;
+  cursor: pointer;
+}
+.reservation-drop__time-item.selected {
+    background-color: #c94897;
+    border-color: #c94897;
+    color: white;  
+}
+.reservation-drop__time-item.selected:before {
+  position: absolute;
+  top: 50%;
+  margin-top: -5px;
+  left: 8px;
+  display: block;
+  content: '';
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 50%;
+}
+@media screen and (min-width: 992px){
+  .reservation-drop__time-item:hover {
+    background-color: #c94897;
+    border-color: #c94897;
+    color: white;
+  }
+  .reservation-drop__time-item:hover:before {
+    position: absolute;
+    top: 50%;
+    margin-top: -5px;
+    left: 8px;
+    display: block;
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 50%;
+  }
+}
+.reservation-drop__time-left {
+  display: flex;
+  align-items: center;
+}
+.reservation-drop__time-time {
+  font-size: 22px;
+  font-weight: bold;
+}
+.reservation-drop__time-date {
+  margin-left: 5px;
+  font-size: 18px;
+}
+.reservation-drop__time-status {
+  font-size: 14px;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+
+/*.reservation-drop__time-item.selected {
+  background-color: #C94897;
+  border-color: #C94897;
+  color: white;
+}
+@media screen and (min-width: 992px){
+  .reservation-drop__time-item:hover {
+    background-color: #C94897;
+    border-color: #C94897;
+    color: white;
+  }
+}*/
+
+.reservation-drop__time-back-wrap {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
 }
 .reservation-drop__time-back-arrow {
   margin-right: 7px;
@@ -980,29 +1065,6 @@
 }
 .reservation-drop__time-back-trigger:hover {
   border-color: transparent;
-}
-.reservation-drop__time-item {
-  padding: 7px 11px;
-  border: 1px solid #cccccc;
-  margin-right: 17px;
-  background-color: #FFF4F4;
-  border-radius: 7px;
-  font-size: 20px;
-  font-weight: 500;
-  color: #C94897;
-  cursor: pointer;
-}
-.reservation-drop__time-item.selected {
-  background-color: #C94897;
-  border-color: #C94897;
-  color: white;
-}
-@media screen and (min-width: 992px){
-  .reservation-drop__time-item:hover {
-    background-color: #C94897;
-    border-color: #C94897;
-    color: white;
-  }
 }
 .reservation-drop__selected-map {
   display: none;

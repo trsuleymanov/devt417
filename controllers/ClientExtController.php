@@ -82,7 +82,11 @@ class ClientExtController extends Controller
 
             if($time_confirm > 0) {
 
+                $aDays = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+
                 $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+
+                $aMonthsFull = ['', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 
                 $arrival = $time_confirm + 12000;
 
@@ -102,6 +106,7 @@ class ClientExtController extends Controller
                     'trip_id' => $trip->id,
                     'status' => $status,
                     'data' => date("d.m.Y", $time_confirm),
+                    'data_formatted' => '- в '. $aDays[intval(date('w', $time_confirm))] .', '. date('d', $time_confirm) .' '. $aMonthsFull[intval(date('m', $time_confirm))],
                     'departure_date' => date('d', $time_confirm) .' '. $aMonths[intval(date('m', $time_confirm))],
                     'departure_time' => date("H:i", $time_confirm),
                     'arrival_date' => date('d', $arrival) .' '. $aMonths[intval(date('m', $arrival))],

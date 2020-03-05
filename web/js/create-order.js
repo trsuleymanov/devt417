@@ -535,7 +535,7 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
                     var trip_obj = response.trips_time[key];
 
 
-                    var text = trip_obj.data + ' ' + trip_obj.departure_time + ' (' + trip_obj.status + ')';
+                    var text = '<div class = "reservation-drop__time-left"><div class = "reservation-drop__time-time">' + trip_obj.departure_time + '</div><div class = "reservation-drop__time-date">' + trip_obj.data_formatted + '</div></div><div class = "reservation-drop__time-right"><div class = "reservation-drop__time-status">' + trip_obj.status + '</div></div>';
                     trips_html += '<li class="reservation-drop__time-item"' +
                         ' trip-id="' + trip_obj.trip_id + '"' +
                         ' data-departure-date="'+ trip_obj.departure_date +'" ' +
@@ -565,7 +565,7 @@ function loadTripTimes(access_code, yandex_point_id, response_function) {
                 var time = $('#order-client-form').attr('time');
 
                 var html =
-                    '<div class="reservation-drop__time-paragraph">Указанное вами желаемое время посадки - <span class="reservation-drop__time-time">' + time + '</span>. На выбранной точке можно сесть в указанное время.</div>' +
+                    '<div class="reservation-drop__time-paragraph">Указанное вами желаемое время посадки - ' + time + '. На выбранной точке можно сесть в указанное время.</div>' +
                     '    <div class="reservation-drop__time-title">Выберите время посадки:</div>' +
                     '    <ul class="reservation-drop__time-list">' +
                     trips_html +
