@@ -17,7 +17,11 @@ $this->registerCssFile('/libs/rolltime.css', ['depends'=>'app\assets\NewAppAsset
 // echo "model:<pre>"; print_r($model); echo "</pre>";
 //echo "errors:<pre>"; print_r($model->getErrors()); echo "</pre>";
 
+$aDays = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+
 $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+
+$aMonthsFull = ['', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 ?>
 <?php
 $form = ActiveForm::begin([
@@ -26,7 +30,7 @@ $form = ActiveForm::begin([
         //'client-ext-id' => $model->id,
         'client-ext-code' => $model->access_code,
         'direction-id' => $model->direction_id,
-        'time' => $model->time
+        'time' => $model->time .', в '. $aDays[intval(date('w', $model->data))] .'. '. date('d', $model->data) .' '. $aMonthsFull[intval(date('m', $model->data))] .' '. date('Y', $model->data) .' г'
     ]
 ]);
 ?>
