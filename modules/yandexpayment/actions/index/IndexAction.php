@@ -97,7 +97,7 @@ class IndexAction extends \yii\rest\Action
         $yandex_payment = YandexPayment::find()->where(['yandex_payment_id' => $payment_id])->one();
         if($yandex_payment == null) {
             Yii::$app->mailer->compose()
-                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setFrom(Yii::$app->params['fromEmail'])
                 ->setTo('vlad.shetinin@gmail.com')
                 ->setSubject('сообщение от Яндекс оплаты')
                 ->setTextBody('Платеж с yandex_payment_id='.$payment_id.' не найден')
@@ -133,7 +133,7 @@ class IndexAction extends \yii\rest\Action
                 $msg .= $key.'='.$value."\n";
             }
             Yii::$app->mailer->compose()
-                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setFrom(Yii::$app->params['fromEmail'])
                 ->setTo('vlad.shetinin@gmail.com')
                 ->setSubject('сообщение от Яндекс оплаты')
                 ->setTextBody($msg)
@@ -148,7 +148,7 @@ class IndexAction extends \yii\rest\Action
 
 //            $msg = "yandex_payment_status=".$yandex_payment->status." \n";
 //            Yii::$app->mailer->compose()
-//                ->setFrom(Yii::$app->params['adminEmail'])
+//                ->setFrom(Yii::$app->params['fromEmail'])
 //                ->setTo('vlad.shetinin@gmail.com')
 //                ->setSubject('сообщение от Яндекс оплаты')
 //                ->setTextBody($msg)
@@ -162,7 +162,7 @@ class IndexAction extends \yii\rest\Action
                     $msg .= $key . '=' . $value . "\n";
                 }
                 Yii::$app->mailer->compose()
-                    ->setFrom(Yii::$app->params['adminEmail'])
+                    ->setFrom(Yii::$app->params['fromEmail'])
                     ->setTo('vlad.shetinin@gmail.com')
                     ->setSubject('сообщение от Яндекс оплаты')
                     ->setTextBody($msg)
@@ -177,7 +177,7 @@ class IndexAction extends \yii\rest\Action
                     $msg .= $key . '=' . $value . "\n";
                 }
                 Yii::$app->mailer->compose()
-                    ->setFrom(Yii::$app->params['adminEmail'])
+                    ->setFrom(Yii::$app->params['fromEmail'])
                     ->setTo('vlad.shetinin@gmail.com')
                     ->setSubject('сообщение от Яндекс оплаты')
                     ->setTextBody($msg)
@@ -190,7 +190,7 @@ class IndexAction extends \yii\rest\Action
             {
 //                $msg = "yandex_payment_type=".$yandex_payment->type." \n";
 //                Yii::$app->mailer->compose()
-//                    ->setFrom(Yii::$app->params['adminEmail'])
+//                    ->setFrom(Yii::$app->params['fromEmail'])
 //                    ->setTo('vlad.shetinin@gmail.com')
 //                    ->setSubject('сообщение от Яндекс оплаты')
 //                    ->setTextBody($msg)
@@ -224,7 +224,7 @@ class IndexAction extends \yii\rest\Action
 //                $msg .= $key.'='.$val."\n";
 //            }
 //            Yii::$app->mailer->compose()
-//                ->setFrom(Yii::$app->params['adminEmail'])
+//                ->setFrom(Yii::$app->params['fromEmail'])
 //                ->setTo('vlad.shetinin@gmail.com')
 //                ->setSubject('сообщение от Яндекс оплаты')
 //                ->setTextBody($msg)
@@ -237,7 +237,7 @@ class IndexAction extends \yii\rest\Action
                     $msg .= $key . '=' . $value . "\n";
                 }
                 Yii::$app->mailer->compose()
-                    ->setFrom(Yii::$app->params['adminEmail'])
+                    ->setFrom(Yii::$app->params['fromEmail'])
                     ->setTo('vlad.shetinin@gmail.com')
                     ->setSubject('сообщение от Яндекс оплаты')
                     ->setTextBody($msg)
@@ -247,7 +247,7 @@ class IndexAction extends \yii\rest\Action
 //            else {
 //                $msg = "Заказ ".$clientext->id." сохранен. paid_summ=".$clientext->paid_summ.": \n";
 //                Yii::$app->mailer->compose()
-//                    ->setFrom(Yii::$app->params['adminEmail'])
+//                    ->setFrom(Yii::$app->params['fromEmail'])
 //                    ->setTo('vlad.shetinin@gmail.com')
 //                    ->setSubject('сообщение от Яндекс оплаты')
 //                    ->setTextBody($msg)
@@ -265,7 +265,7 @@ class IndexAction extends \yii\rest\Action
                     $msg .= $key . '=' . $value . "\n";
                 }
                 Yii::$app->mailer->compose()
-                    ->setFrom(Yii::$app->params['adminEmail'])
+                    ->setFrom(Yii::$app->params['fromEmail'])
                     ->setTo('vlad.shetinin@gmail.com')
                     ->setSubject('сообщение от Яндекс оплаты')
                     ->setTextBody($msg)

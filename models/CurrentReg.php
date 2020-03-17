@@ -170,7 +170,7 @@ class CurrentReg extends \yii\db\ActiveRecord
     public function sendRegistrationCode() {
 
         $message = Yii::$app->mailer->compose();
-        $message->setFrom(\Yii::$app->params['callbackEmail']);
+        $message->setFrom(\Yii::$app->params['fromRegistrationEmail']);
         $message->setTo($this->email);
         $message->setSubject('Подтверждение регистрации на сайте '.Yii::$app->params['siteUrl']);
         $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [

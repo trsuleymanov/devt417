@@ -25,7 +25,6 @@ class MainServerController extends Controller
     //private $main_server_url = 'http://tobus-yii2.ru/serverapi/';
     //private $main_server_url = 'http://test2-vlad.tmweb.ru/serverapi/';
     //private $main_server_url = 'http://185.6.83.45:7900/serverapi/';
-    //private $main_server_url = Yii::$app->params['adminEmail'];
 
     public static $secretKey = 'lsaeu5jERTffd_7'; // ключ доступа к serverapi основного сервера.
 

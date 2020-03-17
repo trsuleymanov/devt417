@@ -440,9 +440,7 @@ class SiteController extends Controller
 //            'registration_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/confirm-registration/',
 //            'site' => $_SERVER['HTTP_HOST']
 //        ])
-//            ->setFrom(\Yii::$app->params['callbackEmail'])
-//            ->setBcc(\Yii::$app->params['fromEmail'])
-//            //->setTo('vlad.shetinin@gmail.com')
+//            ->setFrom(\Yii::$app->params['fromEmail'])
 //            ->setTo('nara-dress@yandex.ru')
 //            ->setSubject('Регистрационный код')
 //            //->setTextBody('Текст сообщения')
@@ -451,7 +449,7 @@ class SiteController extends Controller
 
 
         $message = Yii::$app->mailer->compose();
-        $message->setFrom(\Yii::$app->params['callbackEmail']);
+        $message->setFrom(\Yii::$app->params['fromEmail']);
         $message->setTo('nara-dress@yandex.ru');
         $message->setSubject('Регистрационный код');
         $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [
