@@ -402,6 +402,7 @@ class SiteController extends Controller
         //$email = 'ya@ya.ru'; // ya@ya.ru
         //echo Helper::setMaskToEmail($email);
 
+        /*
         $clientext = ClientExt::find()->where(['id' => 204241])->one();
 
         $aTime = explode(':', $clientext->time);
@@ -421,7 +422,11 @@ class SiteController extends Controller
             ->one();
 
         echo "prev_trip:<pre>"; print_r($prev_trip); echo "</pre>";
+        */
 
+        echo "mail_result=".mail('vlad.shetinin@gmail.com', 'simple test', 'my message = моё сообщение')."<br />";
+
+        echo "mail_result=".mail('nara-dress@yandex.ru', 'simple test', 'my message = моё сообщение')."<br />";
 
         //echo strtotime(date('d.m.Y')) + 2*86400;
     }
