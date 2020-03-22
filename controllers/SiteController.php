@@ -197,8 +197,6 @@ class SiteController extends Controller
                 $client_ext_childs = ClientExtChild::find()->where(['clientext_id' => $model->id])->all();
             }
 
-            exit('test2');
-
             return $this->render('create-order', [
                 'model' => $model,
                 'client_ext_childs' => $client_ext_childs
