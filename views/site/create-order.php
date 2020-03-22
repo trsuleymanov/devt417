@@ -24,8 +24,6 @@ $aMonths = ['', 'янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'и�
 $aMonthsFull = ['', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 ?>
 <?php
-
-/*
 $form = ActiveForm::begin([
     'id' => 'order-client-form',
     'options' => [
@@ -93,7 +91,7 @@ $form = ActiveForm::begin([
         </div>
     </div>
 </div>
-
+<?php /* ?>
 <div class="reservation-form reservation-form--step1">
     <div class="container">
         <div class="reservation-step reservation-step--first">
@@ -687,7 +685,8 @@ $form = ActiveForm::begin([
         </div>
     </div>
 </div>
+<?php */ ?>
 
 
 
-<?php ActiveForm::end(); */ ?>
+<?php ActiveForm::end(); ?>
