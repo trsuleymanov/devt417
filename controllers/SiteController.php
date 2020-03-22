@@ -138,7 +138,7 @@ class SiteController extends Controller
     public function actionCreateOrder($c)
     {
         // Yii::$app->controller->layout = 'main_page2';
-
+exit('test');
         $model = ClientExt::find()->where(['access_code' => $c])->one();
         if($model == null) {
             throw new ForbiddenHttpException('Заказ не найден');
@@ -434,33 +434,30 @@ class SiteController extends Controller
     public function actionTest2() {
 
 //        $message = Yii::$app->mailer->compose();
-//        $message->attach('/images/417.gif');
-
-//        Yii::$app->mailer->compose('registration_code', [
+//        $message->setFrom(\Yii::$app->params['fromEmail']);
+//        $message->setTo('nara-dress@yandex.ru');
+//        $message->setSubject('Регистрационный код');
+//        $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [
 //            'registration_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/confirm-registration/',
-//            'site' => $_SERVER['HTTP_HOST']
-//        ])
-//            ->setFrom(\Yii::$app->params['fromEmail'])
-//            ->setTo('nara-dress@yandex.ru')
-//            ->setSubject('Регистрационный код')
-//            //->setTextBody('Текст сообщения')
-//            //->setHtmlBody('<b>текст сообщения в формате HTML</b>')
-//            ->send();
-
+//            'site' => $_SERVER['HTTP_HOST'],
+//            'img' => $message->embed('http://tobus-client.ru/images/417.gif'),
+//            'email' => 'vlad.shetinin@gmail.com',
+//            'phone' => '+7(966) 112-80-06',
+//        ]));
+//
+//        return $message->send();
 
         $message = Yii::$app->mailer->compose();
-        $message->setFrom(\Yii::$app->params['fromEmail']);
-        $message->setTo('nara-dress@yandex.ru');
-        $message->setSubject('Регистрационный код');
+        $message->setFrom(\Yii::$app->params['fromRegistrationEmail']);
+        $message->setTo($this->email);
+        $message->setSubject('Подтверждение регистрации на сайте '.Yii::$app->params['siteUrl']);
         $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [
-            'registration_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/confirm-registration/',
-            'site' => $_SERVER['HTTP_HOST'],
-            'img' => $message->embed('http://tobus-client.ru/images/417.gif'),
-            'email' => 'vlad.shetinin@gmail.com',
-            'phone' => '+7(966) 112-80-06',
+            'registration_url' =>  Yii::$app->params['siteUrl'].'/user/confirm-registration/?registration_code='.$this->registration_code,
+            'site' => Yii::$app->params['siteUrl'],
+            'email' => $this->email,
+            'phone' => $this->mobile_phone,
         ]));
-
-        return $message->send();
+        $message->send();
 
 
         return true;
