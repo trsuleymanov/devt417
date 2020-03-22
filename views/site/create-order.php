@@ -91,6 +91,7 @@ $form = ActiveForm::begin([
         </div>
     </div>
 </div>
+<?php /* ?>
 <div class="reservation-form reservation-form--step1">
     <div class="container">
         <div class="reservation-step reservation-step--first">
@@ -233,7 +234,7 @@ $form = ActiveForm::begin([
         </div>
     </div>
 </div>
-
+<?php */ ?>
 
 
 <div class="container">
@@ -244,7 +245,6 @@ $form = ActiveForm::begin([
     </div>
 </div>
 
-<?php /* ?>
 <div id="dop-data" class="reservation-form reservation-form--step1">
     <div class="container">
         <div class="reservation-step reservation-step--second">
@@ -684,8 +684,6 @@ $form = ActiveForm::begin([
         </div>
     </div>
 </div>
-<?php */ ?>
-
 
 
 <?php ActiveForm::end(); ?>
