@@ -138,7 +138,6 @@ class SiteController extends Controller
     public function actionCreateOrder($c)
     {
         // Yii::$app->controller->layout = 'main_page2';
-exit('test');
         $model = ClientExt::find()->where(['access_code' => $c])->one();
         if($model == null) {
             throw new ForbiddenHttpException('Заказ не найден');
@@ -197,6 +196,8 @@ exit('test');
             if($model->child_count > 0) {
                 $client_ext_childs = ClientExtChild::find()->where(['clientext_id' => $model->id])->all();
             }
+
+            exit('test2');
 
             return $this->render('create-order', [
                 'model' => $model,
