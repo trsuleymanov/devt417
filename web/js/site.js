@@ -142,6 +142,7 @@ function openConfirmPhoneForm(user_phone) {
         data: {},
         success: function (response) {
 
+            console.log(response);
             if(response.success == true) {
 
                 if( is_mobile() ) {
@@ -175,7 +176,7 @@ function openConfirmPhoneForm(user_phone) {
                         type: 'post',
                         data: {},
                         dataType: 'json',
-                        success: function () {
+                        success: function (result) {
 
                             if( is_mobile() ) {
 

@@ -639,7 +639,7 @@ class SiteController extends Controller
 
         $number = str_replace('-', '', $user_phone);
         $number = substr($number, -10);
-        $reg_number = '89674660000';
+        $reg_number = '9674660000';
         $reg_number_pretty = '+7 (967) 466-00-00';
         $reg_time_limit = 60;
 

@@ -128,7 +128,6 @@ class UserController extends Controller
         $url = 'http://82.146.45.127:9000/result?number='. $number;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $reg_time_limit);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $result = curl_exec($ch);

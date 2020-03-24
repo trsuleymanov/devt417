@@ -7,7 +7,6 @@ $this->registerJsFile('/libs/rolltime.js', ['depends'=>'app\assets\NewAppAsset']
 $this->registerJsFile('/js/create-order.js', ['depends'=>'app\assets\NewAppAsset', 'position' => \yii\web\View::POS_END]);
 
 $this->registerCssFile('/libs/rolltime.css', ['depends'=>'app\assets\NewAppAsset']);
-
 ?>
 <div class="welcome_wrap" id="new-order">
     <div class="container">
