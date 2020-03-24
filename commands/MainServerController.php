@@ -434,7 +434,7 @@ class MainServerController extends Controller
                 $aNewDataTrips = [];
                 foreach($data['trips'] as $data_trip) {
 
-                    if($aExistTrips[$data_trip['id']]) {
+                    if(isset($aExistTrips[$data_trip['id']])) {
                         $aExistDataTrips[$data_trip['id']] = $data_trip;
                     }else {
                         $aNewDataTrips[$data_trip['id']] = $data_trip;
