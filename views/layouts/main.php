@@ -10,7 +10,6 @@ NewAppAsset::register($this);
 
 $settings = \app\models\Setting::find()->where(['id' => 1])->one();
 
-// $current_module = Yii::$app->controller->module->id;
 $current_controller = Yii::$app->controller->id;
 $current_route = $this->context->route;
 
@@ -43,9 +42,6 @@ endif;
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
     <meta name="theme-color" content="#ffffff">
     <!-- CSS-->
-    <?php /*
-    <link rel="stylesheet" type="text/css" href="/css/libs.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/main_new.css">*/ ?><!--[if lt IE 9]>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script><![endif]-->
     <?php $this->head() ?>
     <script>
@@ -55,9 +51,6 @@ endif;
 <body class="<?=$addClass?>">
 <?php $this->beginBody() ?>
 <div class="wrapper">
-    <?php /*
-    <header style="<?= (!in_array($current_route, ['site/index', 'site/create-order', 'site/create-order-step2', 'site/check-order']) ? 'display: none;' : '') ?>">
-    */ ?>
     <header>
         <div class="container">
             <div class="header">
@@ -164,15 +157,7 @@ endif;
             </div>
         </div>
     </header>
-    <?php // if(in_array($current_route, ['site/index', 'site/create-order', 'site/create-order-step2', 'site/check-order'])) { ?>
-        <div class="content main-content" style="">
-    <?php /*}else { ?>
-        <div class="content" style="padding-top: 0 !important;" >
-    <?php }*/ ?>
-        <?php
-        // echo 'current_controller='.$current_controller.'<br />';
-        // echo 'current_route='.$current_route.'<br />';
-        ?>
+    <div class="content main-content" style="">
         <?= $content ?>
     </div>
     <footer class="footer">
@@ -233,24 +218,6 @@ endif;
         </div>
     </footer>
     <?php if($current_route == 'site/index') { ?>
-        <!-- <ul class="social_box">
-            <li class="social_box__item"><a class="social_box__link" href="#">
-                    <svg class="icon icon-facebook social_box__icon">
-                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#facebook"></use>
-                    </svg></a></li>
-            <li class="social_box__item"><a class="social_box__link" href="#">
-                    <svg class="icon icon-twitter social_box__icon">
-                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#twitter"></use>
-                    </svg></a></li>
-            <li class="social_box__item"><a class="social_box__link" href="#">
-                    <svg class="icon icon-instagram social_box__icon">
-                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#instagram"></use>
-                    </svg></a></li>
-            <li class="social_box__item"><a class="social_box__link" href="#">
-                    <svg class="icon icon-youtube social_box__icon">
-                        <use xlink:href="/images_new/svg-sprites/symbol/sprite.svg#youtube"></use>
-                    </svg></a></li>
-        </ul> -->
         <div id="modal-video"></div>
         <div class="iziModal" id="modal1">
             <div class="modal_global">
@@ -417,9 +384,6 @@ endif;
             <div class="modal_global__enter">
                 <div class="modal_global__content">
                     <p class="modal_global__title text_20">Для входа в личный кабинет<br>введите номер телефона</p>
-                    <!--
-                    <input class="modal_global__input" type="tel" name="phone" placeholder="+7 (000) 000 - 00 - 00" autocomplete="off">
-                    -->
                     <?php
                     echo $form->field($model, 'mobile_phone2')->textInput(['maxlength' => true])
                         ->widget(\yii\widgets\MaskedInput::class, [
@@ -464,14 +428,6 @@ endif;
         </div>
     <? endif; ?>
 </div>
-<!--
-<script src="/js/libs.min.js"></script>
-<script src="/js/main.min.js"></script>
--->
-<!--
-<script src="/js/libs.js"></script>
-<script src="/js/main_new.js"></script>
--->
 <?php $this->endBody() ?>
 </body>
 </html>

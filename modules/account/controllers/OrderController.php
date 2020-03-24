@@ -17,7 +17,7 @@ class OrderController extends Controller
     {
         $orders = ClientExt::find()
             ->where(['user_id' => Yii::$app->getUser()->getId()])
-            ->andWhere(['status' => ['sended', 'canceled_by_client', 'canceled_by_operator']])
+            ->andWhere(['status' => ['sended', 'canceled_by_client', 'canceled_by_operator', 'canceled_not_ready_order_auto', 'canceled_not_ready_order_by_client']])
             ->orderBy(['id' => SORT_DESC])
             ->all();
 
@@ -82,7 +82,11 @@ class OrderController extends Controller
             throw new ForbiddenHttpException('Заказ не найден');
         }
 
-        $client_ext->setStatus('canceled_by_client');
+        if(empty($client_ext->status)) {
+            $client_ext->setStatus('canceled_not_ready_order_by_client');
+        }else {
+            $client_ext->setStatus('canceled_by_client');
+        }
 
         return [
             'success' => true

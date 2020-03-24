@@ -383,53 +383,17 @@ class ClientExt extends \yii\db\ActiveRecord
             }
         }
 
-        // если пользователь авторизован, то его данные беруться
-        // если пользователь не авторизован, то
-        //      - проверяется что для такого телефона или почты не существует пользователся
-        if (!Yii::$app instanceof \yii\console\Application) {
-            $user = Yii::$app->user->identity;
-            if ($user == null) {
-                // throw new ForbiddenHttpException('Пока временно отключена создания заказа без предварительно авторизованного пользователя');
-            } else {
-
-                // у авторизованного пользователя должна быть возможность создать заказ с данными другого человека
-                /*
-                if (!empty($this->phone) && $user->phone != $this->phone) {
-                    throw new ForbiddenHttpException('Нельзя изменить телефон пользователя');
-                }
-
-                $update_user = false;
-                if (!empty($this->email) && $user->email != $this->email) {
-                    $user->email = $this->email;
-                    $update_user = true;
-                }
-
-                // 'last_name', 'first_name'
-                if (!empty($this->last_name) && $user->last_name != $this->last_name) {
-                    $user->last_name = $this->last_name;
-                    $update_user = true;
-                }
-                if (!empty($this->first_name) && $user->first_name != $this->first_name) {
-                    $user->first_name = $this->first_name;
-                    $update_user = true;
-                }
-
-
-                if ($update_user == true) {
-                    if (!$user->save(false)) {
-                        throw new ForbiddenHttpException('Не удалось обновить данные пользователя');
-                    }
-                }*/
-            }
-        }
-
 
         if($this->price > 0 && ($this->price == $this->paid_summ + $this->used_cash_back)) {
-            $this->is_paid = true;
-            $this->paid_time = time();
-            if(empty($this->payment_source)) { // application
-                $this->payment_source = 'client_site';
+
+            if($this->is_paid != true) {
+                $this->is_paid = true;
+                $this->paid_time = time();
+                if (empty($this->payment_source)) { // application
+                    $this->payment_source = 'client_site';
+                }
             }
+
         }else {
             $this->is_paid = false;
             $this->paid_time = NULL;
@@ -503,9 +467,10 @@ class ClientExt extends \yii\db\ActiveRecord
             '' => '', // Заказ недооформлен
             'created_with_time_confirm' => 'created_with_time_confirm',
             'created_without_time_confirm' => 'created_without_time_confirm',
+            'canceled_not_ready_order_by_client' => 'canceled_not_ready_order_by_client',
             'canceled_by_client' => 'canceled_by_client',
             'canceled_by_operator' => 'canceled_by_operator',
-            'canceled_auto' => 'canceled_auto',
+            'canceled_not_ready_order_auto' => 'canceled_not_ready_order_auto',
             'created_with_time_sat' => 'created_with_time_sat',
             'sended' => 'sended'
         ];
@@ -526,9 +491,10 @@ class ClientExt extends \yii\db\ActiveRecord
             '' => 'Заказ недооформлен', // Заказ недооформлен
             'created_with_time_confirm' => 'Заказ создан и время подтверждено',
             'created_without_time_confirm' => 'Заказ создан, но время не подтверждено',
+            'canceled_not_ready_order_by_client' => 'Отменен незавершенный заказ',
             'canceled_by_client' => 'Отменен клиентом',
             'canceled_by_operator' => 'Отменен оператором',
-            'canceled_auto' => 'Отменен автоматически',
+            'canceled_not_ready_order_auto' => 'Отменен автоматически незавершенный заказ',
             'created_with_time_sat' => 'Заказ отправлен на посадку (водителю)',
             'sended' => 'Заказ отправлен'
         ];
@@ -555,10 +521,11 @@ class ClientExt extends \yii\db\ActiveRecord
 //        'created_without_time_confirm',
 //        'canceled_by_client',
 //        'canceled_by_operator',
-//        'canceled_auto',
+//        'canceled_not_ready_order_auto',
 //        'created_with_time_sat',
 //        'sended'
 
+        // статус canceled_not_ready_order_by_client и canceled_not_ready_order_auto не учитываются и такие заказы не должны оказываться в CRM
         if($main_server_order['status_code'] == 'created' && !empty($main_server_order['time_sat'])) {
             return 'created_with_time_sat';
         }elseif($main_server_order['status_code'] == 'created' && !empty($main_server_order['time_confirm'])) {
@@ -569,8 +536,8 @@ class ClientExt extends \yii\db\ActiveRecord
             return 'canceled_by_client';
         }elseif($main_server_order['status_code'] == 'canceled' && $main_server_order['canceled_by'] == 'operator') {
             return 'canceled_by_operator';
-        }elseif($main_server_order['status_code'] == 'canceled' && $main_server_order['canceled_by'] == 'auto') {
-            return 'canceled_auto';
+//        }elseif($main_server_order['status_code'] == 'canceled' && $main_server_order['canceled_by'] == 'auto') {
+//            return 'canceled_not_ready_order_auto';
         }elseif($main_server_order['status_code'] == 'sent') {
             return 'sended';
         }else {
@@ -592,19 +559,15 @@ class ClientExt extends \yii\db\ActiveRecord
         }
 
 
-        if(in_array($status, ['canceled_by_client', 'canceled_by_operator', 'canceled_auto'])) {
+        if(in_array($status, ['canceled_by_client', 'canceled_by_operator', 'canceled_not_ready_order_auto', 'canceled_not_ready_order_by_client'])) {
 
-            $setting = Setting::find()->where(['id' => 1])->one();
 
             $trip = $this->trip;
-            //if($trip == null) {
-                // throw new ErrorException('У заказа '.$this->id.' не найден рейс');
-            //}
 
-            // если текущее время отмены заказа больше чем время (первая точка рейча минут часы $setting->count_hours_before_trip_to_cancel_order),
-            // то отмена заказа запрещена
             if($trip != null) {
-                if (in_array($status, ['canceled_by_client']) && !empty($this->status) && $with_check == true && time() > $trip->getStartTimeUnixtime() - 3600 * intval($setting->count_hours_before_trip_to_cancel_order)) {
+
+                $setting = Setting::find()->where(['id' => 1])->one();
+                if (($status == 'canceled_by_client') && !empty($this->status) && $with_check == true && time() > $trip->getStartTimeUnixtime() - 3600 * intval($setting->count_hours_before_trip_to_cancel_order)) {
                     throw new ForbiddenHttpException('Запрещено отменять заказ ' . $this->id . ' менее чем за ' . $setting->count_hours_before_trip_to_cancel_order . ' часов до рейса (id=' . $this->id . ')');
                 } else {
                     // если заказ оплачен/частично оплачен, то проводим возврат
@@ -614,9 +577,11 @@ class ClientExt extends \yii\db\ActiveRecord
                 }
             }
 
-            if($status == 'canceled_by_client') {
+            if(in_array($status, ['canceled_by_client', 'canceled_not_ready_order_by_client', 'canceled_not_ready_order_auto'])) {
                 $this->cancellation_click_time = time();
-                $this->cancellation_clicker_id = Yii::$app->getUser()->getId();
+                if(!(\Yii::$app instanceof yii\console\Application)) {
+                    $this->cancellation_clicker_id = Yii::$app->getUser()->getId();
+                }
             }
 
         }elseif($status == 'sended') {// если заявка-заказ перешел в статус "отправлена", то при наличии кода друга начисляем другу деньгу
@@ -912,6 +877,10 @@ class ClientExt extends \yii\db\ActiveRecord
         // дата-время в заказе
         $unixtime = $this->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
 
+        $prev_trip = null;
+        $next_trip_1 = null;
+        $next_trip_2 = null;
+
 
         // ищем самый ближний рейс до выбранного времени
         $prev_trip = Trip::find()
@@ -920,7 +889,24 @@ class ClientExt extends \yii\db\ActiveRecord
             ->orderBy(['end_time_unixtime' => SORT_DESC])
             ->one();
 
+        // ищем самый ближний рейс после выбранного времени
+        if($prev_trip != null) {
+            $next_trip_1 = Trip::find()
+                ->where(['direction_id' => $this->direction_id])
+                ->andWhere(['>', 'end_time_unixtime', $prev_trip->end_time_unixtime])
+                ->orderBy(['end_time_unixtime' => SORT_ASC])
+                ->one();
+        }
 
+        if($next_trip_1 != null) {
+            $next_trip_2 = Trip::find()
+                ->where(['direction_id' => $this->direction_id])
+                ->andWhere(['>', 'end_time_unixtime', $next_trip_1->end_time_unixtime])
+                ->orderBy(['end_time_unixtime' => SORT_ASC])
+                ->one();
+        }
+
+        /*
         $day_trips = Trip::find()
             ->where(['direction_id' => $this->direction_id])
             ->andWhere(['date' => $this->data])
@@ -955,7 +941,7 @@ class ClientExt extends \yii\db\ActiveRecord
                     $next_trip_1 = $aUnixtimeDayTrips2[0];
                     $next_trip_2 = $aUnixtimeDayTrips2[1];
 
-                    /*
+
                     $prev_day_trips = Trip::find()
                         ->where(['direction_id' => $this->direction_id])
                         ->andWhere(['date' => $this->data - 86400])
@@ -975,7 +961,7 @@ class ClientExt extends \yii\db\ActiveRecord
                     foreach ($PrevDayTrips as $unixtime => $prev_day_trip) {
                         $prev_trip = $prev_day_trip;
                         break;
-                    }*/
+                    }
 
                     break;
                 }
@@ -1071,7 +1057,7 @@ class ClientExt extends \yii\db\ActiveRecord
                 $next_trip_1 = $aUnixtimeNextDayTrips[1];
                 $next_trip_2 = $aUnixtimeNextDayTrips[2];
             }
-        }
+        }*/
 
         $ResultTrips = [];
         $ResultTrips[] = $prev_trip;

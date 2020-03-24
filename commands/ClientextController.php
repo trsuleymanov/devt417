@@ -48,4 +48,27 @@ class ClientextController extends Controller
         }
     }
 
+
+    /*
+     * Незаконченные заказы созданные более 30 минут назад отменяются автоматически
+     *
+     * php yii clientext/cancel-not-ready-orders
+     */
+    public function actionCancelNotReadyOrders()
+    {
+        $not_ready_orders = ClientExt::find()
+            ->where(['status' => ''])
+            ->andWhere(['<', 'created_at', time() - 1800])
+            ->all();
+
+        $i = 0;
+        if(count($not_ready_orders) > 0) {
+            foreach ($not_ready_orders as $order) {
+                $order->setStatus('canceled_not_ready_order_auto');
+                $i++;
+            }
+        }
+
+        echo "отменено $i заказов\n";
+    }
 }

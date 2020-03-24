@@ -319,7 +319,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 //        }
 //
 //        $message = Yii::$app->mailer->compose();
-//        $message->setFrom(\Yii::$app->params['callbackEmail']);
+//        $message->setFrom(\Yii::$app->params['fromEmail']);
 //        $message->setTo($this->email);
 //        $message->setSubject('Подтверждение регистрации на сайте '.Yii::$app->params['siteUrl']);
 //        $message->setHtmlBody(Yii::$app->mailer->render('registration_code', [
@@ -343,15 +343,14 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 //            'restore_url' =>  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/user/restore-access/?restore_code='.$this->restore_code,
 //            'site' => $_SERVER['HTTP_HOST']
 //        ])
-//            ->setFrom(\Yii::$app->params['callbackEmail'])
-//            ->setBcc(\Yii::$app->params['fromEmail'])
+//            ->setFrom(\Yii::$app->params['fromEmail'])
 //            ->setTo($this->email)
 //            ->setSubject('Код восстановления доступа')
 //            ->send();
 
 
         $message = Yii::$app->mailer->compose();
-        $message->setFrom(\Yii::$app->params['callbackEmail']);
+        $message->setFrom(\Yii::$app->params['fromRegistrationEmail']);
         $message->setTo($this->email);
         $message->setSubject('Код восстановления доступа');
         $message->setHtmlBody(Yii::$app->mailer->render('restore_code', [
@@ -370,8 +369,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             //'site' => $_SERVER['HTTP_HOST']
             'password' => $password,
         ])
-            ->setFrom(\Yii::$app->params['callbackEmail'])
-            ->setBcc(\Yii::$app->params['fromEmail'])
+            ->setFrom(\Yii::$app->params['fromRegistrationEmail'])
             ->setTo($this->email)
             ->setSubject('Временный пароль для входа на сайт')
             ->send();
@@ -383,8 +381,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function sendInfo($aData) {
 
         return Yii::$app->mailer->compose('info', $aData)
-            ->setFrom(\Yii::$app->params['callbackEmail'])
-            ->setBcc(\Yii::$app->params['fromEmail'])
+            ->setFrom(\Yii::$app->params['fromRegistrationEmail'])
             ->setTo($this->email)
             ->setSubject('Информационное сообщение с сайта')
             ->send();

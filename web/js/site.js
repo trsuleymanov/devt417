@@ -238,6 +238,7 @@ function openConfirmPhoneForm(user_phone) {
                         }
                     });
 
+                    return false;
                 });
 
             }else {
