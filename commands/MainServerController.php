@@ -485,9 +485,9 @@ class MainServerController extends Controller
                             $data_trip['end_time_unixtime'],
                             $data['new_max_date'],
 
-                            $data['date_start_sending'],
-                            $data['date_issued_by_operator'],
-                            $data['date_sended'],
+                            $data_trip['date_start_sending'],
+                            $data_trip['date_issued_by_operator'],
+                            $data_trip['date_sended'],
                         ];
                     }
 
