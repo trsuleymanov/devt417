@@ -396,7 +396,7 @@ class SiteController extends Controller
 
     public function actionTest() {
 
-        $clientext = ClientExt::find()->where(['id' => 5])->one();
+        $clientext = ClientExt::find()->where(['id' => 7])->one();
         //$ResultTrips = $clientext->getTripsForChange();
 
         $aTime = explode(':', $clientext->time); // 1585083600 + 04:15
