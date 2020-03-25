@@ -396,36 +396,10 @@ class SiteController extends Controller
 
     public function actionTest() {
 
-        // $email = 'vlad.shetinin@gmail.com'; // vl**********n@g***l.com
-        // $email = 'kal@li.ru'; // k*l@li.ru
-        // $email = 'absuz@cook.com'; // ab**z@c**k.com
-        //$email = 'ya@ya.ru'; // ya@ya.ru
-        //echo Helper::setMaskToEmail($email);
+        $clientext = ClientExt::find()->where(['id' => 5])->one();
+        $ResultTrips = $clientext->getTripsForChange();
 
-        /*
-        $clientext = ClientExt::find()->where(['id' => 204241])->one();
-
-        $aTime = explode(':', $clientext->time);
-        $unixtime = $clientext->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
-
-        // 1583687460
-        // 1581195600 + 3600*3 =
-        // 1581206400
-        // 1581232020
-
-        echo "unixtime=$unixtime <br />";
-
-        $prev_trip = Trip::find()
-            ->where(['direction_id' => $clientext->direction_id])
-            ->andWhere(['<', 'end_time_unixtime', $unixtime])
-            ->orderBy(['end_time_unixtime' => SORT_DESC])
-            ->one();
-
-        echo "prev_trip:<pre>"; print_r($prev_trip); echo "</pre>";
-*/
-        echo "это ветка alex-branch";
-
-        //echo strtotime(date('d.m.Y')) + 2*86400;
+        echo "ResultTrips:<pre>"; print_r($ResultTrips); echo "</pre>";
     }
 
     public function actionTest2() {
