@@ -399,13 +399,13 @@ class SiteController extends Controller
         $clientext = ClientExt::find()->where(['id' => 5])->one();
         //$ResultTrips = $clientext->getTripsForChange();
 
-        $aTime = explode(':', $this->time); // 1585083600 + 04:15
-        $unixtime = $this->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
+        $aTime = explode(':', $clientext->time); // 1585083600 + 04:15
+        $unixtime = $clientext->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
 
-        echo "unixtime=$unixtime direction_id=".$this->direction_id."<br />";
+        echo "unixtime=$unixtime direction_id=".$clientext->direction_id."<br />";
 
         $prev_trip = Trip::find()
-            ->where(['direction_id' => $this->direction_id])
+            ->where(['direction_id' => $clientext->direction_id])
             ->andWhere(['<', 'end_time_unixtime', $unixtime])
             ->orderBy(['end_time_unixtime' => SORT_DESC])
             ->one();
