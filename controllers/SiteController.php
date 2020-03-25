@@ -397,9 +397,20 @@ class SiteController extends Controller
     public function actionTest() {
 
         $clientext = ClientExt::find()->where(['id' => 5])->one();
-        $ResultTrips = $clientext->getTripsForChange();
+        //$ResultTrips = $clientext->getTripsForChange();
 
-        echo "ResultTrips:<pre>"; print_r($ResultTrips); echo "</pre>";
+        $aTime = explode(':', $this->time); // 1585083600 + 04:15
+        $unixtime = $this->data + 3600 * intval($aTime[0]) + 60 * intval($aTime[1]);
+
+        echo "unixtime=$unixtime direction_id=".$this->direction_id."<br />";
+
+        $prev_trip = Trip::find()
+            ->where(['direction_id' => $this->direction_id])
+            ->andWhere(['<', 'end_time_unixtime', $unixtime])
+            ->orderBy(['end_time_unixtime' => SORT_DESC])
+            ->one();
+
+        echo "prev_trip:<pre>"; print_r($prev_trip); echo "</pre>";
     }
 
     public function actionTest2() {
