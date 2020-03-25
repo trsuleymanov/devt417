@@ -366,9 +366,9 @@ class MainServerController extends Controller
         $created_updated_at = $trip != null ? $trip->created_updated_at : 0;
 
         // если хотим выгрузить все рейсы, то текущую таблицу рейсов нужно очистить и использовать $url для всех рейсов
-        //$url = Yii::$app->params['mainServerUrl'].'trip/get-trips?created_updated_at=0&directions_ids=1,2&all_days=true';
+        $url = Yii::$app->params['mainServerUrl'].'trip/get-trips?created_updated_at=0&directions_ids=1,2&all_days=true';
 
-        $url = Yii::$app->params['mainServerUrl'].'trip/get-trips?created_updated_at='.$created_updated_at.'&directions_ids=1,2';
+        //$url = Yii::$app->params['mainServerUrl'].'trip/get-trips?created_updated_at='.$created_updated_at.'&directions_ids=1,2';
 
         $request_1 = new Client();
         $response = $request_1->createRequest()
