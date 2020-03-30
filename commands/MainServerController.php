@@ -174,6 +174,7 @@ class MainServerController extends Controller
 
         if ($response->statusCode == 200) {
 
+            $aSyncOrdersIds = [];
             $orders = $response->data;
             if(count($orders) > 0) {
                 foreach($orders as $order) {
@@ -204,7 +205,8 @@ class MainServerController extends Controller
 
                     // создание пользователя должно было произойти ранее при синхронизации пользователей
                     if($user == null) {
-                        throw new ErrorException('Пользователь не найден');
+                        // throw new ErrorException('Пользователь не найден');
+                        continue;
                     }
 
                     $client_ext->user_id = $user->id;
@@ -321,13 +323,15 @@ class MainServerController extends Controller
 //                    if($push != null) {
 //                        $push->send();
 //                    }
+
+                    $aSyncOrdersIds[$order['order_id']] = $order['order_id'];
                 }
 
                 // пошлем обратно ответ на основной сервер со списком id записанных клиентов, чтобы там была установлена дата синхронизации
                 $request_2 = new Client();
                 $response = $request_2->createRequest()
                     ->setMethod('post')
-                    ->setUrl(Yii::$app->params['mainServerUrl'].'order/set-sync-to-orders?ids='.implode(',', ArrayHelper::map($orders, 'order_id', 'order_id')))
+                    ->setUrl(Yii::$app->params['mainServerUrl'].'order/set-sync-to-orders?ids='.implode(',', $aSyncOrdersIds))
                     ->setHeaders(['Authorization' => 'SecretKey '.MainServerController::$secretKey])
                     ->send();
 
